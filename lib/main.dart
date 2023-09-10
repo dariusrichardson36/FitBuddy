@@ -1,3 +1,4 @@
+import 'package:fit_buddy/pages/timeline.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,12 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      routes: {
-        '': (context) => HomePage(),
-        'matching': (context) => MatchingPage(),
-      },
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
@@ -36,20 +32,8 @@ class MatchingPage extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Home Page'),
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -60,11 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
-        return const HomePage();
+        return TimelinePage();
       case 1:
         return const MatchingPage();
       default:
-        return const HomePage(); // You can provide a default screen
+        return TimelinePage(); // You can provide a default screen
     }
   }
 
@@ -72,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _getScreen(_currentPageIndex),
+      drawer: Drawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {  },
         child: const Icon(Icons.add),
