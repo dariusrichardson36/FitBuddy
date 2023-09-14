@@ -19,7 +19,7 @@ class Auth {
 
   signInWithEmail(email, pw) async {
     try {
-      return await _firebaseAuth.signInWithEmailAndPassword(
+       return await _firebaseAuth.signInWithEmailAndPassword(
           email: email,
           password: pw);
     } on FirebaseAuthException catch (e) {
