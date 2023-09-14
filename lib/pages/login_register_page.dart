@@ -65,24 +65,42 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 25),
 
               // sign in button
-              GestureDetector(
-                // todo: Add error messages
-                onTap: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        });
-                  await Auth().signInWithEmail(emailController.text, passwordController.text);
-                  Navigator.pop(context);
-                  },
-                child: Text("Sign In"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    // todo: Add error messages
+                    onTap: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          });
+                      await Auth().signInWithEmail(emailController.text, passwordController.text);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Sign In"),
+                  ),
+                  GestureDetector(
+                    // todo: Add error messages
+                    onTap: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          });
+                      await Auth().registerWithEmail(emailController.text, passwordController.text);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Register"),
+                  ),
+                ],
               ),
-
               const SizedBox(height: 50),
-
               // google + apple sign in buttons
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -115,13 +133,6 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    'Register now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ],
               )
             ],

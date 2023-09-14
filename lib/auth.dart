@@ -29,8 +29,18 @@ class Auth {
         // todo
       }
     }
-
   }
+
+  registerWithEmail(email, pw) async {
+    try {
+      return await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email,
+          password: pw);
+    } on FirebaseAuthException catch (e) {
+      // todo
+    }
+  }
+
 
   void signOutUser() {
     _firebaseAuth.signOut();
