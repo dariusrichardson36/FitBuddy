@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/test.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class AuthPage extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool isNewUser = true;
+  bool isNewUser = true; // This needs to be on false
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,14 @@ class AuthPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return TestPage();
-          } else {
+          print("isNewUser = " + isNewUser.toString());
+          if (!snapshot.hasData) {
             return LoginPage(context);
+          } else if (isNewUser) {
+            return CompleteAccountInformation();
+          }
+          else {
+            return TestPage();
           }
         },
       ),
@@ -110,14 +115,9 @@ class AuthPage extends StatelessWidget {
                               child: CircularProgressIndicator(),
                             );
                           });
-                      UserCredential userCredential = await Auth().registerWithEmail(emailController.text, passwordController.text);
-                      isNewUser = userCredential.additionalUserInfo!.isNewUser;
+                      await Auth().registerWithEmail(emailController.text, passwordController.text);
+                      isNewUser = true;
                       Navigator.pop(context);
-                      showDialog(context: context, builder: (context) {
-                        return Center(
-                          child: Text("This user is new = $isNewUser"),
-                        );
-                      });
                     },
                     child: Text("Register"),
                   ),
