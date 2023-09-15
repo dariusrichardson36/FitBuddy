@@ -1,7 +1,7 @@
 
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_buddy/auth.dart';
+import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class TestPage extends StatelessWidget {
@@ -21,5 +21,4 @@ class TestPage extends StatelessWidget {
       ),
     );
   }
-
 }
