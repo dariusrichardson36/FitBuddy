@@ -29,7 +29,7 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           print("isNewUser = " + isNewUser.toString());
           if (!snapshot.hasData) {
-            return LoginPage(context);
+            return authPage();
           } else if (isNewUser) {
             return CompleteAccountInformation();
           }
@@ -41,6 +41,105 @@ class AuthPage extends StatelessWidget {
     );
   }
 
+  authPage() {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 20),
+            // logo
+            Icon(
+              Icons.local_fire_department_rounded,
+              size: 100,
+            ),
+            SizedBox(height: 40),
+            loginEmailPw(),
+            otherLoginMethods(),
+          ]
+        )
+      )
+    );
+  }
+
+  Widget loginEmailPw() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: Column(
+          children: [
+            Text(
+              'Login to FitBuddy',
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 10),
+            MyTextField(
+              controller: emailController,
+              hintText: 'email',
+              obscureText: false,
+            ),
+            Text(
+                "Forgot email?",
+                textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: 10),
+            // password textfield
+            MyTextField(
+              controller: passwordController,
+              hintText: 'Password',
+              obscureText: true,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () => {},
+                  child: Text("Sign In"),
+                ),
+                Text(
+                    "Register here",
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16)
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+  }
+
+  registerEmailPw() {
+
+  }
+
+  Widget otherLoginMethods() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // google button
+            SquareTile(imagePath: 'lib/images/google.png',
+              text: 'Continue with Google',
+              onTap: () => Auth().signInWithGoogle(),
+            ),
+
+            const SizedBox(width: 25),
+
+            // apple button
+            SquareTile(
+                imagePath: 'lib/images/apple.png',
+                text: 'Continue with Apple',
+                onTap: () => Auth().signInWithGoogle()
+            )
+          ],
+        ),
+      );
+  }
+
   LoginPage(context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -50,22 +149,9 @@ class AuthPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
-
-                // logo
-                const Icon(
-                  Icons.local_fire_department_rounded,
-                  size: 100,
-                ),
 
                 const SizedBox(height: 50),
-                Text(
-                  'Login to FitBuddy',
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 16,
-                  ),
-                ),
+
 
                 const SizedBox(height: 25),
 
@@ -133,25 +219,7 @@ class AuthPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 // google + apple sign in buttons
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    SquareTile(imagePath: 'lib/images/google.png',
-                      text: 'Continue with Google',
-                      onTap: () => Auth().signInWithGoogle(),
-                    ),
 
-                    const SizedBox(width: 25),
-
-                    // apple button
-                    SquareTile(
-                        imagePath: 'lib/images/apple.png',
-                        text: 'Continue with Apple',
-                        onTap: () => Auth().signInWithGoogle()
-                    )
-                  ],
-                ),
 
                 const SizedBox(height: 50),
 
