@@ -30,11 +30,13 @@ class SquareTile extends StatelessWidget {
                     imagePath,
                     height: 40,
                   ),
-                  Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold
+                  Expanded(
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   )
                 ],
