@@ -22,24 +22,23 @@ class SquareTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             color: Colors.grey[200],
           ),
-          child: Row (
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    imagePath,
-                    height: 40,
-                  ),
-                  Expanded(
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  )
-                ],
+              Image.asset(
+                alignment: Alignment.centerLeft,
+                imagePath,
+                height: 40,
+                width: 50,
+              ),
+              Text(
+                text,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(
+                width: 50,
               )
             ],
           )

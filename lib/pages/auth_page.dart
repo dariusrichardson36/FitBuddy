@@ -7,12 +7,27 @@ import '../services/auth.dart';
 import '../components/my_textfield.dart';
 import '../components/square_tile.dart';
 
-class AuthPage extends StatelessWidget {
+
+class AuthPage extends StatefulWidget {
   AuthPage({super.key});
 
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool isNewUser = false; // This needs to be on false
+  bool loginState = true; // The current state of the page
+
+  void toggleLoginState() {
+    setState(() {
+      loginState = !loginState;
+    });
+  }
+
 
   @override
   void dispose() {
@@ -43,32 +58,40 @@ class AuthPage extends StatelessWidget {
 
   authPage() {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            // logo
-            Icon(
-              Icons.local_fire_department_rounded,
-              size: 100,
-            ),
-            SizedBox(height: 40),
-            loginEmailPw(),
-            otherLoginMethods(),
-          ]
-        )
+      child: Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 20),
+          // logo
+          Icon(
+            Icons.local_fire_department_rounded,
+            size: 100,
+          ),
+          SizedBox(height: 40),
+          if (loginState) ... [
+            loginEmailPw()
+          ] else ...[
+            registerEmailPw()
+          ],
+
+          //Spacer(),
+          Divider(
+            thickness: 2,
+          ),
+          otherLoginMethods(),
+          SizedBox(height: 60),
+        ]
       )
     );
   }
 
-  Widget loginEmailPw() {
+  loginEmailPw() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: Column(
           children: [
             Text(
-              'Login to FitBuddy',
+              'Sign in to FitBuddy',
               style: TextStyle(
                 color: Colors.grey[700],
                 fontSize: 16,
@@ -95,14 +118,17 @@ class AuthPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () => {},
+                  onPressed: toggleLoginState,
                   child: Text("Sign In"),
                 ),
-                Text(
-                    "Register here",
-                style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 16)
+                GestureDetector(
+                  onTap: toggleLoginState,
+                  child: Text(
+                      "Register here",
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16)
+                  ),
                 )
               ],
             ),
@@ -112,10 +138,65 @@ class AuthPage extends StatelessWidget {
   }
 
   registerEmailPw() {
-
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Column(
+        children: [
+          Text(
+            'Register an account on FitBuddy',
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 16,
+            ),
+          ),
+          SizedBox(height: 10),
+          MyTextField(
+            controller: emailController,
+            hintText: 'email',
+            obscureText: false,
+          ),
+          Text(
+            "Forgot email?",
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 10),
+          // password textfield
+          MyTextField(
+            controller: passwordController,
+            hintText: 'Password',
+            obscureText: true,
+          ),
+          const SizedBox(height: 10),
+          // password textfield
+          MyTextField(
+            controller: confirmPasswordController,
+            hintText: 'Confirm password',
+            obscureText: true,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: () => {},
+                child: Text("Register"),
+              ),
+              GestureDetector(
+                onTap: toggleLoginState,
+                child: Text(
+                    "Sign in here",
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16)
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget otherLoginMethods() {
+  otherLoginMethods() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: Column(
@@ -126,9 +207,7 @@ class AuthPage extends StatelessWidget {
               text: 'Continue with Google',
               onTap: () => Auth().signInWithGoogle(),
             ),
-
-            const SizedBox(width: 25),
-
+            SizedBox(height: 15),
             // apple button
             SquareTile(
                 imagePath: 'lib/images/apple.png',
