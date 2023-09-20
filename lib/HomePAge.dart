@@ -1,3 +1,4 @@
+import 'package:fit_buddy/pages/drawer.dart';
 import 'package:fit_buddy/pages/timeline.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _getScreen(_currentPageIndex),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: DrawerPage(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {  },
         child: const Icon(Icons.add),
