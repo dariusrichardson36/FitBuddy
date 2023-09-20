@@ -10,14 +10,17 @@ class TimelinePage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
           child: Stack(
             children: [
-              Container(
-                width: 35.0,
-                height: 35.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
-                    fit: BoxFit.cover,
+              GestureDetector(
+                onTap: Scaffold.of(context).openDrawer,
+                child: Container(
+                  width: 35.0,
+                  height: 35.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
