@@ -15,4 +15,15 @@ class Firestore {
     }
   }
 
+  Future<bool> doesUserDocumentExist(String userId) async {
+    // Reference to the "users" collection and the specific document
+    DocumentReference userDocRef = FirebaseFirestore.instance.collection("users").doc(userId);
+
+    // Try to retrieve the document snapshot
+    DocumentSnapshot docSnapshot = await userDocRef.get();
+
+    // Check if the document exists
+    return docSnapshot.exists;
+  }
+
 }

@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
-import 'package:fit_buddy/pages/test.dart';
+import 'package:fit_buddy/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth.dart';
@@ -21,39 +21,52 @@ class _AuthPageState extends State<AuthPage> {
   final confirmPasswordController = TextEditingController();
   bool isNewUser = false; // This needs to be on false
   bool loginState = true; // The current state of the page
+  String _currentErrorMessage = "";
 
   void toggleLoginState() {
     setState(() {
       loginState = !loginState;
+      _currentErrorMessage = "";
     });
   }
 
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    //super.dispose();
+  void setErrorMessage(message) {
+    setState(() {
+      _currentErrorMessage = message;
+    });
   }
+
+//
+//  @override
+//  void dispose() {
+//    emailController.dispose();
+//    passwordController.dispose();
+    //super.dispose();
+//  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          print("isNewUser = " + isNewUser.toString());
-          if (!snapshot.hasData) {
-            return authPage();
-          } else if (isNewUser) {
-            return CompleteAccountInformation();
-          }
-          else {
-            return TestPage();
-          }
-        },
-      ),
-    );
+    return authPage();
+  }
+
+  login() {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      Auth().signInWithEmail(emailController.text, passwordController.text);
+    } else {
+      setErrorMessage("Please fill in email and password");
+    }
+  }
+
+  register() {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && confirmPasswordController.text.isNotEmpty) {
+      if (passwordController.text.trim() == confirmPasswordController.text.trim()) {
+        Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
+      } else {
+        setErrorMessage("Both passwords need to be the same");
+      }
+    } else {
+      setErrorMessage("Please fill in all the required fields");
+    }
   }
 
   authPage() {
@@ -73,7 +86,7 @@ class _AuthPageState extends State<AuthPage> {
           ] else ...[
             registerEmailPw()
           ],
-
+          errorMessage(),
           //Spacer(),
           Divider(
             thickness: 2,
@@ -118,7 +131,7 @@ class _AuthPageState extends State<AuthPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: toggleLoginState,
+                  onPressed: login,
                   child: Text("Sign In"),
                 ),
                 GestureDetector(
@@ -155,10 +168,8 @@ class _AuthPageState extends State<AuthPage> {
             hintText: 'email',
             obscureText: false,
           ),
-          Text(
-            "Forgot email?",
-            textAlign: TextAlign.start,
-          ),
+
+
           const SizedBox(height: 10),
           // password textfield
           MyTextField(
@@ -177,7 +188,7 @@ class _AuthPageState extends State<AuthPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                onPressed: () => {},
+                onPressed: register,
                 child: Text("Register"),
               ),
               GestureDetector(
@@ -219,104 +230,11 @@ class _AuthPageState extends State<AuthPage> {
       );
   }
 
-  LoginPage(context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                const SizedBox(height: 50),
-
-
-                const SizedBox(height: 25),
-
-                // username textfield
-                MyTextField(
-                  controller: emailController,
-                  hintText: 'email',
-                  obscureText: false,
-                ),
-
-                const SizedBox(height: 10),
-
-                // password textfield
-                MyTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-
-                const SizedBox(height: 10),
-                const SizedBox(height: 25),
-
-                // sign in button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      // todo: Add error messages
-                      onTap: () async {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            });
-                        UserCredential userCredential = await Auth().signInWithEmail(emailController.text, passwordController.text);
-                        isNewUser = userCredential.additionalUserInfo!.isNewUser;
-                        Navigator.pop(context);
-                        showDialog(context: context, builder: (context) {
-                          return Center(
-                            child: Text("This user is new = $isNewUser"),
-                          );
-                        });
-                      },
-                      child: Text("Sign In"),
-                    ),
-                    GestureDetector(
-                      // todo: Add error messages
-                      onTap: () async {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            });
-                        UserCredential userCredential = await Auth().registerWithEmail(emailController.text, passwordController.text);
-                        isNewUser = true;
-                        Navigator.pop(context);
-                      },
-                      child: Text("Register"),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 50),
-                // google + apple sign in buttons
-
-
-                const SizedBox(height: 50),
-
-                // not a member? register now
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                    const SizedBox(width: 4),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+  errorMessage() {
+    return Text(
+      _currentErrorMessage,
+      style: TextStyle(
+        color: Colors.red
       ),
     );
   }
