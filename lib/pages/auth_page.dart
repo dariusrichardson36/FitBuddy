@@ -49,34 +49,45 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            // logo
-            Icon(
-              Icons.local_fire_department_rounded,
-              size: 100,
-            ),
-            SizedBox(height: 40),
-            if (loginState) ... [
-              loginEmailPw()
-            ] else ...[
-              registerEmailPw()
-            ],
-            errorMessage(),
-            //Spacer(),
-            Divider(
-              thickness: 2,
-            ),
-            otherLoginMethods(),
-            SizedBox(height: 60),
-          ]
-        )
-      ),
+      body: StreamBuilder(
+        stream: Auth().authStateChanges,
+        builder: (context, snapshot) {
+          print("State is:");
+          print(snapshot);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          return SafeArea(
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                // logo
+                Icon(
+                  Icons.local_fire_department_rounded,
+                  size: 100,
+                ),
+                SizedBox(height: 40),
+                if (loginState) ... [
+                  loginEmailPw()
+                ] else
+                  ...[
+                    registerEmailPw()
+                  ],
+                errorMessage(),
+                //Spacer(),
+                Divider(
+                  thickness: 2,
+                ),
+                otherLoginMethods(),
+                SizedBox(height: 60),
+              ]
+          )
+        );
+      })
     );
   }
+
 
   login() {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
@@ -214,7 +225,10 @@ class _AuthPageState extends State<AuthPage> {
             // google button
             SquareTile(imagePath: 'lib/images/google.png',
               text: 'Continue with Google',
-              onTap: () => Auth().signInWithGoogle(),
+              onTap: () {
+                Auth().signInWithGoogle();
+
+              },
             ),
             SizedBox(height: 15),
             // apple button

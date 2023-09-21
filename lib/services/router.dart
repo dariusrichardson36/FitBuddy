@@ -49,6 +49,7 @@ class FitBuddyRouter {
           }
         )
       ],
+    /*
     refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
     redirect: (context, state) async {
         User? user = Auth().currentUser;
@@ -61,6 +62,8 @@ class FitBuddyRouter {
         }
         return '/';
     }
+
+     */
   );
 }
 

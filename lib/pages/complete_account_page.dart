@@ -54,6 +54,7 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
     final firstDate = DateTime(DateTime.now().year - 120);
     final lastDate = DateTime.now();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text("Please provide your name, username and date of birth"),
         Text("Don't worry, you can change your name and username at any given time!"),
@@ -100,8 +101,14 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
 
   personalData() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text("Give us some more data:"),
+        Text("Please provide us with more data so we can match you to the right people."),
+        Text("Don't worry, you can always do this later or change it."),
+        SizedBox(
+          height: 10,
+        ),
+        Text("What is your fitness experience"),
         FitBuddyDropdownMenu(
           items: experienceList,
           value: experienceValue,
@@ -111,47 +118,67 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
             });
           }
         ),
-
-        DropdownButton(
-          value: goalValue,
-          items: goalList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? value) {
-            setState(() {
-              goalValue = value!;
-            });
-          },
-        ),DropdownButton(
-          value: liftingStyleValue,
-          items: liftingStyleList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? value) {
-            setState(() {
-              liftingStyleValue = value!;
-            });
-          },
+        SizedBox(
+          height: 10,
         ),
-        ElevatedButton(
-            child: Text("Submit"),
-            onPressed: () async {
-              await Firestore().createUser(
-                  Auth().currentUser!.uid,
-                  experienceValue,
-                  goalValue,
-                  liftingStyleValue);
-              context.go('/homepage');
+        Text("What is your fitness goal?"),
+        FitBuddyDropdownMenu(
+            items: goalList,
+            value: goalValue,
+            onChange: (String? value) {
+              setState(() {
+                goalValue = value!;
+              });
             }
-        )
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text("What is your fitness style?"),
+        FitBuddyDropdownMenu(
+            items: liftingStyleList,
+            value: liftingStyleValue,
+            onChange: (String? value) {
+              setState(() {
+                liftingStyleValue = value!;
+              });
+            }
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  _pageController.previousPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.linear
+                  );
+                },
+                child: Text("Previous")
+            ),
+            ElevatedButton(
+                child: Text("Submit"),
+                onPressed: () async {
+                  await Firestore().createUser(
+                      Auth().currentUser!.uid,
+                      experienceValue,
+                      goalValue,
+                      liftingStyleValue);
+                  context.go('/homepage');
+                }
+            ),
+          ],
+        ),
       ],
     );
   }
+
+  submitData() async {
+
+  }
+
 }
 

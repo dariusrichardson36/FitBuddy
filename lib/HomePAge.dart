@@ -1,5 +1,5 @@
 import 'package:fit_buddy/pages/drawer.dart';
-import 'package:fit_buddy/pages/timeline.dart';
+import 'package:fit_buddy/pages/homepage_views/timeline_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {

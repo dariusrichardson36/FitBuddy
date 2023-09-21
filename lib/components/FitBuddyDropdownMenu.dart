@@ -20,7 +20,18 @@ class FitBuddyDropdownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
+    return DropdownButtonFormField (
+      decoration: InputDecoration(
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade400),
+          ),
+          fillColor: Colors.grey.shade200,
+          filled: true,
+          hintStyle: TextStyle(color: Colors.grey[500])
+      ),
       value: value,
       items: items.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -28,7 +39,8 @@ class FitBuddyDropdownMenu extends StatelessWidget {
           child: Text(value),
         );
       }).toList(),
-      onChanged: onChange
+      onChanged: onChange,
+
     );
   }
 }
