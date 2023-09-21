@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/homepage_views/achievements_view.dart';
+import 'package:fit_buddy/pages/homepage_views/matchmaking_view.dart';
+import 'package:fit_buddy/pages/homepage_views/messages_view.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import '../services/firestore.dart';
@@ -21,10 +23,19 @@ class _HomePageState extends State<HomePage> {
   int _currentPageIndex = 0;
   final PageController _pageController = PageController();
 
-  succes() {
-    return Center(child: Text("Logged In!}"));
+  void _onViewChange(int index) {
+    setState(() {
+      if (_currentPageIndex != index) {
+        // Only animate if the selected tab is different from the current page
+        _currentPageIndex = index;
+        _pageController.animateToPage(
+          index,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +44,18 @@ class _HomePageState extends State<HomePage> {
         child: DrawerPage(),
       ),
       body: PageView(
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndex = index;
+          });
+        },
+        
         controller: _pageController,
         children: [
           TimeLineView(),
-          achievementsView(),
+          MatchmakingView(),
+          AchievementsView(),
+          MessagesView()
         ],
 
       ),
@@ -48,7 +67,7 @@ class _HomePageState extends State<HomePage> {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: _currentPageIndex,
-      onTap: (index) => setState(() => _currentPageIndex = index),
+      onTap: (index) => _onViewChange(index),
       //selectedItemColor: Colors.black,
       items: const [
         BottomNavigationBarItem(

@@ -10,7 +10,8 @@ class TimeLineView extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-          child: Stack(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
                 onTap: Scaffold.of(context).openDrawer,
@@ -26,12 +27,8 @@ class TimeLineView extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text("Logo Here") ,
-                ),
-              ),
+              Text("Logo Here") ,
+              SizedBox(width: 35)
             ],
           ),
         ),

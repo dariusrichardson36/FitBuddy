@@ -26,9 +26,8 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
   String liftingStyleValue = liftingStyleList.first;
   final userNameController = TextEditingController();
   final nameController = TextEditingController();
-  int _currentPageIndex = 0;
   final PageController _pageController = PageController();
-
+  String _errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +50,16 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
   }
 
   requiredInformation() {
-    final firstDate = DateTime(DateTime.now().year - 120);
+    final firstDate = DateTime(DateTime.now().year - 100);
     final lastDate = DateTime.now();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text("Please provide your name, username and date of birth"),
         Text("Don't worry, you can change your name and username at any given time!"),
+        SizedBox(
+          height: 10,
+        ),
         MyTextField(
           controller: nameController,
           hintText: 'name',
@@ -65,7 +67,7 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
         ),
         MyTextField(
           controller: userNameController,
-          hintText: 'userName',
+          hintText: 'username',
           obscureText: false,
         ),
         SizedBox(
@@ -73,18 +75,24 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
         ),
         Text("You need to be at least X years of age to use the FitBuddy App"),
         InputDatePickerFormField(
+          acceptEmptyDate: false,
+          errorFormatText: "Invalid date format",
+          errorInvalidText: "Invalid text",
           firstDate: firstDate,
           lastDate: lastDate,
           fieldLabelText: "Date of birth",
+
         ),
         SizedBox(
           height: 10,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            errorMessage(),
             ElevatedButton(
                 onPressed: () {
+                  submitData();
                   _pageController.nextPage(
                       duration: Duration(milliseconds: 300),
                       curve: Curves.linear
@@ -177,7 +185,24 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
   }
 
   submitData() async {
+    if (userNameController.text.isEmpty || nameController.text.isEmpty) {
+      updateErrorMessage("Name and username are required");
+    }
+  }
 
+  updateErrorMessage(String message) {
+    setState(() {
+      _errorMessage = message;
+    });
+  }
+
+  errorMessage() {
+    return Text(
+      _errorMessage,
+      style: TextStyle(
+          color: Colors.red
+      ),
+    );
   }
 
 }
