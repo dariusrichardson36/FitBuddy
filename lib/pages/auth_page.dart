@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
+import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../services/auth.dart';
 import '../components/my_textfield.dart';
@@ -46,7 +48,44 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return authPage();
+    return Scaffold(
+      body: StreamBuilder(
+        stream: Auth().authStateChanges,
+        builder: (context, snapshot) {
+          print(snapshot.connectionState);
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) { // user has logged is successfully
+              context.go('/homepage');
+              /*
+              return FutureBuilder(
+                future: Firestore().doesUserDocumentExist(Auth().currentUser!.uid), 
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data != null && snapshot.data == true) {
+                      context.go('/homepage');
+                    } else {
+                      return CompleteAccountInformation();
+                    }
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              );
+
+               */
+            }
+          }
+          else if (snapshot.connectionState == ConnectionState.waiting) {
+            return
+              Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+          }
+          return authPage();
+        },
+      ),
+    );
   }
 
   login() {

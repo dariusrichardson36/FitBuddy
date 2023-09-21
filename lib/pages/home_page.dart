@@ -20,31 +20,16 @@ class _HomePageState extends State<HomePage> {
     return Center(child: Text("Logged In ${user.email!}"));
   }
 
-  noData() {
-    return Center(child: Text("You have no data"));
-  }
 
   @override
   Widget build(BuildContext context) {
-    Future<bool> isLoggedIn = Firestore().doesUserDocumentExist(user.uid);
+    //Future<bool> isLoggedIn = Firestore().doesUserDocumentExist(user.uid);
     return Scaffold(
         appBar: AppBar(actions: [
           IconButton(onPressed: () => Auth().signOutUser(), icon: Icon(Icons.logout))
         ],
       ),
-      body: StreamBuilder(
-        stream: isLoggedIn.asStream() ,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data != null && snapshot.data == true) {
-                return succes();
-            } else {
-                return CompleteAccountInformation();
-            }
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      )
+      body: succes()
     );
   }
 }
