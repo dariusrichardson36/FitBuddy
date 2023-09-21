@@ -9,6 +9,7 @@ class Firestore {
         'experience': experience,
         'goals': goals,
         'liftingStyle': liftingStyle,
+        'age': null,
       });
     } catch (e) {
       // todo

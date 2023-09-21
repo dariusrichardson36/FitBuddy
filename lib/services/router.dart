@@ -1,7 +1,7 @@
-import 'dart:js';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/pages/auth_page.dart';
+import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ class FitBuddyRouter {
   GoRouter router = GoRouter(
       routes: [
         GoRoute(
+          name: FitBuddyRouterConstants.homePage,
           path: '/',
           pageBuilder: (context, state) {
             return MaterialPage(
@@ -23,7 +24,8 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
-            path: '/authentication',
+          name: FitBuddyRouterConstants.authPage,
+          path: '/authentication',
           pageBuilder: (context, state) {
               return MaterialPage(
                 child: AuthPage(),
@@ -39,32 +41,26 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
-          path:  ,
-          builder: (context, state) {
-
+          path: '/completeAccountInfo' ,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+                child: CompleteAccountInformation()
+            );
           }
         )
       ],
     refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
     redirect: (context, state) async {
         User? user = Auth().currentUser;
-        //await bool
         if (user == null) {
-          return '/authentication';
-        } else {
-          return '/';
+          return state.namedLocation(FitBuddyRouterConstants.authPage);
         }
-        return null;
+        bool doesUserDataExist = await Firestore().doesUserDocumentExist(user.uid);
+        if (!doesUserDataExist) {
+          return '/completeAccountInfo';
+        }
+        return '/';
     }
   );
 }
-
-
-
-
-
-
-
-
-
 
