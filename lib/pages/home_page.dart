@@ -23,13 +23,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //Future<bool> isLoggedIn = Firestore().doesUserDocumentExist(user.uid);
     return Scaffold(
         appBar: AppBar(actions: [
           IconButton(onPressed: () => Auth().signOutUser(), icon: Icon(Icons.logout))
         ],
       ),
-      body: succes()
+      body: Center(child: Text("Logged In ${user.email!}"))
     );
   }
 }

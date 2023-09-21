@@ -2,6 +2,7 @@ import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'auth_page.dart';
 
@@ -70,11 +71,11 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
             },
           ),
           ElevatedButton(
-              child: Text("Submit"),
-              onPressed: () async {
-                await Firestore().createUser(Auth().currentUser!.uid, experienceValue, goalValue, liftingStyleValue);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-              }
+            child: Text("Submit"),
+            onPressed: () async {
+              await Firestore().createUser(Auth().currentUser!.uid, experienceValue, goalValue, liftingStyleValue);
+              context.go('/homepage');
+            }
           )
         ],
       ),

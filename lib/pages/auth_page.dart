@@ -49,41 +49,31 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: Auth().authStateChanges,
-        builder: (context, snapshot) {
-          print(snapshot.connectionState);
-          if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) { // user has logged is successfully
-              context.go('/homepage');
-              /*
-              return FutureBuilder(
-                future: Firestore().doesUserDocumentExist(Auth().currentUser!.uid), 
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data != null && snapshot.data == true) {
-                      context.go('/homepage');
-                    } else {
-                      return CompleteAccountInformation();
-                    }
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
-              );
-
-               */
-            }
-          }
-          else if (snapshot.connectionState == ConnectionState.waiting) {
-            return
-              Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-          }
-          return authPage();
-        },
+      body: SafeArea(
+        child: Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 20),
+            // logo
+            Icon(
+              Icons.local_fire_department_rounded,
+              size: 100,
+            ),
+            SizedBox(height: 40),
+            if (loginState) ... [
+              loginEmailPw()
+            ] else ...[
+              registerEmailPw()
+            ],
+            errorMessage(),
+            //Spacer(),
+            Divider(
+              thickness: 2,
+            ),
+            otherLoginMethods(),
+            SizedBox(height: 60),
+          ]
+        )
       ),
     );
   }
@@ -108,85 +98,56 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  authPage() {
-    return SafeArea(
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 20),
-          // logo
-          Icon(
-            Icons.local_fire_department_rounded,
-            size: 100,
-          ),
-          SizedBox(height: 40),
-          if (loginState) ... [
-            loginEmailPw()
-          ] else ...[
-            registerEmailPw()
-          ],
-          errorMessage(),
-          //Spacer(),
-          Divider(
-            thickness: 2,
-          ),
-          otherLoginMethods(),
-          SizedBox(height: 60),
-        ]
-      )
-    );
-  }
-
   loginEmailPw() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: Column(
-          children: [
-            Text(
-              'Sign in to FitBuddy',
-              style: TextStyle(
-                color: Colors.grey[700],
-                fontSize: 16,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Column(
+        children: [
+          Text(
+            'Sign in to FitBuddy',
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 16,
+            ),
+          ),
+          SizedBox(height: 10),
+          MyTextField(
+            controller: emailController,
+            hintText: 'email',
+            obscureText: false,
+          ),
+          Text(
+              "Forgot email?",
+              textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 10),
+          // password textfield
+          MyTextField(
+            controller: passwordController,
+            hintText: 'Password',
+            obscureText: true,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: login,
+                child: Text("Sign In"),
               ),
-            ),
-            SizedBox(height: 10),
-            MyTextField(
-              controller: emailController,
-              hintText: 'email',
-              obscureText: false,
-            ),
-            Text(
-                "Forgot email?",
-                textAlign: TextAlign.start,
-            ),
-            const SizedBox(height: 10),
-            // password textfield
-            MyTextField(
-              controller: passwordController,
-              hintText: 'Password',
-              obscureText: true,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: login,
-                  child: Text("Sign In"),
+              GestureDetector(
+                onTap: toggleLoginState,
+                child: Text(
+                    "Register here",
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16)
                 ),
-                GestureDetector(
-                  onTap: toggleLoginState,
-                  child: Text(
-                      "Register here",
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16)
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-      );
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   registerEmailPw() {
@@ -207,8 +168,6 @@ class _AuthPageState extends State<AuthPage> {
             hintText: 'email',
             obscureText: false,
           ),
-
-
           const SizedBox(height: 10),
           // password textfield
           MyTextField(
