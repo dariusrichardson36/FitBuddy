@@ -8,9 +8,9 @@ import 'package:go_router/go_router.dart';
 import '../components/my_textfield.dart';
 import 'auth_page.dart';
 
-final experienceList = <String>["0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
-final goalList = <String>["Lose Weight", "Build Muscle", "Build Strength"];
-final liftingStyleList = <String>["Calisthenics", "Powerlifting", "Bodybuilding", "Crossfit", "General Health"];
+final experienceList = <String>["Choose your experience", "0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
+final goalList = <String>["Choose your goal", "Lose Weight", "Build Muscle", "Build Strength"];
+final liftingStyleList = <String>["Choose your lifting style", "Calisthenics", "Powerlifting", "Bodybuilding", "Crossfit", "General Health"];
 
 class CompleteAccountInformation extends StatefulWidget {
   const CompleteAccountInformation({super.key});
@@ -27,7 +27,25 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
   final userNameController = TextEditingController();
   final nameController = TextEditingController();
   final PageController _pageController = PageController();
+  final firstDate = DateTime(DateTime.now().year - 100);
+  final lastDate = DateTime.now();
+  DateTime? selectedDate;
   String _errorMessage = "";
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = (await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: firstDate,
+      lastDate: lastDate,
+    )) ?? DateTime.now();
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +55,7 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: PageView(
+              physics: NeverScrollableScrollPhysics(),
               controller: _pageController,
               children: [
                 requiredInformation(),
@@ -50,8 +69,6 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
   }
 
   requiredInformation() {
-    final firstDate = DateTime(DateTime.now().year - 100);
-    final lastDate = DateTime.now();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -73,16 +90,29 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
         SizedBox(
           height: 10,
         ),
-        Text("You need to be at least X years of age to use the FitBuddy App"),
-        InputDatePickerFormField(
-          acceptEmptyDate: false,
-          errorFormatText: "Invalid date format",
-          errorInvalidText: "Invalid text",
-          firstDate: firstDate,
-          lastDate: lastDate,
-          fieldLabelText: "Date of birth",
-
+        GestureDetector(
+            onTap: () {
+              _selectDate(context);
+            },
+            child: Text("You need to be at least X years of age to use the FitBuddy App")),
+        GestureDetector(
+          onTap: () async {
+            print("object");
+          // Show the date picker dialog
+          _selectDate(context);
+          },
+          child: InputDatePickerFormField(
+            onDateSaved: (value) => print(value),
+            onDateSubmitted: (value) => print("submitted" + value.toString()) ,
+            acceptEmptyDate: false,
+            errorFormatText: "Invalid date format",
+            errorInvalidText: "Invalid text",
+            firstDate: firstDate,
+            lastDate: lastDate,
+            fieldLabelText: "Date of birth",
+          ),
         ),
+
         SizedBox(
           height: 10,
         ),
@@ -92,11 +122,7 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
             errorMessage(),
             ElevatedButton(
                 onPressed: () {
-                  submitData();
-                  _pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear
-                  );
+                  nextPage();
                 },
                 child: Text("Next")
             )
@@ -167,16 +193,30 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
                 },
                 child: Text("Previous")
             ),
-            ElevatedButton(
-                child: Text("Submit"),
-                onPressed: () async {
-                  await Firestore().createUser(
-                      Auth().currentUser!.uid,
-                      experienceValue,
-                      goalValue,
-                      liftingStyleValue);
-                  context.go('/homepage');
-                }
+            Row(
+              children: [
+                GestureDetector(
+                  child: Text(
+                    "skip",
+                    style: TextStyle(
+                        color: Colors.blue
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                    child: Text("Submit"),
+                    onPressed: () async {
+                      await Firestore().createUser(
+                          Auth().currentUser!.uid,
+                          experienceValue,
+                          goalValue,
+                          liftingStyleValue);
+                      context.go('/homepage');
+                    }
+                ),
+
+              ],
             ),
           ],
         ),
@@ -184,10 +224,19 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
     );
   }
 
-  submitData() async {
+  nextPage() {
     if (userNameController.text.isEmpty || nameController.text.isEmpty) {
-      updateErrorMessage("Name and username are required");
+      updateErrorMessage("Name, username and age are required");
+    } else {
+      _pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.linear
+      );
     }
+  }
+
+  submitData() async {
+
   }
 
   updateErrorMessage(String message) {
