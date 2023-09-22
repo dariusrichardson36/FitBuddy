@@ -25,26 +25,11 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
   String goalValue = goalList.first;
   String liftingStyleValue = liftingStyleList.first;
   final userNameController = TextEditingController();
-  final nameController = TextEditingController();
+  final usernameController = TextEditingController();
   final PageController _pageController = PageController();
   final firstDate = DateTime(DateTime.now().year - 100);
   final lastDate = DateTime.now();
-  DateTime? selectedDate;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = (await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: firstDate,
-      lastDate: lastDate,
-    )) ?? DateTime.now();
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
+  late DateTime selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +82,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             height: 10,
           ),
           FitBuddyTextFormField(
-            controller: nameController,
+            controller: usernameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Display name is required';
@@ -124,6 +109,12 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           ),
           Text("You need to be at least X years of age to use the FitBuddy App"),
           InputDatePickerFormField(
+            onDateSubmitted: (value) {
+              selectedDate = value;
+              },
+            onDateSaved:(value) {
+              selectedDate = value;
+            },
             acceptEmptyDate: false,
             errorFormatText: "Invalid date format",
             errorInvalidText: "Invalid date",
@@ -140,6 +131,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    _formKey.currentState?.save();
                     nextPage();
                   }
                 },
@@ -215,6 +207,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             Row(
               children: [
                 GestureDetector(
+                  onTap: () {
+                    submitReqOnly();
+                    context.go('/homepage');
+                  },
                   child: Text(
                     "skip",
                     style: TextStyle(color: Colors.blue),
@@ -223,13 +219,8 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
                 SizedBox(width: 20),
                 ElevatedButton(
                   child: Text("Submit"),
-                  onPressed: () async {
-                    await Firestore().createUser(
-                      Auth().currentUser!.uid,
-                      experienceValue,
-                      goalValue,
-                      liftingStyleValue,
-                    );
+                  onPressed: ()  {
+                    submitAllData();
                     context.go('/homepage');
                   },
                 ),
@@ -239,6 +230,42 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         ),
       ],
     );
+  }
+
+  Future<void> submitAllData() async {
+    try {
+      await Firestore().createUser(
+        Auth().currentUser!.uid,
+        experienceValue,
+        goalValue,
+        liftingStyleValue,
+        userNameController.text,
+        usernameController.text,
+        true,
+        selectedDate
+      );
+    } on Exception catch (e) {
+      // TODO
+    }
+  }
+
+  Future<void> submitReqOnly() async {
+    try {
+      await Firestore().createUser(
+          Auth().currentUser!.uid,
+          null,
+          null,
+          null,
+          userNameController.text,
+          usernameController.text,
+          false,
+          selectedDate
+      );
+    } catch(e) {
+      // todo
+    }
+    //context.go('/homepage');
+
   }
 
   void nextPage() {
