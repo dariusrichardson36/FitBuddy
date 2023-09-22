@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../services/auth.dart';
-import '../components/my_textfield.dart';
+import '../components/FitBuddyTextFormField.dart';
 import '../components/square_tile.dart';
 
 
@@ -122,7 +122,7 @@ class _AuthPageState extends State<AuthPage> {
             ),
           ),
           SizedBox(height: 10),
-          MyTextField(
+          FitBuddyTextFormField(
             controller: emailController,
             hintText: 'email',
             obscureText: false,
@@ -133,7 +133,7 @@ class _AuthPageState extends State<AuthPage> {
           ),
           const SizedBox(height: 10),
           // password textfield
-          MyTextField(
+          FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
             obscureText: true,
@@ -174,21 +174,21 @@ class _AuthPageState extends State<AuthPage> {
             ),
           ),
           SizedBox(height: 10),
-          MyTextField(
+          FitBuddyTextFormField(
             controller: emailController,
             hintText: 'email',
             obscureText: false,
           ),
           const SizedBox(height: 10),
           // password textfield
-          MyTextField(
+          FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
             obscureText: true,
           ),
           const SizedBox(height: 10),
           // password textfield
-          MyTextField(
+          FitBuddyTextFormField(
             controller: confirmPasswordController,
             hintText: 'Confirm password',
             obscureText: true,

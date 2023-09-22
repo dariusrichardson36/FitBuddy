@@ -5,7 +5,7 @@ import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../components/my_textfield.dart';
+import '../components/FitBuddyTextFormField.dart';
 import 'auth_page.dart';
 
 final experienceList = <String>["Choose your experience", "0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
@@ -77,12 +77,12 @@ class _DropDownMenus extends State<CompleteAccountInformationOld> {
         SizedBox(
           height: 10,
         ),
-        MyTextField(
+        FitBuddyTextFormField(
           controller: nameController,
           hintText: 'name',
           obscureText: false,
         ),
-        MyTextField(
+        FitBuddyTextFormField(
           controller: userNameController,
           hintText: 'username',
           obscureText: false,

@@ -49,17 +49,35 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: PageView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: _pageController,
-              children: [
-                requiredInformation(),
-                personalData(),
-              ],
-            ),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: Column(
+            children: [
+              Expanded(
+                child: PageView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  children: [
+                    requiredInformation(),
+                    personalData(),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {Auth().signOutUser();},
+                    child: Text(
+                      "Return to login screen",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ]
+              )
+            ]
           ),
         ),
       ),
