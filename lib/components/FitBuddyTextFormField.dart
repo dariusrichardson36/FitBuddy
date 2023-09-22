@@ -4,12 +4,14 @@ class FitBuddyTextFormField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
+  final String? Function(dynamic value) validator;
 
   const FitBuddyTextFormField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    required this.validator,
   });
 
   @override
@@ -17,6 +19,7 @@ class FitBuddyTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
+      validator: validator,
       decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),

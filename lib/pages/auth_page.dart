@@ -126,6 +126,7 @@ class _AuthPageState extends State<AuthPage> {
             controller: emailController,
             hintText: 'email',
             obscureText: false,
+            validator: (value) {  },
           ),
           Text(
               "Forgot email?",
@@ -137,6 +138,7 @@ class _AuthPageState extends State<AuthPage> {
             controller: passwordController,
             hintText: 'Password',
             obscureText: true,
+            validator: (value) {  },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,6 +180,7 @@ class _AuthPageState extends State<AuthPage> {
             controller: emailController,
             hintText: 'email',
             obscureText: false,
+            validator: (value) {  },
           ),
           const SizedBox(height: 10),
           // password textfield
@@ -185,6 +188,7 @@ class _AuthPageState extends State<AuthPage> {
             controller: passwordController,
             hintText: 'Password',
             obscureText: true,
+            validator: (value) {  },
           ),
           const SizedBox(height: 10),
           // password textfield
@@ -192,6 +196,7 @@ class _AuthPageState extends State<AuthPage> {
             controller: confirmPasswordController,
             hintText: 'Confirm password',
             obscureText: true,
+            validator: (value) {  },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

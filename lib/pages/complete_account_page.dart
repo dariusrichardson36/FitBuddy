@@ -1,4 +1,5 @@
 import 'package:fit_buddy/components/FitBuddyDropdownMenu.dart';
+import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
 import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/services/firestore.dart';
@@ -75,8 +76,8 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
                       ),
                     ),
                   ),
-                ]
-              )
+                ],
+              ),
             ]
           ),
         ),
@@ -95,17 +96,19 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           SizedBox(
             height: 10,
           ),
-          TextFormField(
+          FitBuddyTextFormField(
             controller: nameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'A display name is required';
+                return 'Display name is required';
               }
               return null;
             },
-            decoration: InputDecoration(hintText: 'Display name'),
+            hintText: 'Display name',
+            obscureText: false,
           ),
-          TextFormField(
+          SizedBox(height: 10),
+          FitBuddyTextFormField(
             controller: userNameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -113,7 +116,8 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
               }
               return null;
             },
-            decoration: InputDecoration(hintText: 'Username'),
+            hintText: 'Username',
+            obscureText: false,
           ),
           SizedBox(
             height: 10,
