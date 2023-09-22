@@ -5,22 +5,21 @@ import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../components/my_textfield.dart';
-import 'auth_page.dart';
-
 final experienceList = <String>["Choose your experience", "0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
 final goalList = <String>["Choose your goal", "Lose Weight", "Build Muscle", "Build Strength"];
 final liftingStyleList = <String>["Choose your lifting style", "Calisthenics", "Powerlifting", "Bodybuilding", "Crossfit", "General Health"];
+
 
 class CompleteAccountInformation extends StatefulWidget {
   const CompleteAccountInformation({super.key});
 
   @override
-  State<StatefulWidget> createState() => _DropDownMenus();
+  State<StatefulWidget> createState() => _CompleteAccountInformationState();
 }
 
-class _DropDownMenus extends State<CompleteAccountInformation> {
+class _CompleteAccountInformationState extends State<CompleteAccountInformation> {
 
+  final _formKey = GlobalKey<FormState>();
   String experienceValue = experienceList.first;
   String goalValue = goalList.first;
   String liftingStyleValue = liftingStyleList.first;
@@ -30,7 +29,6 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
   final firstDate = DateTime(DateTime.now().year - 100);
   final lastDate = DateTime.now();
   DateTime? selectedDate;
-  String _errorMessage = "";
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = (await showDatePicker(
@@ -59,7 +57,7 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
               controller: _pageController,
               children: [
                 requiredInformation(),
-                personalData()
+                personalData(),
               ],
             ),
           ),
@@ -68,72 +66,71 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
     );
   }
 
-  requiredInformation() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text("Please provide your name, username and date of birth"),
-        Text("Don't worry, you can change your name and username at any given time!"),
-        SizedBox(
-          height: 10,
-        ),
-        MyTextField(
-          controller: nameController,
-          hintText: 'name',
-          obscureText: false,
-        ),
-        MyTextField(
-          controller: userNameController,
-          hintText: 'username',
-          obscureText: false,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        GestureDetector(
-            onTap: () {
-              _selectDate(context);
+  Widget requiredInformation() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text("Please provide your name, username, and date of birth"),
+          Text("Don't worry, you can change your name and username at any given time!"),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: nameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'A display name is required';
+              }
+              return null;
             },
-            child: Text("You need to be at least X years of age to use the FitBuddy App")),
-        GestureDetector(
-          onTap: () async {
-            print("object");
-          // Show the date picker dialog
-          _selectDate(context);
-          },
-          child: InputDatePickerFormField(
-            onDateSaved: (value) => print(value),
-            onDateSubmitted: (value) => print("submitted" + value.toString()) ,
+            decoration: InputDecoration(hintText: 'Display name'),
+          ),
+          TextFormField(
+            controller: userNameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Username is required';
+              }
+              return null;
+            },
+            decoration: InputDecoration(hintText: 'Username'),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text("You need to be at least X years of age to use the FitBuddy App"),
+          InputDatePickerFormField(
             acceptEmptyDate: false,
             errorFormatText: "Invalid date format",
-            errorInvalidText: "Invalid text",
+            errorInvalidText: "Invalid date",
             firstDate: firstDate,
             lastDate: lastDate,
             fieldLabelText: "Date of birth",
           ),
-        ),
-
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            errorMessage(),
-            ElevatedButton(
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
                 onPressed: () {
-                  nextPage();
+                  if (_formKey.currentState!.validate()) {
+                    nextPage();
+                  }
                 },
-                child: Text("Next")
-            )
-          ],
-        )
-      ],
-
+                child: Text("Next"),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 
-  personalData() {
+  Widget personalData() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -150,33 +147,33 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
             setState(() {
               experienceValue = value!;
             });
-          }
+          },
         ),
         SizedBox(
           height: 10,
         ),
         Text("What is your fitness goal?"),
         FitBuddyDropdownMenu(
-            items: goalList,
-            value: goalValue,
-            onChange: (String? value) {
-              setState(() {
-                goalValue = value!;
-              });
-            }
+          items: goalList,
+          value: goalValue,
+          onChange: (String? value) {
+            setState(() {
+              goalValue = value!;
+            });
+          },
         ),
         SizedBox(
           height: 10,
         ),
         Text("What is your fitness style?"),
         FitBuddyDropdownMenu(
-            items: liftingStyleList,
-            value: liftingStyleValue,
-            onChange: (String? value) {
-              setState(() {
-                liftingStyleValue = value!;
-              });
-            }
+          items: liftingStyleList,
+          value: liftingStyleValue,
+          onChange: (String? value) {
+            setState(() {
+              liftingStyleValue = value!;
+            });
+          },
         ),
         SizedBox(
           height: 10,
@@ -185,37 +182,35 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear
-                  );
-                },
-                child: Text("Previous")
+              onPressed: () {
+                _pageController.previousPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                );
+              },
+              child: Text("Previous"),
             ),
             Row(
               children: [
                 GestureDetector(
                   child: Text(
                     "skip",
-                    style: TextStyle(
-                        color: Colors.blue
-                    ),
+                    style: TextStyle(color: Colors.blue),
                   ),
                 ),
                 SizedBox(width: 20),
                 ElevatedButton(
-                    child: Text("Submit"),
-                    onPressed: () async {
-                      await Firestore().createUser(
-                          Auth().currentUser!.uid,
-                          experienceValue,
-                          goalValue,
-                          liftingStyleValue);
-                      context.go('/homepage');
-                    }
+                  child: Text("Submit"),
+                  onPressed: () async {
+                    await Firestore().createUser(
+                      Auth().currentUser!.uid,
+                      experienceValue,
+                      goalValue,
+                      liftingStyleValue,
+                    );
+                    context.go('/homepage');
+                  },
                 ),
-
               ],
             ),
           ],
@@ -224,35 +219,10 @@ class _DropDownMenus extends State<CompleteAccountInformation> {
     );
   }
 
-  nextPage() {
-    if (userNameController.text.isEmpty || nameController.text.isEmpty) {
-      updateErrorMessage("Name, username and age are required");
-    } else {
-      _pageController.nextPage(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.linear
-      );
-    }
-  }
-
-  submitData() async {
-
-  }
-
-  updateErrorMessage(String message) {
-    setState(() {
-      _errorMessage = message;
-    });
-  }
-
-  errorMessage() {
-    return Text(
-      _errorMessage,
-      style: TextStyle(
-          color: Colors.red
-      ),
+  void nextPage() {
+    _pageController.nextPage(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.linear,
     );
   }
-
 }
-
