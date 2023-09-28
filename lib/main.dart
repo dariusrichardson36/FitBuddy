@@ -32,3 +32,5 @@ class MyApp extends StatelessWidget {
   }
 // This widget is the root of your application.
 }
+
+// https://coolors.co/30343f-fafaff-e4d9ff-273469-1e2749
