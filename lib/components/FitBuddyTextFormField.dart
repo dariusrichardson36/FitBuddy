@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
+class FitBuddyTextFormField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
+  final String? Function(dynamic value) validator;
 
-  const MyTextField({
+  const FitBuddyTextFormField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    required this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       obscureText: obscureText,
+      validator: validator,
       decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
