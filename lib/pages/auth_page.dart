@@ -4,6 +4,7 @@ import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../services/auth.dart';
 import '../components/FitBuddyTextFormField.dart';
@@ -52,8 +53,6 @@ class _AuthPageState extends State<AuthPage> {
       body: StreamBuilder(
         stream: Auth().authStateChanges,
         builder: (context, snapshot) {
-          print("State is:");
-          print(snapshot);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
@@ -63,11 +62,19 @@ class _AuthPageState extends State<AuthPage> {
               children: [
                 SizedBox(height: 20),
                 // logo
-                Icon(
-                  Icons.local_fire_department_rounded,
-                  size: 100,
+                SizedBox(
+                  height: 100,
+                  child: Image.asset('lib/images/logo.png'),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 10),
+                Text(
+                  "FitBuddy",
+                  style: GoogleFonts.fugazOne(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold
+                  ) ,
+                ),
+                SizedBox(height: 20),
                 if (loginState) ... [
                   loginEmailPw()
                 ] else
@@ -113,12 +120,13 @@ class _AuthPageState extends State<AuthPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sign in to FitBuddy',
-            style: TextStyle(
-              color: Colors.grey[700],
-              fontSize: 16,
+            'Log in to your FitBuddy account',
+            style: GoogleFonts.robotoFlex(
+                fontWeight: FontWeight.w700,
+                fontSize: 16
             ),
           ),
           SizedBox(height: 10),
