@@ -3,12 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
 
-  Future createUser(String uid, String experience, String goals, String liftingStyle) async {
+  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime dob) async {
     try {
       await _firebaseFirestoreInstance.collection('users').doc(uid).set({
         'experience': experience,
         'goals': goals,
         'liftingStyle': liftingStyle,
+        'dob': dob,
+        'isAccountComplete': isAccountComplete,
+        'username': username,
+        'displayName': displayName,
       });
     } catch (e) {
       // todo

@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
+import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../services/auth.dart';
-import '../components/my_textfield.dart';
+import '../components/FitBuddyTextFormField.dart';
 import '../components/square_tile.dart';
 
 
@@ -46,8 +48,46 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return authPage();
+    return Scaffold(
+      body: StreamBuilder(
+        stream: Auth().authStateChanges,
+        builder: (context, snapshot) {
+          print("State is:");
+          print(snapshot);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          return SafeArea(
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                // logo
+                Icon(
+                  Icons.local_fire_department_rounded,
+                  size: 100,
+                ),
+                SizedBox(height: 40),
+                if (loginState) ... [
+                  loginEmailPw()
+                ] else
+                  ...[
+                    registerEmailPw()
+                  ],
+                errorMessage(),
+                //Spacer(),
+                Divider(
+                  thickness: 2,
+                ),
+                otherLoginMethods(),
+                SizedBox(height: 60),
+              ]
+          )
+        );
+      })
+    );
   }
+
 
   login() {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
@@ -69,85 +109,58 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  authPage() {
-    return SafeArea(
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 20),
-          // logo
-          Icon(
-            Icons.local_fire_department_rounded,
-            size: 100,
-          ),
-          SizedBox(height: 40),
-          if (loginState) ... [
-            loginEmailPw()
-          ] else ...[
-            registerEmailPw()
-          ],
-          errorMessage(),
-          //Spacer(),
-          Divider(
-            thickness: 2,
-          ),
-          otherLoginMethods(),
-          SizedBox(height: 60),
-        ]
-      )
-    );
-  }
-
   loginEmailPw() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: Column(
-          children: [
-            Text(
-              'Sign in to FitBuddy',
-              style: TextStyle(
-                color: Colors.grey[700],
-                fontSize: 16,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Column(
+        children: [
+          Text(
+            'Sign in to FitBuddy',
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 16,
+            ),
+          ),
+          SizedBox(height: 10),
+          FitBuddyTextFormField(
+            controller: emailController,
+            hintText: 'email',
+            obscureText: false,
+            validator: (value) {  },
+          ),
+          Text(
+              "Forgot email?",
+              textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 10),
+          // password textfield
+          FitBuddyTextFormField(
+            controller: passwordController,
+            hintText: 'Password',
+            obscureText: true,
+            validator: (value) {  },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: login,
+                child: Text("Sign In"),
               ),
-            ),
-            SizedBox(height: 10),
-            MyTextField(
-              controller: emailController,
-              hintText: 'email',
-              obscureText: false,
-            ),
-            Text(
-                "Forgot email?",
-                textAlign: TextAlign.start,
-            ),
-            const SizedBox(height: 10),
-            // password textfield
-            MyTextField(
-              controller: passwordController,
-              hintText: 'Password',
-              obscureText: true,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: login,
-                  child: Text("Sign In"),
+              GestureDetector(
+                onTap: toggleLoginState,
+                child: Text(
+                    "Register here",
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16)
                 ),
-                GestureDetector(
-                  onTap: toggleLoginState,
-                  child: Text(
-                      "Register here",
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16)
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-      );
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   registerEmailPw() {
@@ -163,26 +176,27 @@ class _AuthPageState extends State<AuthPage> {
             ),
           ),
           SizedBox(height: 10),
-          MyTextField(
+          FitBuddyTextFormField(
             controller: emailController,
             hintText: 'email',
             obscureText: false,
+            validator: (value) {  },
           ),
-
-
           const SizedBox(height: 10),
           // password textfield
-          MyTextField(
+          FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
             obscureText: true,
+            validator: (value) {  },
           ),
           const SizedBox(height: 10),
           // password textfield
-          MyTextField(
+          FitBuddyTextFormField(
             controller: confirmPasswordController,
             hintText: 'Confirm password',
             obscureText: true,
+            validator: (value) {  },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,7 +230,10 @@ class _AuthPageState extends State<AuthPage> {
             // google button
             SquareTile(imagePath: 'lib/images/google.png',
               text: 'Continue with Google',
-              onTap: () => Auth().signInWithGoogle(),
+              onTap: () {
+                Auth().signInWithGoogle();
+
+              },
             ),
             SizedBox(height: 15),
             // apple button
