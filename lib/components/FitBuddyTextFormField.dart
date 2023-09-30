@@ -33,42 +33,52 @@ class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      obscureText: _obscureText,
-      validator: widget.validator,
-      decoration: InputDecoration(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: TextFormField(
+        controller: widget.controller,
+        obscureText: _obscureText,
+        validator: widget.validator,
+        decoration: InputDecoration(
 
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
+          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
 
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lError),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lError),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
+          ),
+          fillColor: fitBuddyLightTheme.colorScheme.secondary,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          label: Text(
+            widget.hintText,
+            style: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
+          ),
+          helperText: "",
+          helperStyle: TextStyle(height: 0.5),
+          // make the error text closer to the field
+          errorStyle: TextStyle(height: 0.5),
+          suffixIcon: widget.icon != null ? IconButton(
+            icon: widget.icon!,
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          ) : null,
         ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: FitBuddyColorConstants.lError),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
-        ),
-        fillColor: fitBuddyLightTheme.colorScheme.secondary,
-        filled: true,
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        label: Text(
-          widget.hintText,
-          style: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
-        ),
-        helperText: "",
-        suffixIcon: widget.icon != null ? IconButton(
-          icon: widget.icon!,
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-        ) : null,
       ),
     );
   }

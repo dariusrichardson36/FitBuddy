@@ -19,6 +19,9 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+
+  final _loginFormKey = GlobalKey<FormState>();
+  final _registerFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -115,128 +118,173 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   loginEmailPw() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Log in to your FitBuddy account',
-          style: GoogleFonts.robotoFlex(
-              fontWeight: FontWeight.w700,
-              fontSize: 16
-          ),
-        ),
-        SizedBox(height: 20),
-        FitBuddyTextFormField(
-          controller: emailController,
-          hintText: 'Email',
-          obscureText: false,
-          validator: (value) {  },
-        ),
-        //const SizedBox(height: 20),
-        FitBuddyTextFormField(
-          controller: passwordController,
-          hintText: 'Password',
-          obscureText: true,
-          validator: (value) {  },
-          icon: Icon(Icons.visibility_off),
-        ),
-        SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-            onPressed: login,
-            child: Text(
-              "Log in",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+    return Form(
+      key: _loginFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Log in to your FitBuddy account',
+            style: GoogleFonts.robotoFlex(
+                fontWeight: FontWeight.w700,
+                fontSize: 16
             ),
           ),
-        ),
-        SizedBox(height: 10),
-        Row(
-          children: [
-            Text("No FitBuddy account yet? "),
-            GestureDetector(
-              onTap: toggleLoginState,
+          SizedBox(height: 20),
+          FitBuddyTextFormField(
+            controller: emailController,
+            hintText: 'Email',
+            obscureText: false,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your email';
+              }
+              return null;
+            },
+          ),
+          //const SizedBox(height: 20),
+          FitBuddyTextFormField(
+            controller: passwordController,
+            hintText: 'Password',
+            obscureText: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your password';
+              }
+              return null;
+            },
+            icon: Icon(Icons.visibility_off),
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: (){
+                if (_loginFormKey.currentState!.validate()) {
+                  _loginFormKey.currentState!.save();
+                  login();
+                }
+              },
               child: Text(
-                  "Register here",
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 16)
+                "Log in",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ]
-        ),
-      ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Text("No FitBuddy account yet? "),
+              GestureDetector(
+                onTap: toggleLoginState,
+                child: Text(
+                    "Register here",
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16)
+                ),
+              ),
+            ]
+          ),
+        ],
+      ),
     );
   }
 
   registerEmailPw() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Register a account on FitBuddy',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16
+    return Form(
+      key: _registerFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Register a account on FitBuddy',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 16
+            ),
           ),
-        ),
-        SizedBox(height: 20),
-        FitBuddyTextFormField(
-          controller: emailController,
-          hintText: 'email',
-          obscureText: false,
-          validator: (value) {  },
-        ),
-        // password textfield
-        FitBuddyTextFormField(
-          controller: passwordController,
-          hintText: 'Password',
-          obscureText: true,
-          validator: (value) {  },
-        ),
-        // password textfield
-        FitBuddyTextFormField(
-          controller: confirmPasswordController,
-          hintText: 'Confirm password',
-          obscureText: true,
-          validator: (value) {  },
-        ),
-        SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-            onPressed: register,
-            child: Text(
-              "Register",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+          SizedBox(height: 20),
+          FitBuddyTextFormField(
+            controller: emailController,
+            hintText: 'email',
+            obscureText: false,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your email';
+              }
+              return null;
+            },
+          ),
+          // password textfield
+          FitBuddyTextFormField(
+            controller: passwordController,
+            hintText: 'Password',
+            obscureText: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your password';
+              } else if (value.isWhitespace()) {
+                return 'Password is invalid';
+              }
+              return null;
+            },
+          ),
+          // password textfield
+          FitBuddyTextFormField(
+            controller: confirmPasswordController,
+            hintText: 'Confirm password',
+            obscureText: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your password';
+              } else if (value != passwordController.text) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () {
+                if (_registerFormKey.currentState!.validate()) {
+                  _registerFormKey.currentState?.save();
+                  register();
+                }
+              },
+              child: Text(
+                "Register",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(height: 10),
-        Row(
-          children: [
-            Text("Already have a FitBuddy account? "),
-            GestureDetector(
-              onTap: toggleLoginState,
-              child: Text(
-                  "Log in here",
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16)
-              ),
-            )
-          ],
-        ),
-      ],
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Text("Already have a FitBuddy account? "),
+              GestureDetector(
+                onTap: toggleLoginState,
+                child: Text(
+                    "Log in here",
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16)
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
