@@ -24,20 +24,14 @@ class _AuthPageState extends State<AuthPage> {
   final confirmPasswordController = TextEditingController();
   bool isNewUser = false; // This needs to be on false
   bool loginState = true; // The current state of the page
-  String _currentErrorMessage = "";
 
   void toggleLoginState() {
     setState(() {
       loginState = !loginState;
-      _currentErrorMessage = "";
     });
   }
 
-  void setErrorMessage(message) {
-    setState(() {
-      _currentErrorMessage = message;
-    });
-  }
+
 
 //
 //  @override
@@ -50,6 +44,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: StreamBuilder(
         stream: Auth().authStateChanges,
         builder: (context, snapshot) {
@@ -58,11 +53,10 @@ class _AuthPageState extends State<AuthPage> {
           }
           return SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
                   // logo
                   SizedBox(
                     height: 100,
@@ -83,15 +77,16 @@ class _AuthPageState extends State<AuthPage> {
                     ...[
                       registerEmailPw()
                     ],
-                  errorMessage(),
-                  //Spacer(),
+                  Spacer(),
+
                   Divider(
                     thickness: 1,
                   ),
+                  SizedBox(height: 10),
                   otherLoginMethods(),
-                  SizedBox(height: 60),
+                  SizedBox(height: 75),
                 ]
-          ),
+              ),
             )
         );
       })
@@ -103,7 +98,7 @@ class _AuthPageState extends State<AuthPage> {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       Auth().signInWithEmail(emailController.text, passwordController.text);
     } else {
-      setErrorMessage("Please fill in email and password");
+
     }
   }
 
@@ -112,10 +107,10 @@ class _AuthPageState extends State<AuthPage> {
       if (passwordController.text.trim() == confirmPasswordController.text.trim()) {
         Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
       } else {
-        setErrorMessage("Both passwords need to be the same");
+
       }
     } else {
-      setErrorMessage("Please fill in all the required fields");
+
     }
   }
 
@@ -137,14 +132,15 @@ class _AuthPageState extends State<AuthPage> {
           obscureText: false,
           validator: (value) {  },
         ),
-        const SizedBox(height: 20),
+        //const SizedBox(height: 20),
         FitBuddyTextFormField(
           controller: passwordController,
           hintText: 'Password',
           obscureText: true,
           validator: (value) {  },
+          icon: Icon(Icons.visibility_off),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -196,7 +192,6 @@ class _AuthPageState extends State<AuthPage> {
           obscureText: false,
           validator: (value) {  },
         ),
-        const SizedBox(height: 20),
         // password textfield
         FitBuddyTextFormField(
           controller: passwordController,
@@ -204,7 +199,6 @@ class _AuthPageState extends State<AuthPage> {
           obscureText: true,
           validator: (value) {  },
         ),
-        const SizedBox(height: 20),
         // password textfield
         FitBuddyTextFormField(
           controller: confirmPasswordController,
@@ -212,7 +206,7 @@ class _AuthPageState extends State<AuthPage> {
           obscureText: true,
           validator: (value) {  },
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -258,7 +252,7 @@ class _AuthPageState extends State<AuthPage> {
 
             },
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 10),
           // apple button
           FitBuddyThirdPartyBox(
               imagePath: 'lib/images/apple.png',
@@ -267,14 +261,5 @@ class _AuthPageState extends State<AuthPage> {
           )
         ],
       );
-  }
-
-  errorMessage() {
-    return Text(
-      _currentErrorMessage,
-      style: TextStyle(
-        color: Colors.red
-      ),
-    );
   }
 }

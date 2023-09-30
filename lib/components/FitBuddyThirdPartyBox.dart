@@ -1,14 +1,17 @@
+import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:flutter/material.dart';
 
 class FitBuddyThirdPartyBox extends StatelessWidget {
   final String imagePath;
   final String text;
   final Function()? onTap;
+  final Icon? icon;
   const FitBuddyThirdPartyBox({
     super.key,
     required this.imagePath,
     required this.text,
     required this.onTap,
+    this.icon,
   });
 
   @override
@@ -16,11 +19,11 @@ class FitBuddyThirdPartyBox extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child:Container(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(16),
-            color: Colors.grey[200],
+            border: Border.all(color: FitBuddyColorConstants.lOnSecondary),
+            borderRadius: BorderRadius.circular(50),
+
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,14 +31,11 @@ class FitBuddyThirdPartyBox extends StatelessWidget {
               Image.asset(
                 alignment: Alignment.centerLeft,
                 imagePath,
-                height: 40,
-                width: 50,
+                height: 20,
+                width: 30,
               ),
               Text(
                 text,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold
-                ),
               ),
               SizedBox(
                 width: 50,
