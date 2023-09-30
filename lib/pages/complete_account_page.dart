@@ -1,5 +1,7 @@
 import 'package:fit_buddy/components/FitBuddyDropdownMenu.dart';
+import 'package:fit_buddy/components/FitBuddySelectableButton.dart';
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
+import 'package:fit_buddy/pages/complete_account_views/gender_selection.dart';
 import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/services/firestore.dart';
@@ -31,6 +33,12 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
   final lastDate = DateTime.now();
   late DateTime selectedDate;
 
+  List<GlobalKey<FormState>> formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,31 +46,47 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         child: Padding(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                alignment: Alignment.centerLeft,
+
+                //constraints: const BoxConstraints(minWidth: 20, maxWidth: 30),
+                onPressed: previousPage,
+                icon: Icon(Icons.arrow_back_rounded),
+                iconSize: 40,
+
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Expanded(
                 child: PageView(
                   physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
-                    requiredInformation(),
+                    GenderSelection(),
+                    nameAndUsername(),
                     personalData(),
+
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {Auth().signOutUser();},
-                    child: Text(
-                      "Return to login screen",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 15,
-                      ),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: nextPage,
+                  child: Text(
+                    "Continue",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
-              ),
+                ),
+              )
             ]
           ),
         ),
@@ -70,14 +94,42 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     );
   }
 
-  Widget requiredInformation() {
+  Widget ageSelection() {
+    return Column(
+      children: [
+        Text("You need to be at least X years of age to use the FitBuddy App"),
+        InputDatePickerFormField(
+          onDateSubmitted: (value) {
+            selectedDate = value;
+          },
+          onDateSaved:(value) {
+            selectedDate = value;
+          },
+          acceptEmptyDate: false,
+          errorFormatText: "Invalid date format",
+          errorInvalidText: "Invalid date",
+          firstDate: firstDate,
+          lastDate: lastDate,
+          fieldLabelText: "Date of birth",
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
+
+  Widget nameAndUsername() {
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("Please provide your name, username, and date of birth"),
-          Text("Don't worry, you can change your name and username at any given time!"),
+          Text("To create an account, we need to know your name and username"),
+          SizedBox(
+            height: 10,
+          ),
+          Text("No stress, you can change this later"),
           SizedBox(
             height: 10,
           ),
@@ -89,10 +141,9 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
               }
               return null;
             },
-            hintText: 'Display name',
+            hintText: 'Name',
             obscureText: false,
           ),
-          SizedBox(height: 10),
           FitBuddyTextFormField(
             controller: userNameController,
             validator: (value) {
@@ -104,27 +155,8 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             hintText: 'Username',
             obscureText: false,
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Text("You need to be at least X years of age to use the FitBuddy App"),
-          InputDatePickerFormField(
-            onDateSubmitted: (value) {
-              selectedDate = value;
-              },
-            onDateSaved:(value) {
-              selectedDate = value;
-            },
-            acceptEmptyDate: false,
-            errorFormatText: "Invalid date format",
-            errorInvalidText: "Invalid date",
-            firstDate: firstDate,
-            lastDate: lastDate,
-            fieldLabelText: "Date of birth",
-          ),
-          SizedBox(
-            height: 10,
-          ),
+
+
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -266,6 +298,17 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     }
     //context.go('/homepage');
 
+  }
+
+  void previousPage() {
+    // if the page is the first page, log out
+    if (_pageController.page == 0) {
+      Auth().signOutUser();
+    }
+    _pageController.previousPage(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
   }
 
   void nextPage() {
