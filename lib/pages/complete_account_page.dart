@@ -8,9 +8,9 @@ import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-final experienceList = <String>["Choose your experience", "0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
-final goalList = <String>["Choose your goal", "Lose Weight", "Build Muscle", "Build Strength"];
-final liftingStyleList = <String>["Choose your lifting style", "Calisthenics", "Powerlifting", "Bodybuilding", "Crossfit", "General Health"];
+final experienceList = <String>["0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
+final goalList = <String>["Lose Weight", "Build Muscle", "Build Strength"];
+final liftingStyleList = <String>["Calisthenics", "Powerlifting", "Bodybuilding", "Crossfit", "General Health"];
 
 
 class CompleteAccountInformation extends StatefulWidget {
@@ -66,8 +66,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
                   physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
-                    personalData(),
+                    ageSelection(),
                     nameAndUsername(),
+                    personalData(),
+
                     GenderSelection(),
 
                   ],
@@ -180,10 +182,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text("Please provide us with more data so we can match you to the right people."),
+        Text("Please complete these questions so we can match you to the right people."),
         Text("Don't worry, you can always do this later or change it."),
         SizedBox(
-          height: 10,
+          height: 30,
         ),
         FitBuddyDropdownMenu(
           items: experienceList,
@@ -196,7 +198,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           },
         ),
         SizedBox(
-          height: 10,
+          height: 30,
         ),
         FitBuddyDropdownMenu(
           items: goalList,
@@ -209,7 +211,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           },
         ),
         SizedBox(
-          height: 10,
+          height: 30,
         ),
         FitBuddyDropdownMenu(
           items: liftingStyleList,
@@ -222,41 +224,20 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           },
         ),
         SizedBox(
-          height: 10,
+          height: 20,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                _pageController.previousPage(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.linear,
-                );
+            GestureDetector(
+              onTap: () {
+                submitReqOnly();
+                context.go('/homepage');
               },
-              child: Text("Previous"),
-            ),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    submitReqOnly();
-                    context.go('/homepage');
-                  },
-                  child: Text(
-                    "skip",
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  child: Text("Submit"),
-                  onPressed: ()  {
-                    submitAllData();
-                    context.go('/homepage');
-                  },
-                ),
-              ],
+              child: Text(
+                "skip account setup",
+                style: TextStyle(color: Colors.blue, fontSize: 16),
+              ),
             ),
           ],
         ),
