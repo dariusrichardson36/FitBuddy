@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fit_buddy/constants/color_constants.dart';
+import '../theme/theme_constants.dart';
 
 class FitBuddyTextFormField extends StatelessWidget {
   final controller;
@@ -21,16 +23,19 @@ class FitBuddyTextFormField extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          fillColor: Colors.grey.shade200,
-          filled: true,
-          hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey[500])),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
+
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
+        ),
+        fillColor: fitBuddyLightTheme.colorScheme.secondary,
+        filled: true,
+        hintStyle: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
+        hintText: hintText
+      ),
     );
   }
 }

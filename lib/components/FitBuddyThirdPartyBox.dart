@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class SquareTile extends StatelessWidget {
+class FitBuddyThirdPartyBox extends StatelessWidget {
   final String imagePath;
   final String text;
   final Function()? onTap;
-  const SquareTile({
+  const FitBuddyThirdPartyBox({
     super.key,
     required this.imagePath,
     required this.text,

@@ -17,6 +17,7 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -58,9 +59,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeManager.themeMode,
+      theme: fitBuddyLightTheme,
+      //darkTheme: darkTheme,
+      //themeMode: ThemeManager.themeMode,
       routerConfig: FitBuddyRouter().router,
 
     );
