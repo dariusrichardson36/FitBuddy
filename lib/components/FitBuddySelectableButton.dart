@@ -29,7 +29,7 @@ class _FitBuddySelectableButtonState extends State<FitBuddySelectableButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
-            color: widget.isSelected ? FitBuddyColorConstants.lOnPrimary : FitBuddyColorConstants.lAccent,
+            color: widget.isSelected ? FitBuddyColorConstants.lAccent : FitBuddyColorConstants.lOnPrimary,
             width: 1,
           ),
         ),
@@ -37,7 +37,7 @@ class _FitBuddySelectableButtonState extends State<FitBuddySelectableButton> {
           child: Text(
             widget.text,
             style: TextStyle(
-              color: widget.isSelected ? FitBuddyColorConstants.lOnPrimary : FitBuddyColorConstants.lAccent,
+              color: widget.isSelected ? FitBuddyColorConstants.lAccent : FitBuddyColorConstants.lOnPrimary,
               fontSize: 19,
               fontWeight: FontWeight.bold,
             ),

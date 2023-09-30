@@ -6,11 +6,12 @@ class GenderSelection extends StatefulWidget {
   const GenderSelection({super.key});
 
   @override
-  _GenderSelectionState createState() => _GenderSelectionState();
+  GenderSelectionState createState() => GenderSelectionState();
 }
 
-class _GenderSelectionState extends State<GenderSelection> {
-  bool isManSelected = true;
+class GenderSelectionState extends State<GenderSelection> {
+  bool isManSelected = false;
+  bool isWomanSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,10 @@ class _GenderSelectionState extends State<GenderSelection> {
           onTap: () {
             setState(() {
               isManSelected = true;
+              isWomanSelected = false;
             });
           },
-          isSelected: !isManSelected,
+          isSelected: isManSelected,
         ),
         SizedBox(height: 20),
         FitBuddySelectableButton(
@@ -34,9 +36,10 @@ class _GenderSelectionState extends State<GenderSelection> {
           onTap: () {
             setState(() {
               isManSelected = false;
+              isWomanSelected = true;
             });
           },
-          isSelected: isManSelected,
+          isSelected: isWomanSelected,
         ),
       ],
     );

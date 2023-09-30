@@ -66,9 +66,9 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
                   physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
-                    GenderSelection(),
-                    nameAndUsername(),
                     personalData(),
+                    nameAndUsername(),
+                    GenderSelection(),
 
                   ],
                 ),
@@ -185,10 +185,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         SizedBox(
           height: 10,
         ),
-        Text("What is your fitness experience"),
         FitBuddyDropdownMenu(
           items: experienceList,
           value: experienceValue,
+          labelText: "Choose your experience",
           onChange: (String? value) {
             setState(() {
               experienceValue = value!;
@@ -198,10 +198,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         SizedBox(
           height: 10,
         ),
-        Text("What is your fitness goal?"),
         FitBuddyDropdownMenu(
           items: goalList,
           value: goalValue,
+          labelText: "Choose your goal",
           onChange: (String? value) {
             setState(() {
               goalValue = value!;
@@ -211,10 +211,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         SizedBox(
           height: 10,
         ),
-        Text("What is your fitness style?"),
         FitBuddyDropdownMenu(
           items: liftingStyleList,
           value: liftingStyleValue,
+          labelText: "Choose your lifting style",
           onChange: (String? value) {
             setState(() {
               liftingStyleValue = value!;
