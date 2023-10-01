@@ -134,7 +134,7 @@ class _AuthPageState extends State<AuthPage> {
           FitBuddyTextFormField(
             controller: emailController,
             hintText: 'Email',
-            obscureText: false,
+            isPassword: false,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter your email';
@@ -146,7 +146,7 @@ class _AuthPageState extends State<AuthPage> {
           FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
-            obscureText: true,
+            isPassword: true,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter your password';
@@ -212,7 +212,7 @@ class _AuthPageState extends State<AuthPage> {
           FitBuddyTextFormField(
             controller: emailController,
             hintText: 'email',
-            obscureText: false,
+            isPassword: false,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter your email';
@@ -224,7 +224,7 @@ class _AuthPageState extends State<AuthPage> {
           FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
-            obscureText: true,
+            isPassword: true,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter your password';
@@ -238,7 +238,7 @@ class _AuthPageState extends State<AuthPage> {
           FitBuddyTextFormField(
             controller: confirmPasswordController,
             hintText: 'Confirm password',
-            obscureText: true,
+            isPassword: true,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter your password';

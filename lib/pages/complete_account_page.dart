@@ -192,7 +192,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
               return null;
             },
             hintText: 'Name',
-            obscureText: false,
+            isPassword: false,
           ),
           FitBuddyTextFormField(
             controller: userNameController,
@@ -209,7 +209,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
               return null;
             },
             hintText: 'Username',
-            obscureText: false,
+            isPassword: false,
           ),
         ],
       ),

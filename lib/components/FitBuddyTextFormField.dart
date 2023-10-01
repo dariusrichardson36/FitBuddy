@@ -5,7 +5,8 @@ import '../theme/theme_constants.dart';
 class FitBuddyTextFormField extends StatefulWidget {
   final controller;
   final String hintText;
-  final bool obscureText;
+  final bool isPassword;
+
   final String? Function(dynamic value) validator;
   final Icon? icon;
 
@@ -13,7 +14,7 @@ class FitBuddyTextFormField extends StatefulWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
+    required this.isPassword,
     required this.validator,
     this.icon,
   });
@@ -28,7 +29,7 @@ class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
   @override
   void initState() {
     super.initState();
-    _obscureText = widget.obscureText;
+    _obscureText = widget.isPassword;
   }
 
   @override
@@ -70,8 +71,8 @@ class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
           helperStyle: TextStyle(height: 0.5),
           // make the error text closer to the field
           errorStyle: TextStyle(height: 0.5),
-          suffixIcon: widget.icon != null ? IconButton(
-            icon: widget.icon!,
+          suffixIcon: widget.isPassword ? IconButton(
+            icon: _obscureText ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
             onPressed: () {
               setState(() {
                 _obscureText = !_obscureText;
