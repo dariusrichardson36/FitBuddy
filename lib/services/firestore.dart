@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
 
-  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime dob) async {
+  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime? dob, String? gender) async {
     try {
       await _firebaseFirestoreInstance.collection('users').doc(uid).set({
         'experience': experience,
@@ -13,6 +13,7 @@ class Firestore {
         'isAccountComplete': isAccountComplete,
         'username': username,
         'displayName': displayName,
+        'gender': gender,
       });
     } catch (e) {
       // todo

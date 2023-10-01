@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:fit_buddy/components/FitBuddyDropdownMenu.dart';
 import 'package:fit_buddy/components/FitBuddySelectableButton.dart';
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
@@ -7,6 +9,8 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../components/FitBuddyDateInputField.dart';
 
 final experienceList = <String>["0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
 final goalList = <String>["Lose Weight", "Build Muscle", "Build Strength"];
@@ -23,25 +27,22 @@ class CompleteAccountInformation extends StatefulWidget {
 class _CompleteAccountInformationState extends State<CompleteAccountInformation> {
 
   final _formKey = GlobalKey<FormState>();
-  String experienceValue = experienceList.first;
-  String goalValue = goalList.first;
-  String liftingStyleValue = liftingStyleList.first;
+  String experienceValue = "";
+  String goalValue = "";
+  String liftingStyleValue = "";
+  bool isManSelected = false;
+  bool isWomanSelected = false;
   final userNameController = TextEditingController();
   final usernameController = TextEditingController();
   final PageController _pageController = PageController();
   final firstDate = DateTime(DateTime.now().year - 100);
   final lastDate = DateTime.now();
-  late DateTime selectedDate;
-
-  List<GlobalKey<FormState>> formKeys = [
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-  ];
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -66,12 +67,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
                   physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
-                    ageSelection(),
                     nameAndUsername(),
                     personalData(),
-
-                    GenderSelection(),
-
+                    genderSelection(),
+                    ageSelection(),
                   ],
                 ),
               ),
@@ -96,27 +95,66 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     );
   }
 
+  Widget skipSetup() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: () {
+            print("object");
+            submitAccountData();
+            context.go('/homepage');
+          },
+          child: Text(
+            "skip account setup",
+            style: TextStyle(color: Colors.blue, fontSize: 16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget genderSelection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("I am a", style: TextStyle(fontSize: 20),),
+        SizedBox(height: 20),
+        FitBuddySelectableButton(
+          text: "MAN",
+          onTap: () {
+            setState(() {
+              isManSelected = true;
+              isWomanSelected = false;
+            });
+          },
+          isSelected: isManSelected,
+        ),
+        SizedBox(height: 20),
+        FitBuddySelectableButton(
+          text: "WOMAN",
+          onTap: () {
+            setState(() {
+              isManSelected = false;
+              isWomanSelected = true;
+            });
+          },
+          isSelected: isWomanSelected,
+        ),
+        skipSetup(),
+      ],
+    );
+  }
+
   Widget ageSelection() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("You need to be at least X years of age to use the FitBuddy App"),
-        InputDatePickerFormField(
-          onDateSubmitted: (value) {
-            selectedDate = value;
-          },
-          onDateSaved:(value) {
-            selectedDate = value;
-          },
-          acceptEmptyDate: false,
-          errorFormatText: "Invalid date format",
-          errorInvalidText: "Invalid date",
-          firstDate: firstDate,
-          lastDate: lastDate,
-          fieldLabelText: "Date of birth",
-        ),
-        SizedBox(
-          height: 10,
-        ),
+        Text("My birthday is", style: TextStyle(fontSize: 20)),
+        SizedBox(height: 20),
+        FitBuddyDateInputField(),
+        SizedBox(height: 10),
+        skipSetup(),
       ],
     );
   }
@@ -157,22 +195,6 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             hintText: 'Username',
             obscureText: false,
           ),
-
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState?.save();
-                    nextPage();
-                  }
-                },
-                child: Text("Next"),
-              )
-            ],
-          )
         ],
       ),
     );
@@ -226,76 +248,70 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         SizedBox(
           height: 20,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                submitReqOnly();
-                context.go('/homepage');
-              },
-              child: Text(
-                "skip account setup",
-                style: TextStyle(color: Colors.blue, fontSize: 16),
-              ),
-            ),
-          ],
-        ),
+        skipSetup(),
       ],
     );
   }
 
-  Future<void> submitAllData() async {
+  Future<void> submitAccountData() async {
     try {
       await Firestore().createUser(
         Auth().currentUser!.uid,
-        experienceValue,
-        goalValue,
-        liftingStyleValue,
+        experienceValue.isEmpty ? null : experienceValue,
+        goalValue.isEmpty ? null : goalValue,
+        liftingStyleValue.isEmpty ? null : liftingStyleValue,
         userNameController.text,
         usernameController.text,
-        true,
-        selectedDate
+        isComplete(),
+        selectedDate,
+        getGender(),
       );
     } on Exception catch (e) {
       // TODO
     }
   }
 
-  Future<void> submitReqOnly() async {
-    try {
-      await Firestore().createUser(
-          Auth().currentUser!.uid,
-          null,
-          null,
-          null,
-          userNameController.text,
-          usernameController.text,
-          false,
-          selectedDate
-      );
-    } catch(e) {
-      // todo
-    }
-    //context.go('/homepage');
+  bool isComplete() {
+    return experienceValue.isNotEmpty &&
+        goalValue.isNotEmpty &&
+        liftingStyleValue.isNotEmpty &&
+        getGender() != null &&
+        selectedDate != null;
+  }
 
+  String? getGender() {
+    if (isManSelected && !isWomanSelected) return "male";
+    if (!isManSelected && isWomanSelected) return "female";
+    return null; // if both are false, or both are true, return null.
   }
 
   void previousPage() {
     // if the page is the first page, log out
     if (_pageController.page == 0) {
       Auth().signOutUser();
+    } else {
+      _pageController.previousPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.linear,
+      );
     }
-    _pageController.previousPage(
-      duration: Duration(milliseconds: 300),
-      curve: Curves.linear,
-    );
   }
 
   void nextPage() {
-    _pageController.nextPage(
-      duration: Duration(milliseconds: 300),
-      curve: Curves.linear,
-    );
+    switch (_pageController.page?.toInt()) {
+      case 0:
+        if (_formKey.currentState!.validate()) {
+          _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.linear);
+        }
+        break;
+      case 1:
+      case 2:
+        _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.linear);
+        break;
+      case 3:
+        submitAccountData();
+        context.go('/homepage');
+        break;
+    }
   }
 }

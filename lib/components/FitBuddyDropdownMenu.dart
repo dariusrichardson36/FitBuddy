@@ -49,12 +49,10 @@ class FitBuddyDropdownMenu extends StatelessWidget {
       items: items.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-
-
           child: Text(value),
         );
       }).toList(),
-
+      value: value.isEmpty ? null : value,
       onChanged: onChange,
       icon: Icon(Icons.keyboard_arrow_down_rounded),
       iconSize: 50,
