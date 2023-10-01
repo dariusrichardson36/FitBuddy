@@ -140,6 +140,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           },
           isSelected: isWomanSelected,
         ),
+        SizedBox(height: 20),
         skipSetup(),
       ],
     );
