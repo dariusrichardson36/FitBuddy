@@ -105,15 +105,14 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  register() {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && confirmPasswordController.text.isNotEmpty) {
-      if (passwordController.text.trim() == confirmPasswordController.text.trim()) {
-        Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
-      } else {
-
-      }
-    } else {
-
+  register() async {
+    print("object");
+    try {
+       var result = await Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
+       print(result);
+    } catch (e) {
+      print(e);
+      return e;
     }
   }
 
@@ -228,8 +227,8 @@ class _AuthPageState extends State<AuthPage> {
             validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter your password';
-              } else if (value.isWhitespace()) {
-                return 'Password is invalid';
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters';
               }
               return null;
             },
@@ -254,9 +253,12 @@ class _AuthPageState extends State<AuthPage> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
+                print("here");
                 if (_registerFormKey.currentState!.validate()) {
                   _registerFormKey.currentState?.save();
                   register();
+                } else {
+                  print("not validated");
                 }
               },
               child: Text(
