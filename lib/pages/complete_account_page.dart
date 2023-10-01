@@ -33,11 +33,11 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
   bool isManSelected = false;
   bool isWomanSelected = false;
   final userNameController = TextEditingController();
-  final usernameController = TextEditingController();
+  final nameController = TextEditingController();
   final PageController _pageController = PageController();
   final firstDate = DateTime(DateTime.now().year - 100);
   final lastDate = DateTime.now();
-  DateTime? selectedDate;
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,6 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
       children: [
         GestureDetector(
           onTap: () {
-            print("object");
             submitAccountData();
             context.go('/homepage');
           },
@@ -152,7 +151,11 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
       children: [
         Text("My birthday is", style: TextStyle(fontSize: 20)),
         SizedBox(height: 20),
-        FitBuddyDateInputField(),
+        FitBuddyDateInputField(
+          onDateSelected: (selectedDate) {
+            _selectedDate = selectedDate;
+          },
+        ),
         SizedBox(height: 10),
         skipSetup(),
       ],
@@ -174,10 +177,16 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             height: 10,
           ),
           FitBuddyTextFormField(
-            controller: usernameController,
+            controller: nameController,
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Display name is required';
+              if (value == null || value.isEmpty ) {
+                return 'Name is required';
+              } else if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(value)) {
+                return 'Name can only contain alphanumeric characters';
+              } else if (value.length < 3) {
+                return 'Name must be at least 3 characters long';
+              } else if (value.length > 20) {
+                return 'Name must be less than 20 characters long';
               }
               return null;
             },
@@ -189,6 +198,12 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Username is required';
+              } else if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                return 'Username can only contain alphanumeric characters and underscores';
+              } else if (value.length < 3) {
+                return 'Username must be at least 3 characters long';
+              } else if (value.length > 20) {
+                return 'Username must be less than 20 characters long';
               }
               return null;
             },
@@ -260,10 +275,10 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         experienceValue.isEmpty ? null : experienceValue,
         goalValue.isEmpty ? null : goalValue,
         liftingStyleValue.isEmpty ? null : liftingStyleValue,
-        userNameController.text,
-        usernameController.text,
+        userNameController.text.trim(),
+        nameController.text.trim(),
         isComplete(),
-        selectedDate,
+        _selectedDate,
         getGender(),
       );
     } on Exception catch (e) {
@@ -276,7 +291,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         goalValue.isNotEmpty &&
         liftingStyleValue.isNotEmpty &&
         getGender() != null &&
-        selectedDate != null;
+        _selectedDate != null;
   }
 
   String? getGender() {
