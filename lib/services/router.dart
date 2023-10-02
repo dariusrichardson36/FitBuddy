@@ -7,6 +7,7 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fit_buddy/services/firestore.dart';
+import '../pages/search_page.dart';
 import '../services/auth.dart';
 import 'notifier.dart';
 
@@ -47,11 +48,19 @@ class FitBuddyRouter {
                 child: CompleteAccountInformation()
             );
           }
+        ),
+        GoRoute(path: '/search',
+          name: FitBuddyRouterConstants.searchPage,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: SearchPage(),
+            );
+          }
         )
       ],
 
     refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
-    redirect: (context, state) async {
+    redirect: (context, GoRouterState state) async {
         User? user = Auth().currentUser;
         if (user == null) {
           return state.namedLocation(FitBuddyRouterConstants.authPage);
@@ -59,6 +68,10 @@ class FitBuddyRouter {
         bool doesUserDataExist = await Firestore().doesUserDocumentExist(user.uid);
         if (!doesUserDataExist) {
           return '/completeAccountInfo';
+        }
+         //
+        if(state.matchedLocation != '/') {
+          return null;
         }
         return '/';
     }

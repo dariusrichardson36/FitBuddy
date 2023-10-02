@@ -1,4 +1,6 @@
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TimeLineView extends StatelessWidget {
   const TimeLineView({super.key});
@@ -28,12 +30,15 @@ class TimeLineView extends StatelessWidget {
                 ),
               ),
               Text("Logo Here") ,
-              SizedBox(width: 35)
+              IconButton(
+                  onPressed: () => context.go('/search'),
+                  icon: Icon(Icons.search)),
+              //SizedBox(width: 35)
             ],
           ),
         ),
 
-
+/*
         Expanded (
           child: ListView.separated(
             itemCount: 100,
@@ -43,6 +48,8 @@ class TimeLineView extends StatelessWidget {
 
           ),
         )
+
+ */
       ],    
     );
   }
