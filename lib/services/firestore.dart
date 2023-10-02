@@ -30,4 +30,28 @@ class Firestore {
     return docSnapshot.exists;
   }
 
+  Future<List<String>> searchUser(String name) async {
+    try {
+      // Ensuring case-insensitive search by converting input and stored name to lowercase
+      String lowerCaseName = name.toLowerCase();
+
+      // Using startAt and endAt to get all usernames that start with the search string
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .orderBy('username')
+          .startAt([lowerCaseName])
+          .get();
+
+      // Extracting usernames from the query snapshot
+      List<String> usernames = snapshot.docs.map((doc) {
+        return (doc['username'] as String?) ?? ''; // Adjust if the username is nested or has a different field name
+      }).toList();
+
+      return usernames;
+    } catch (e) {
+      print("Error in searchUser: $e");
+      return [];
+    }
+  }
+
 }
