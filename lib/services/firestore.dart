@@ -20,9 +20,21 @@ class Firestore {
     }
   }
 
+  Future<QuerySnapshot> getTimeline() {
+    print("Getting timeline");
+    return _firebaseFirestoreInstance.collection("posts").orderBy('timestamp', descending: true).get();
+  }
+
+  Stream<QuerySnapshot> getTimelineStream() {
+    return _firebaseFirestoreInstance
+        .collection('posts')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
+
   Future<bool> doesUserDocumentExist(String userId) async {
     // Reference to the "users" collection and the specific document
-    DocumentReference userDocRef = FirebaseFirestore.instance.collection("users").doc(userId);
+    DocumentReference userDocRef = _firebaseFirestoreInstance.collection("users").doc(userId);
 
     // Try to retrieve the document snapshot
     DocumentSnapshot docSnapshot = await userDocRef.get();
