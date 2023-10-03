@@ -39,7 +39,7 @@ class Firestore {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('users')
           .orderBy('username')
-          .startAt([lowerCaseName])
+          .where('username', isEqualTo: lowerCaseName)
           .get();
 
       // Extracting usernames from the query snapshot
