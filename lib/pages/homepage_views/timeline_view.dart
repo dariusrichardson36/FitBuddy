@@ -1,80 +1,57 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/services/firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TimeLineView extends StatelessWidget {
+class TimeLineView extends StatefulWidget {
   const TimeLineView({super.key});
 
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: Scaffold.of(context).openDrawer,
-                child: Container(
-                  width: 35.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              Text("Logo Here") ,
-              SizedBox(width: 35)
-            ],
-          ),
-        ),
-
-
-        Expanded (
-          child: ListView.separated(
-            itemCount: 100,
-            padding: const EdgeInsets.all(8),
-            separatorBuilder: (BuildContext context, int index) => const Divider(),
-            itemBuilder: (context, index) => Post(),
-
-          ),
-        )
-      ],    
-    );
-  }
+  _TimeLineViewState createState() => _TimeLineViewState();
 }
 
-class Post extends StatelessWidget {
+class _TimeLineViewState extends State<TimeLineView> {
+  late Stream<QuerySnapshot> timelinePostsStream;
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: Column (
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0,  0,  100,  0),
-                  width: 45.0,
-                  height: 45.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Text("Robin Monseré")
-              ],
-            ),
-            Text("This is the post bla bla ")
-          ],
-        ),
-    );
+  void initState() {
+    super.initState();
+    loadTimeline();
   }
 
+  void loadTimeline() async {
+    // Replace with actual currentUserId
+    //String currentUserId = 'exampleUserId';
+    //List<String> friendsIds = await getFriendsIds();
+    setState(() {
+      timelinePostsStream = Firestore().getTimelineStream();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: timelinePostsStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text('No posts available.'));
+        }
+
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            final post = snapshot.data!.docs[index];
+            return ListTile(
+              title: Text(post['description']),
+              //subtitle: Text('By ${post['userId']} at ${post['timestamp']}'),
+            );
+          },
+        );
+      },
+    );
+  }
 }

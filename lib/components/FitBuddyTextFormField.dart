@@ -1,36 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:fit_buddy/constants/color_constants.dart';
+import '../theme/theme_constants.dart';
 
-class FitBuddyTextFormField extends StatelessWidget {
+class FitBuddyTextFormField extends StatefulWidget {
   final controller;
   final String hintText;
-  final bool obscureText;
+  final bool isPassword;
+
   final String? Function(dynamic value) validator;
+  final Icon? icon;
 
   const FitBuddyTextFormField({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
+    required this.isPassword,
     required this.validator,
+    this.icon,
   });
 
   @override
+  State<FitBuddyTextFormField> createState() => _FitBuddyTextFormFieldState();
+}
+
+class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.isPassword;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      validator: validator,
-      decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: TextFormField(
+        controller: widget.controller,
+        obscureText: _obscureText,
+        validator: widget.validator,
+        decoration: InputDecoration(
+
+          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
+
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lError),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lError),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
           ),
-          fillColor: Colors.grey.shade200,
+          fillColor: fitBuddyLightTheme.colorScheme.secondary,
           filled: true,
-          hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey[500])),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          label: Text(
+            widget.hintText,
+            style: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
+          ),
+          helperText: "",
+          helperStyle: TextStyle(height: 0.5),
+          // make the error text closer to the field
+          errorStyle: TextStyle(height: 0.5),
+          suffixIcon: widget.isPassword ? IconButton(
+            icon: _obscureText ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          ) : null,
+        ),
+      ),
     );
   }
 }
