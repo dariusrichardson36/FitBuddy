@@ -1,4 +1,5 @@
 
+import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,13 @@ class DrawerPage extends StatelessWidget {
             Text("Profile"),
             Text("Settings"),
             Spacer(),
-            IconButton(onPressed: () => Auth().signOutUser(), icon: Icon(Icons.logout_rounded))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(onPressed: () => Auth().signOutUser(), icon: Icon(Icons.logout_rounded)),
+                IconButton(onPressed: () => ThemeManager().toggleTheme(), icon: Icon(Icons.sunny))
+              ],
+            ),
           ]
         ),
       )

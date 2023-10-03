@@ -4,10 +4,11 @@ import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../services/auth.dart';
 import '../components/FitBuddyTextFormField.dart';
-import '../components/square_tile.dart';
+import '../components/FitBuddyThirdPartyBox.dart';
 
 
 class AuthPage extends StatefulWidget {
@@ -18,25 +19,22 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+
+  final _loginFormKey = GlobalKey<FormState>();
+  final _registerFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool isNewUser = false; // This needs to be on false
   bool loginState = true; // The current state of the page
-  String _currentErrorMessage = "";
 
   void toggleLoginState() {
     setState(() {
       loginState = !loginState;
-      _currentErrorMessage = "";
     });
   }
 
-  void setErrorMessage(message) {
-    setState(() {
-      _currentErrorMessage = message;
-    });
-  }
+
 
 //
 //  @override
@@ -49,40 +47,50 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: StreamBuilder(
         stream: Auth().authStateChanges,
         builder: (context, snapshot) {
-          print("State is:");
-          print(snapshot);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
           return SafeArea(
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 20),
-                // logo
-                Icon(
-                  Icons.local_fire_department_rounded,
-                  size: 100,
-                ),
-                SizedBox(height: 40),
-                if (loginState) ... [
-                  loginEmailPw()
-                ] else
-                  ...[
-                    registerEmailPw()
-                  ],
-                errorMessage(),
-                //Spacer(),
-                Divider(
-                  thickness: 2,
-                ),
-                otherLoginMethods(),
-                SizedBox(height: 60),
-              ]
-          )
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // logo
+                  SizedBox(
+                    height: 100,
+                    child: Image.asset('lib/images/logo.png'),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "FitBuddy",
+                    style: GoogleFonts.fugazOne(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold
+                    ) ,
+                  ),
+                  SizedBox(height: 20),
+                  if (loginState) ... [
+                    loginEmailPw()
+                  ] else
+                    ...[
+                      registerEmailPw()
+                    ],
+                  Spacer(),
+
+                  Divider(
+                    thickness: 1,
+                  ),
+                  SizedBox(height: 10),
+                  otherLoginMethods(),
+                  SizedBox(height: 75),
+                ]
+              ),
+            )
         );
       })
     );
@@ -93,60 +101,83 @@ class _AuthPageState extends State<AuthPage> {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       Auth().signInWithEmail(emailController.text, passwordController.text);
     } else {
-      setErrorMessage("Please fill in email and password");
+
     }
   }
 
-  register() {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && confirmPasswordController.text.isNotEmpty) {
-      if (passwordController.text.trim() == confirmPasswordController.text.trim()) {
-        Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
-      } else {
-        setErrorMessage("Both passwords need to be the same");
-      }
-    } else {
-      setErrorMessage("Please fill in all the required fields");
+  register() async {
+    print("object");
+    try {
+       var result = await Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
+       print(result);
+    } catch (e) {
+      print(e);
+      return e;
     }
   }
 
   loginEmailPw() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+    return Form(
+      key: _loginFormKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sign in to FitBuddy',
-            style: TextStyle(
-              color: Colors.grey[700],
-              fontSize: 16,
+            'Log in to your FitBuddy account',
+            style: GoogleFonts.robotoFlex(
+                fontWeight: FontWeight.w700,
+                fontSize: 16
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 20),
           FitBuddyTextFormField(
             controller: emailController,
-            hintText: 'email',
-            obscureText: false,
-            validator: (value) {  },
+            hintText: 'Email',
+            isPassword: false,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your email';
+              }
+              return null;
+            },
           ),
-          Text(
-              "Forgot email?",
-              textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 10),
-          // password textfield
+          //const SizedBox(height: 20),
           FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
-            obscureText: true,
-            validator: (value) {  },
+            isPassword: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your password';
+              }
+              return null;
+            },
+            icon: Icon(Icons.visibility_off),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: login,
-                child: Text("Sign In"),
+          SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: (){
+                if (_loginFormKey.currentState!.validate()) {
+                  _loginFormKey.currentState!.save();
+                  login();
+                }
+              },
+              child: Text(
+                "Log in",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+            ),
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Text("No FitBuddy account yet? "),
               GestureDetector(
                 onTap: toggleLoginState,
                 child: Text(
@@ -155,8 +186,8 @@ class _AuthPageState extends State<AuthPage> {
                     color: Colors.blue,
                     fontSize: 16)
                 ),
-              )
-            ],
+              ),
+            ]
           ),
         ],
       ),
@@ -164,51 +195,89 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   registerEmailPw() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+    return Form(
+      key: _registerFormKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Register an account on FitBuddy',
+            'Register a account on FitBuddy',
             style: TextStyle(
-              color: Colors.grey[700],
-              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontSize: 16
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 20),
           FitBuddyTextFormField(
             controller: emailController,
             hintText: 'email',
-            obscureText: false,
-            validator: (value) {  },
+            isPassword: false,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your email';
+              }
+              return null;
+            },
           ),
-          const SizedBox(height: 10),
           // password textfield
           FitBuddyTextFormField(
             controller: passwordController,
             hintText: 'Password',
-            obscureText: true,
-            validator: (value) {  },
+            isPassword: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your password';
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
           ),
-          const SizedBox(height: 10),
           // password textfield
           FitBuddyTextFormField(
             controller: confirmPasswordController,
             hintText: 'Confirm password',
-            obscureText: true,
-            validator: (value) {  },
+            isPassword: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter your password';
+              } else if (value != passwordController.text) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: register,
-                child: Text("Register"),
+          SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () {
+                print("here");
+                if (_registerFormKey.currentState!.validate()) {
+                  _registerFormKey.currentState?.save();
+                  register();
+                } else {
+                  print("not validated");
+                }
+              },
+              child: Text(
+                "Register",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+            ),
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Text("Already have a FitBuddy account? "),
               GestureDetector(
                 onTap: toggleLoginState,
                 child: Text(
-                    "Sign in here",
+                    "Log in here",
                     style: TextStyle(
                         color: Colors.blue,
                         fontSize: 16)
@@ -222,37 +291,25 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   otherLoginMethods() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // google button
-            SquareTile(imagePath: 'lib/images/google.png',
-              text: 'Continue with Google',
-              onTap: () {
-                Auth().signInWithGoogle();
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // google button
+          FitBuddyThirdPartyBox(imagePath: 'lib/images/google.png',
+            text: 'Continue with Google',
+            onTap: () {
+              Auth().signInWithGoogle();
 
-              },
-            ),
-            SizedBox(height: 15),
-            // apple button
-            SquareTile(
-                imagePath: 'lib/images/apple.png',
-                text: 'Continue with Apple',
-                onTap: () => Auth().signInWithGoogle()
-            )
-          ],
-        ),
+            },
+          ),
+          SizedBox(height: 10),
+          // apple button
+          FitBuddyThirdPartyBox(
+              imagePath: 'lib/images/apple.png',
+              text: 'Continue with Apple',
+              onTap: () => Auth().signInWithGoogle()
+          )
+        ],
       );
-  }
-
-  errorMessage() {
-    return Text(
-      _currentErrorMessage,
-      style: TextStyle(
-        color: Colors.red
-      ),
-    );
   }
 }
