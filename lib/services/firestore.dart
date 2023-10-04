@@ -20,11 +20,6 @@ class Firestore {
     }
   }
 
-  Future<QuerySnapshot> getTimeline() {
-    print("Getting timeline");
-    return _firebaseFirestoreInstance.collection("posts").orderBy('timestamp', descending: true).get();
-  }
-
   Stream<QuerySnapshot> getTimelineStream() {
     return _firebaseFirestoreInstance
         .collection('posts')
@@ -52,7 +47,9 @@ class Firestore {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('users')
           .orderBy('username')
-          .where('username', isEqualTo: lowerCaseName)
+          .startAt([lowerCaseName])
+          //.endAt(['$lowerCaseName\uf8ff'])
+          //.where('username', isEqualTo: lowerCaseName)
           .get();
 
       // Extracting usernames from the query snapshot

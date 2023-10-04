@@ -34,6 +34,7 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
+          name: FitBuddyRouterConstants.loadingPage,
           path: '/loading',
           pageBuilder: (context, state) {
             return MaterialPage(

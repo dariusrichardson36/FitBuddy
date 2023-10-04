@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/constants/color_constants.dart';
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../services/firestore.dart';
 
@@ -12,6 +16,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   late TextEditingController _controller;
+  String searchQuery = '';
   List<String> _searchResults = []; // This list will hold the search results
 
   @override
@@ -37,27 +42,82 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(), // This will automatically navigate back and pop the screen off the stack
+        backgroundColor: FitBuddyColorConstants.lPrimary,
+        leading: IconButton(
+          //onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.goNamed(FitBuddyRouterConstants.homePage),
+          icon: Icon(Icons.arrow_back, color: FitBuddyColorConstants.lOnPrimary),
+        ),
         title: TextField(
-          controller: _controller,
           decoration: InputDecoration(
-            hintText: 'Search',
+            suffixIcon: Icon(Icons.search),
+            hintText: 'Search...',
+            border: InputBorder.none,
+            focusColor: FitBuddyColorConstants.lOnPrimary,
+            focusedBorder: InputBorder.none,
           ),
-          onSubmitted: (value) => _search(),
+          onChanged: (val) {
+            setState(() {
+              searchQuery = val;
+            });
+          },
         ),
       ),
-      body: ListView.builder(
-        itemCount: _searchResults.length,
-        itemBuilder: (context, index) {
-          final user = _searchResults[index];
-          return ListTile(
-            title: GestureDetector(
-              child: Text(user),
-              onTap: () {
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshots) {
+          if ((snapshots.connectionState == ConnectionState.waiting)) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+                  itemCount: snapshots.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    var data = snapshots.data!.docs[index].data()
+                        as Map<String, dynamic>;
 
-              }
-            ),
-          );
+                    if (searchQuery.isEmpty) {
+                      return null;
+                    }
+                    if (data['username']
+                        .toString()
+                        .toLowerCase()
+                        .startsWith(searchQuery.toLowerCase())) {
+                      return ListTile(
+                        title: Text(
+                          data['displayName'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          // append a @ before the username
+                          // with interpolation
+
+                          '@${data['username']}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(data['image_url']),
+                        ),
+                        onTap: () {
+                          //Navigator.of(context).pushNamed('/profile');
+                          //context.goNamed(FitBuddyRouterConstants.profilePage);
+                        },
+                      );
+                    }
+                    return Container();
+                  });
+          }
         },
       ),
     );

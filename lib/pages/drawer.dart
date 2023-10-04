@@ -1,7 +1,9 @@
 
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../services/auth.dart';
 
@@ -30,6 +32,10 @@ class DrawerPage extends StatelessWidget {
             Text("Name@username"),
             Text("Profile"),
             Text("Settings"),
+            GestureDetector(
+              onTap: () => context.goNamed(FitBuddyRouterConstants.searchPage),
+              child: Text("search"),
+            ),
             Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
