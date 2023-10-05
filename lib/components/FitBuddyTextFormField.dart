@@ -41,12 +41,10 @@ class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
         obscureText: _obscureText,
         validator: widget.validator,
         decoration: InputDecoration(
-
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
-
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
