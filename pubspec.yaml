@@ -39,6 +39,9 @@ dependencies:
   get:
   image_picker:
 
+  #This adds Font Awesome Flutter Icons to your application
+  font_awesome_flutter:
+
   firebase_core: ^2.15.1
   firebase_auth: ^4.9.0
   google_sign_in: ^6.1.5

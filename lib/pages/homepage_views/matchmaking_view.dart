@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+
 
 class MatchmakingView extends StatelessWidget {
   const MatchmakingView({super.key});
@@ -10,7 +14,7 @@ class MatchmakingView extends StatelessWidget {
         children: [
           Container(
             width: double.infinity, // Take up the entire screen horizontally
-            height: MediaQuery.of(context).size.height * .4, // Take up the top third vertically
+            height: MediaQuery.of(context).size.height * .5, // Take up the top third vertically
             color: Colors.lightBlue,
           ),
           // Rest of your content goes here
@@ -20,8 +24,8 @@ class MatchmakingView extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft, // Left-align the text
                 child: Text(
-                  ' Matthew',
-                  style: TextStyle(
+                  ' Robin',
+                  style: GoogleFonts.robotoFlex(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
                   ),
@@ -31,8 +35,8 @@ class MatchmakingView extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight, // Right-align the text
                 child: Text(
-                  'Age ',
-                  style: TextStyle(
+                  '21 ',
+                  style: GoogleFonts.robotoFlex(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
                   ),
@@ -45,8 +49,8 @@ class MatchmakingView extends StatelessWidget {
             alignment: Alignment.centerLeft, // Left-align the text
             child: Text(
               '  Gym Experience:',
-              style: TextStyle(
-                color: Colors.grey[700],
+              style: GoogleFonts.robotoFlex(
+                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -58,8 +62,8 @@ class MatchmakingView extends StatelessWidget {
             alignment: Alignment.centerLeft, // Left-align the text
             child: Text(
               '  Gym Goals:',
-              style: TextStyle(
-                color: Colors.grey[700],
+              style: GoogleFonts.robotoFlex(
+                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -71,8 +75,8 @@ class MatchmakingView extends StatelessWidget {
             alignment: Alignment.centerLeft, // Left-align the text
             child: Text(
               '  Lifting Style:',
-              style: TextStyle(
-                color: Colors.grey[700],
+              style: GoogleFonts.robotoFlex(
+                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -87,15 +91,15 @@ class MatchmakingView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(
-                      Icons.thumb_down, // Placeholder icon for "yes"
-                      size: 60.0, // Adjust the size as needed
+                    FaIcon(
+                      FontAwesomeIcons.dumbbell,
+                      size: 56, // Adjust the size as needed
                       color: Colors.red, // Adjust the color as needed
                     ),
-                    Icon(
-                      Icons.thumb_up, // Placeholder icon for "no"
-                      size: 60.0, // Adjust the size as needed
-                      color: Colors.green, // Adjust the color as needed
+                    FaIcon(
+                      FontAwesomeIcons.dumbbell,
+                      size: 56,
+                      color: Colors.green,
                     ),
                   ],
                 ),
