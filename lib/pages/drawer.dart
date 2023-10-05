@@ -1,4 +1,5 @@
 import 'package:fit_buddy/theme/theme_manager.dart';
+import 'package:fit_buddy/pages/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,12 @@ class DrawerPage extends StatelessWidget {
               Icon(Icons.person, color: Colors.black, size: 35),
               SizedBox(width: 15),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePage()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
