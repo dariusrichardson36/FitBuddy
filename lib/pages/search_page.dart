@@ -84,6 +84,7 @@ class _SearchPageState extends State<SearchPage> {
                         .toString()
                         .toLowerCase()
                         .startsWith(searchQuery.toLowerCase())) {
+                      print(data);
                       return ListTile(
                         title: Text(
                           data['displayName'],
@@ -95,9 +96,6 @@ class _SearchPageState extends State<SearchPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                          // append a @ before the username
-                          // with interpolation
-
                           '@${data['username']}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -107,7 +105,8 @@ class _SearchPageState extends State<SearchPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         leading: CircleAvatar(
-                          backgroundImage: NetworkImage(data['image_url']),
+                          backgroundImage: (data['image_url'] != null && data['image_url'].isNotEmpty)
+                              ? NetworkImage(data['image_url']) : AssetImage('lib/images/default_profile.png') as ImageProvider,
                         ),
                         onTap: () {
                           //Navigator.of(context).pushNamed('/profile');
