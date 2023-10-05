@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,7 +21,7 @@ class Auth {
 
   signInWithEmail(email, pw) async {
     try {
-      return await _firebaseAuth.signInWithEmailAndPassword(
+       return await _firebaseAuth.signInWithEmailAndPassword(
           email: email,
           password: pw);
     } on FirebaseAuthException catch (e) {
