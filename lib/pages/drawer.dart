@@ -1,6 +1,8 @@
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../services/auth.dart';
 
@@ -97,6 +99,25 @@ class DrawerPage extends StatelessWidget {
                   ),
                   child: Text(
                     'Log Workout',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  )),
+            ],
+          ),
+          SizedBox(height: 15),
+          Row(
+            children: [
+              Icon(Icons.search, color: Colors.black, size: 35),
+              SizedBox(width: 15),
+              ElevatedButton(
+                  onPressed: () {
+                    context.goNamed(FitBuddyRouterConstants.searchPage);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                  ),
+                  child: Text(
+                    'Search',
                     style: TextStyle(color: Colors.black, fontSize: 18),
                   )),
             ],
