@@ -27,6 +27,7 @@ class Firestore {
         .collection("posts")
         .where("creator_uid", whereIn: ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"])
         .orderBy('timestamp', descending: true)
+        .limit(50)
         .snapshots();
   }
 

@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/components/FitBuddyActivityLog.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,10 +66,7 @@ class _TimeLineViewState extends State<TimeLineView> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data!.docs[index];
-                    return ListTile(
-                      title: Text(post['description']),
-
-                    );
+                    return FitBuddyActivityLog(activityData: post);
                   },
                 ),
               ),
