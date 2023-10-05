@@ -24,9 +24,9 @@ class MatchmakingView extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft, // Left-align the text
                 child: Text(
-                  ' Robin',
+                  ' Matthew',
                   style: GoogleFonts.robotoFlex(
-                    fontSize: 35,
+                    fontSize: 45,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -37,9 +37,59 @@ class MatchmakingView extends StatelessWidget {
                 child: Text(
                   '21 ',
                   style: GoogleFonts.robotoFlex(
-                    fontSize: 35,
+                    fontSize: 45,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              // Display the PNG image within the row
+              Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 5.0), // Adjust the spacing as needed
+                child: SizedBox(
+                  width: 40, // Set the desired width
+                  height: 40, // Set the desired height
+                  child: Image.asset(
+                    'lib/images/emptyBadge.png', // Replace with the actual asset path
+                    fit: BoxFit.contain, // Adjust the fit property as needed
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(right: 5.0), // Adjust the spacing as needed
+                child: SizedBox(
+                  width: 40, // Set the desired width
+                  height: 40, // Set the desired height
+                  child: Image.asset(
+                    'lib/images/emptyBadge.png', // Replace with the actual asset path
+                    fit: BoxFit.contain, // Adjust the fit property as needed
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(right: 5.0), // Adjust the spacing as needed
+                child: SizedBox(
+                  width: 40, // Set the desired width
+                  height: 40, // Set the desired height
+                  child: Image.asset(
+                    'lib/images/emptyBadge.png', // Replace with the actual asset path
+                    fit: BoxFit.contain, // Adjust the fit property as needed
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                width: 40, // Set the desired width
+                height: 40, // Set the desired height
+                child: Image.asset(
+                  'lib/images/emptyBadge.png', // Replace with the actual asset path
+                  fit: BoxFit.contain, // Adjust the fit property as needed
                 ),
               ),
             ],
@@ -51,7 +101,7 @@ class MatchmakingView extends StatelessWidget {
               '  Gym Experience:',
               style: GoogleFonts.robotoFlex(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -64,7 +114,7 @@ class MatchmakingView extends StatelessWidget {
               '  Gym Goals:',
               style: GoogleFonts.robotoFlex(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -77,7 +127,7 @@ class MatchmakingView extends StatelessWidget {
               '  Lifting Style:',
               style: GoogleFonts.robotoFlex(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
