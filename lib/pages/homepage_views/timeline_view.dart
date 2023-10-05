@@ -21,7 +21,7 @@ class _TimeLineViewState extends State<TimeLineView> {
     loadTimeline();
   }
 
-  void loadTimeline() async {
+  void loadTimeline() {
     // Replace with actual currentUserId
     //String currentUserId = 'exampleUserId';
     //List<String> friendsIds = await getFriendsIds();
@@ -67,6 +67,7 @@ class _TimeLineViewState extends State<TimeLineView> {
                     final post = snapshot.data!.docs[index];
                     return ListTile(
                       title: Text(post['description']),
+
                     );
                   },
                 ),

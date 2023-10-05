@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/services/auth.dart';
 
 class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
@@ -21,10 +22,16 @@ class Firestore {
   }
 
   Stream<QuerySnapshot> getTimelineStream() {
+    var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
     return _firebaseFirestoreInstance
-        .collection('posts')
+        .collection("posts")
+        .where("creator_uid", whereIn: ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"])
         .orderBy('timestamp', descending: true)
         .snapshots();
+  }
+
+  getUserData() async {
+    return await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
   }
 
   Future<bool> doesUserDocumentExist(String userId) async {
