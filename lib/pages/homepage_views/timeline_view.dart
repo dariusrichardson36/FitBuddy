@@ -40,23 +40,26 @@ class _TimeLineViewState extends State<TimeLineView> {
           mainAxisSize: MainAxisSize.max,
 
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 35.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
-                      fit: BoxFit.cover,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 35.0,
+                    height: 35.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Image.asset("lib/images/logo.png", width: 35, height: 35),
-                IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-              ],
+                  Image.asset("lib/images/logo.png", width: 35, height: 35),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                ],
+              ),
             ),
             if (snapshot.connectionState == ConnectionState.waiting) ... {
               Center(child: CircularProgressIndicator()),
