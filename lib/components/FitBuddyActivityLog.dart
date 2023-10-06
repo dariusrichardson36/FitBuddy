@@ -1,5 +1,6 @@
 
 
+import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,51 +29,66 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 35.0,
-                      height: 35.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
-                          fit: BoxFit.cover,
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 35,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Text(widget.activityData["creator_userName"]),
-                        Text("25/5")
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (int i = 0; i < ["Activity", "sets", "reps", "weight"].length; i++)
-                        ...[
-                          VerticalDivider(color: Colors.black, thickness: 1,),  // Do not insert a divider before the first item
-                          Expanded(child: Text(["Activity", "sets", "reps", "weight"][i], textAlign: TextAlign.center))
+                      SizedBox(width: 10),
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(widget.activityData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text("6/10", style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
                         ],
+                      )
                     ],
                   ),
                 ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 120, child:Text("Activity", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
+                    SizedBox(width: 70, child:Text("Sets", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
+                    SizedBox(width: 70, child:Text("Reps", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
+                    SizedBox(width: 70, child:Text("Weight", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
+                  ],
+                ),
+                SizedBox(height: 5),
                 Column(
-                  children: widget.activityData["activities"].map<Widget>((activity) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: widget.activityData["activities"].map<Widget>((activityData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(activity["workout"].toString()),
-                        Text(activity["sets"].toString()),
-                        Text(activity["reps"].toString()),
-                        Text(activity["weight"].toString()), // replace with your desired widget
-                        // ... any other widgets you want in this row
+                        Text(activityData["name"], style: TextStyle(fontWeight: FontWeight.bold)),
+                        ...activityData["activity"].map((detail) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Expanded(child: Text(detail["sets"].toString())),
+                                Expanded(child: Text(detail["reps"].toString())),
+                                Expanded(child: Text(detail["weight"].toString())),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ],
                     );
                   }).toList(),
