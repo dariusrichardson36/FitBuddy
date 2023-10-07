@@ -75,32 +75,11 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               // Column for reps
-                              Column(
-                                children: [
-                                  Text("reps", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
-                                  ...activityData["activity"].map<Widget>((detail) {
-                                    return Padding(padding: EdgeInsets.only(top: 5) ,child: Text(detail["reps"].toString(), style: TextStyle(fontSize: 14)));
-                                  }).toList(),
-                                ],
-                              ),
+                              buildDetailColumn("reps", activityData["activity"]),
                               // Column for sets
-                              Column(
-                                children: [
-                                  Text("sets", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
-                                  ...activityData["activity"].map<Widget>((detail) {
-                                    return Padding(padding: EdgeInsets.only(top: 5), child: Text(detail["sets"].toString(), style: TextStyle(fontSize: 14)));
-                                  }).toList(),
-                                ],
-                              ),
+                              buildDetailColumn("sets", activityData["activity"]),
                               // Column for weight
-                              Column(
-                                children: [
-                                  Text("weight", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
-                                  ...activityData["activity"].map<Widget>((detail) {
-                                    return Padding(padding: EdgeInsets.only(top: 5), child: Text(detail["weight"].toString(), style: TextStyle(fontSize: 14)));
-                                  }).toList(),
-                                ],
-                              ),
+                              buildDetailColumn("weight", activityData["activity"]),
                             ],
                           ),
                         ),
@@ -118,7 +97,19 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
     );
   }
 
-  profileHeader() {
+  Widget buildDetailColumn(String label, activityData) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
+        ...activityData.map<Widget>((detail) => Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: Text(detail[label].toString(), style: TextStyle(fontSize: 14))
+        )).toList(),
+      ],
+    );
+  }
+
+  Widget profileHeader() {
     return SizedBox(
       height: 40,
       child: Row(
