@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,24 @@ class FitBuddyActivityLog extends StatefulWidget {
 }
 
 class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
+
+  String formatDateForDisplay(Timestamp timestamp) {
+    final currentDate = DateTime.now();
+    final postDate = timestamp.toDate();
+    final difference = currentDate.difference(postDate);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h';
+    } else if (difference.inDays <= 5) {
+      return '${difference.inDays}d';
+    } else {
+      return '${postDate.month}/${postDate.day}';
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     print(widget.activityData.data());
@@ -55,7 +74,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(widget.activityData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("6/10", style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
+                          Text(formatDateForDisplay(widget.activityData["timestamp"]), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
                         ],
                       )
                     ],
