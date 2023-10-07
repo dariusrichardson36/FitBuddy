@@ -50,7 +50,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Profile header
-                _ProfileHeader(activityData: widget.activityData, formatDateForDisplay: formatDateForDisplay),
+                profileHeader(),
                 SizedBox(height: 10),
                 // if no description, or description is empty don't show
                 ...(widget.activityData["description"] != null && widget.activityData["description"] != "")
