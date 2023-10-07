@@ -49,40 +49,16 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 40,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        width: 40.0,
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.activityData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text(formatDateForDisplay(widget.activityData["timestamp"]), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+                // Profile header
+                _ProfileHeader(activityData: widget.activityData, formatDateForDisplay: formatDateForDisplay),
                 SizedBox(height: 10),
-                Text(widget.activityData["description"], style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-                SizedBox(height: 10),
+                // if no description, or description is empty don't show
+                ...(widget.activityData["description"] != null && widget.activityData["description"] != "")
+                    ? [
+                  Text(widget.activityData["description"], style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                  SizedBox(height: 10),
+                ]
+                    : [],
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: widget.activityData["activities"].map<Widget>((activityData) {
@@ -141,4 +117,37 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
       ),
     );
   }
+
+  profileHeader() {
+    return SizedBox(
+      height: 40,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            width: 40.0,
+            height: 40.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.activityData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(formatDateForDisplay(widget.activityData["timestamp"]), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
+
