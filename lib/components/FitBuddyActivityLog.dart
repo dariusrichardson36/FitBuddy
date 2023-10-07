@@ -25,20 +25,20 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
         children: [
           Divider(),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: 35,
+                    maxHeight: 40,
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
-                        width: 35.0,
-                        height: 35.0,
+                        width: 40.0,
+                        height: 40.0,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -61,34 +61,71 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 120, child:Text("Activity", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
-                    SizedBox(width: 70, child:Text("Sets", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
-                    SizedBox(width: 70, child:Text("Reps", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
-                    SizedBox(width: 70, child:Text("Weight", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary))),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: widget.activityData["activities"].map<Widget>((activityData) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(activityData["name"], style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          SizedBox(
+                            width: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Sets", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary)),
+                                Text("Reps", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary)),
+                                Text("Weight", style: TextStyle(color: FitBuddyColorConstants.lOnSecondary)),
+                              ],
+                            ),
+                          ),
+
+                          ...activityData["activity"].map((detail) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: SizedBox(
+                                width: 200,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(detail["sets"].toString()),
+                                    Text(detail["reps"].toString()),
+                                    Text(detail["weight"].toString()),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
-                SizedBox(height: 5),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: widget.activityData["activities"].map<Widget>((activityData) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(activityData["name"], style: TextStyle(fontWeight: FontWeight.bold)),
-                        ...activityData["activity"].map((detail) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Row(
-                              children: [
-                                Expanded(child: Text(detail["sets"].toString())),
-                                Expanded(child: Text(detail["reps"].toString())),
-                                Expanded(child: Text(detail["weight"].toString())),
-                              ],
-                            ),
-                          );
+                        // Activity name
+                        Text(activityData["name"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+
+                        // Reps title
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                          child: Text("reps", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                        ),
+
+                        // Individual rep values
+                        ...activityData["activity"].map<Widget>((detail) {
+                          return Text(detail["reps"].toString(), style: TextStyle(fontSize: 14));
                         }).toList(),
+
+                        // Spacing between each activity
+                        SizedBox(height: 20),
                       ],
                     );
                   }).toList(),

@@ -38,7 +38,6 @@ class _TimeLineViewState extends State<TimeLineView> {
       builder: (context, snapshot) {
         return Column(
           mainAxisSize: MainAxisSize.max,
-
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
