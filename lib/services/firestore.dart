@@ -21,14 +21,19 @@ class Firestore {
     }
   }
 
-  Stream<QuerySnapshot> getTimelineStream() {
+  Stream<QuerySnapshot> getTimelineStream([DocumentSnapshot? lastDoc]) {
     var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
-    return _firebaseFirestoreInstance
+    var query = _firebaseFirestoreInstance
         .collection("posts")
-        .where("creator_uid", whereIn: ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"])
+        .where("creator_uid", whereIn: friendList)
         .orderBy('timestamp', descending: true)
-        .limit(10)
-        .snapshots();
+        .limit(10);
+
+    if (lastDoc != null) {
+      query = query.startAfterDocument(lastDoc);
+    }
+
+    return query.snapshots();
   }
 
   getUserData() async {

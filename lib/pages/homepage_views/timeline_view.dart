@@ -1,4 +1,5 @@
-
+import 'dart:async';
+import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/components/FitBuddyActivityLog.dart';
 import 'package:fit_buddy/services/firestore.dart';
@@ -15,17 +16,50 @@ class TimeLineView extends StatefulWidget {
 
 class _TimeLineViewState extends State<TimeLineView> {
   late Stream<QuerySnapshot> _timelinePostsStream;
-  bool _isLoading = true;
+  final StreamController<List<DocumentSnapshot>> _streamController = StreamController<List<DocumentSnapshot>>();
+  final ScrollController _scrollController = ScrollController();
+  DocumentSnapshot? _lastDocument;
+  bool _isLoading = false;
   int _postsLoaded = 0;
 
   @override
   void initState() {
     super.initState();
     loadTimeline();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        loadMorePosts();
+      }
+    });
   }
 
-  void loadMorePosts(context) {
+  Future<void> loadMorePosts() async {
+    print("Loading more posts");
+    if (!_isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+      print(_lastDocument!.data());
+      Stream<QuerySnapshot> newDocs = await Firestore().getTimelineStream(_lastDocument);
 
+        if (!_streamController.isClosed) {
+          //_streamController.addStream(newDocs);
+        }
+
+
+      print("done");
+      _timelinePostsStream = combinedFirestoreStreams(_timelinePostsStream, newDocs);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Stream<QuerySnapshot<Object?>> combinedFirestoreStreams(
+      Stream<QuerySnapshot<Object?>> stream1,
+      Stream<QuerySnapshot<Object?>> stream2) {
+
+    return StreamGroup.merge<QuerySnapshot<Object?>>([stream1, stream2]);
   }
 
   void loadTimeline() {
@@ -72,10 +106,11 @@ class _TimeLineViewState extends State<TimeLineView> {
             } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) ... {
               Expanded(
                 child: ListView.builder(
-                  controller: ScrollController(),
+                  controller: _scrollController,
                   itemCount: snapshot.data!.docs.length + (_isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index == snapshot.data!.docs.length) {
+                    if (index == snapshot.data!.docs.length && _isLoading) {
+                      _lastDocument = snapshot.data!.docs.last;
                       return Padding(padding: EdgeInsets.symmetric(vertical: 20) ,child: Center(child: CircularProgressIndicator())); // Loading indicator at the end
                     }
                     final post = snapshot.data!.docs[index];
