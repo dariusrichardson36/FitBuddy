@@ -21,6 +21,7 @@ class _TimeLineViewState extends State<TimeLineView> {
   DocumentSnapshot? _lastDocument;
   bool _isLoading = false;
   int _postsLoaded = 0;
+  final _firestore = Firestore();
 
   @override
   void initState() {
@@ -33,42 +34,34 @@ class _TimeLineViewState extends State<TimeLineView> {
     });
   }
 
+
   Future<void> loadMorePosts() async {
     print("Loading more posts");
     if (!_isLoading) {
       setState(() {
         _isLoading = true;
       });
-      print(_lastDocument!.data());
-      Stream<QuerySnapshot> newDocs = await Firestore().getTimelineStream(_lastDocument);
-
-        if (!_streamController.isClosed) {
-          //_streamController.addStream(newDocs);
-        }
-
-
-      print("done");
-      _timelinePostsStream = combinedFirestoreStreams(_timelinePostsStream, newDocs);
+      _firestore.getTimelineStream();
       setState(() {
         _isLoading = false;
       });
     }
   }
 
-  Stream<QuerySnapshot<Object?>> combinedFirestoreStreams(
-      Stream<QuerySnapshot<Object?>> stream1,
-      Stream<QuerySnapshot<Object?>> stream2) {
 
-    return StreamGroup.merge<QuerySnapshot<Object?>>([stream1, stream2]);
-  }
+
 
   void loadTimeline() {
     // Replace with actual currentUserId
     //String currentUserId = 'exampleUserId';
     //List<String> friendsIds = await getFriendsIds();
     setState(() {
-      _timelinePostsStream = Firestore().getTimelineStream();
+      _firestore.getTimelineStream();
+      _timelinePostsStream = _firestore.postsController.stream;
       _postsLoaded = 10;
+      _firestore.postsController.stream.listen((event) {
+        print("EVENT");
+      });
     });
   }
 
@@ -110,7 +103,6 @@ class _TimeLineViewState extends State<TimeLineView> {
                   itemCount: snapshot.data!.docs.length + (_isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == snapshot.data!.docs.length && _isLoading) {
-                      _lastDocument = snapshot.data!.docs.last;
                       return Padding(padding: EdgeInsets.symmetric(vertical: 20) ,child: Center(child: CircularProgressIndicator())); // Loading indicator at the end
                     }
                     final post = snapshot.data!.docs[index];
