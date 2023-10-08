@@ -14,7 +14,9 @@ class TimeLineView extends StatefulWidget {
 }
 
 class _TimeLineViewState extends State<TimeLineView> {
-  late Stream<QuerySnapshot> timelinePostsStream;
+  late Stream<QuerySnapshot> _timelinePostsStream;
+  bool _isLoading = true;
+  int _postsLoaded = 0;
 
   @override
   void initState() {
@@ -22,19 +24,24 @@ class _TimeLineViewState extends State<TimeLineView> {
     loadTimeline();
   }
 
+  void loadMorePosts(context) {
+
+  }
+
   void loadTimeline() {
     // Replace with actual currentUserId
     //String currentUserId = 'exampleUserId';
     //List<String> friendsIds = await getFriendsIds();
     setState(() {
-      timelinePostsStream = Firestore().getTimelineStream();
+      _timelinePostsStream = Firestore().getTimelineStream();
+      _postsLoaded = 10;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: timelinePostsStream,
+      stream: _timelinePostsStream,
       builder: (context, snapshot) {
         return Column(
           mainAxisSize: MainAxisSize.max,
@@ -65,8 +72,12 @@ class _TimeLineViewState extends State<TimeLineView> {
             } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) ... {
               Expanded(
                 child: ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
+                  controller: ScrollController(),
+                  itemCount: snapshot.data!.docs.length + (_isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
+                    if (index == snapshot.data!.docs.length) {
+                      return Padding(padding: EdgeInsets.symmetric(vertical: 20) ,child: Center(child: CircularProgressIndicator())); // Loading indicator at the end
+                    }
                     final post = snapshot.data!.docs[index];
                     return FitBuddyActivityLog(activityData: post);
                   },
