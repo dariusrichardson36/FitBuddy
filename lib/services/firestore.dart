@@ -12,7 +12,7 @@ class Firestore {
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
-  List<List<Post>> _allPagedResults = [];
+  List<List<Post>> _allPagedResults = [[]];
 
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getFirstPost() {
@@ -31,23 +31,24 @@ class Firestore {
     var query = _firebaseFirestoreInstance
         .collection("posts")
         .orderBy('timestamp', descending: true)
-        .limit(10)
-        .endAt([firstPost]);
+        .endAt([firstPost['timestamp']]);
 
     query.snapshots().listen((postSnapshot) {
+      print("Listening to object");
       var posts = postSnapshot.docs
           .map((snapshot) => Post.fromMap(snapshot.data())).toList();
-      print(posts);
-      _allPagedResults.add(posts);
+      _allPagedResults[0] = posts;
+      var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+        return initialValue..addAll(pageItems);
+      });
+
+      postsController.add(allPosts);
     });
-
-
     getTimelineStream();
   }
 
 
-  Future<void> getTimelineStream() async {
-
+  getTimelineStream() {
     var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
     var query = _firebaseFirestoreInstance
         .collection("posts")
@@ -58,12 +59,12 @@ class Firestore {
     if (_hasMorePosts == false) return;
 
     if (_lastDocument != null) {
-      print(_lastDocument);
       query = query.startAfterDocument(_lastDocument!);
     }
 
-    var currentRequestIndex = _allPagedResults.length;
-
+    var currentRequestIndex = _allPagedResults.length + 1;
+    print(currentRequestIndex);
+    print(_allPagedResults[0].toString());
     query.snapshots().listen((postSnapshot) {
       if (postSnapshot.docs.isNotEmpty) {
         /*
@@ -82,7 +83,11 @@ class Firestore {
             .map((snapshot) => Post.fromMap(snapshot.data())).toList();
 
         var pageExists = currentRequestIndex < _allPagedResults.length;
-
+        print(pageExists);
+        print(_allPagedResults);
+        print(_allPagedResults.length);
+        print("here");
+        print(_allPagedResults[0][0].creatorUserName);
         if (pageExists) {
           _allPagedResults[currentRequestIndex] = posts;
         } else {
@@ -95,7 +100,7 @@ class Firestore {
 
         postsController.add(allPosts);
 
-        if (currentRequestIndex == _allPagedResults.length - 1) {
+        if (currentRequestIndex == _allPagedResults.length) {
           _lastDocument = postSnapshot.docs.last;
         }
 
