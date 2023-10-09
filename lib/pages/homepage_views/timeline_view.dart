@@ -20,7 +20,6 @@ class _TimeLineViewState extends State<TimeLineView> {
    final ScrollController _scrollController = ScrollController();
   DocumentSnapshot? _lastDocument;
   bool _isLoading = false;
-  int _postsLoaded = 0;
   final _firestore = Firestore();
 
   @override
@@ -36,7 +35,7 @@ class _TimeLineViewState extends State<TimeLineView> {
 
 
   Future<void> loadMorePosts() async {
-    print("Loading more posts");
+    print("LOADING MORE POSTS");
     if (!_isLoading) {
       setState(() {
         _isLoading = true;
@@ -56,12 +55,8 @@ class _TimeLineViewState extends State<TimeLineView> {
     //String currentUserId = 'exampleUserId';
     //List<String> friendsIds = await getFriendsIds();
     setState(() {
-      _firestore.getTimelineStream();
+      _firestore.initTimeLine();
       _timelinePostsStream = _firestore.postsController.stream;
-      _postsLoaded = 10;
-      _firestore.postsController.stream.listen((event) {
-        print("EVENT");
-      });
     });
   }
 

@@ -8,13 +8,46 @@ class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
   DocumentSnapshot? _lastDocument;
   bool _hasMorePosts = true;
+  bool once = false;
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
   List<List<Post>> _allPagedResults = [];
 
 
-  void getTimelineStream() {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFirstPost() {
+    return _firebaseFirestoreInstance
+        .collection("posts")
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.first);
+  }
+
+  void initTimeLine() async {
+    var firstPost = await getFirstPost();
+    _lastDocument = firstPost;
+
+    var query = _firebaseFirestoreInstance
+        .collection("posts")
+        .orderBy('timestamp', descending: true)
+        .limit(10)
+        .endAt([firstPost]);
+
+    query.snapshots().listen((postSnapshot) {
+      var posts = postSnapshot.docs
+          .map((snapshot) => Post.fromMap(snapshot.data())).toList();
+      print(posts);
+      _allPagedResults.add(posts);
+    });
+
+
+    getTimelineStream();
+  }
+
+
+  Future<void> getTimelineStream() async {
+
     var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
     var query = _firebaseFirestoreInstance
         .collection("posts")
@@ -25,7 +58,7 @@ class Firestore {
     if (_hasMorePosts == false) return;
 
     if (_lastDocument != null) {
-      query = query.endAt(10);
+      print(_lastDocument);
       query = query.startAfterDocument(_lastDocument!);
     }
 
@@ -33,6 +66,18 @@ class Firestore {
 
     query.snapshots().listen((postSnapshot) {
       if (postSnapshot.docs.isNotEmpty) {
+        /*
+        print(postSnapshot.docChanges);
+        postSnapshot.docChanges.forEach((docChange) {
+          print('Type of change: ${docChange.type}');
+          print('Document ID: ${docChange.doc.id}');
+          print('Document data: ${docChange.doc.data()}');
+        });
+
+         */
+        if (postSnapshot.docChanges.length < 10) {
+          _hasMorePosts = false;
+        }
         var posts = postSnapshot.docs
             .map((snapshot) => Post.fromMap(snapshot.data())).toList();
 

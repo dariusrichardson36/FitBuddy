@@ -42,8 +42,6 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
 
   @override
   Widget build(BuildContext context) {
-    print("Activity data:");
-    print(widget.postData.activities);
     var activities = widget.postData.activities;
     if (!_showAllActivities && activities.length > 2) {
       activities = activities.sublist(0, 2);
