@@ -5,8 +5,11 @@ import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../models/FitBuddyPostModel.dart';
+import '../models/FitBuddyActivityModel.dart';
+
 class FitBuddyActivityLog extends StatefulWidget {
-  final postData;
+  final Post postData;
 
   const FitBuddyActivityLog({
     super.key,
@@ -18,7 +21,6 @@ class FitBuddyActivityLog extends StatefulWidget {
 }
 
 class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
-  int _postSize = 0;
   bool _showAllActivities = false;
 
   String formatDateForDisplay(Timestamp timestamp) {
@@ -41,8 +43,8 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
   @override
   Widget build(BuildContext context) {
     print("Activity data:");
-    print(widget.postData.toString());
-    var activities = widget.postData["activities"];
+    print(widget.postData.activities);
+    var activities = widget.postData.activities;
     if (!_showAllActivities && activities.length > 2) {
       activities = activities.sublist(0, 2);
     }
@@ -59,9 +61,9 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
               profileHeader(),
               SizedBox(height: 10),
               // if no description, or description is empty don't show
-              ...(widget.postData["description"] != null && widget.postData["description"] != "")
+              ...(widget.postData.description != "")
                   ? [
-                Text(widget.postData["description"], style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                Text(widget.postData.description, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
               ]
                   : [],
               Column(
@@ -72,7 +74,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                     children: [
                       SizedBox(height: 10),
                       // Activity name
-                      Text(activityData["name"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      Text(activityData.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                       SizedBox(height: 5),
                       // Row containing three columns
                       SizedBox(
@@ -81,11 +83,11 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // Column for reps
-                            buildDetailColumn("reps", activityData["activity"]),
+                            buildDetailColumn("reps", activityData.setCollection),
                             // Column for sets
-                            buildDetailColumn("sets", activityData["activity"]),
+                            buildDetailColumn("sets", activityData.setCollection),
                             // Column for weight
-                            buildDetailColumn("weight", activityData["activity"]),
+                            buildDetailColumn("weight", activityData.setCollection),
                           ],
                         ),
                       ),
@@ -94,7 +96,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                 }).toList(),
               ),
               SizedBox(height: 10),
-              if (!_showAllActivities && widget.postData["activities"].length > 2)
+              if (!_showAllActivities && widget.postData.activities.length > 2)
                 SizedBox(
                   height: 24,
                   child: IconButton(
@@ -107,7 +109,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                     icon: Icon(Icons.keyboard_arrow_down),
                   ),
                 ),
-              if (_showAllActivities && widget.postData["activities"].length > 2)
+              if (_showAllActivities && widget.postData.activities.length > 2)
                 SizedBox(
                   height: 24,
                   child: IconButton(
@@ -128,13 +130,13 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
     );
   }
 
-  Widget buildDetailColumn(String label, activityData) {
+  Widget buildDetailColumn(String label, List<SetCollection> activityData) {
     return Column(
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
         ...activityData.map<Widget>((detail) => Padding(
             padding: EdgeInsets.only(top: 5),
-            child: Text(detail[label].toString(), style: TextStyle(fontSize: 14))
+            child: Text(detail.getProperty(label).toString(), style: TextStyle(fontSize: 14))
         )).toList(),
       ],
     );
@@ -163,8 +165,8 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.postData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text(formatDateForDisplay(widget.postData["timestamp"]), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
+              Text(widget.postData.creatorUserName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(formatDateForDisplay(widget.postData.timestamp), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
             ],
           ),
         ],

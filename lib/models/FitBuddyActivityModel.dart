@@ -21,6 +21,13 @@ class SetCollection {
 
   SetCollection({required this.reps, required this.sets, required this.weight});
 
+  int getProperty(String label) {
+    if (label == 'reps') return reps;
+    if (label == 'sets') return sets;
+    if (label == 'weight') return weight;
+    throw Exception('Invalid property name');
+  }
+
   factory SetCollection.fromMap(Map<String, dynamic> json) {
     return SetCollection(
       reps: json['reps'],
