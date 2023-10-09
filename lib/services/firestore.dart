@@ -8,8 +8,8 @@ class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
   DocumentSnapshot? _lastDocument;
 
-  final StreamController<QuerySnapshot> postsController =
-      StreamController<QuerySnapshot>.broadcast();
+  final StreamController<List<Post>> postsController =
+      StreamController<List<Post>>.broadcast();
 
   List<QuerySnapshot> _allPagedResults = [];
 
@@ -34,6 +34,7 @@ class Firestore {
         var posts = postSnapshot.docs
             .map((snapshot) => Post.fromMap(snapshot.data())).toList();
         print(posts);
+        print(posts.runtimeType);
         var pageExists = currentRequestIndex < _allPagedResults.length;
 
         if (pageExists) {
@@ -47,7 +48,7 @@ class Firestore {
           print(element.docs.first.data());
         });
         print(_allPagedResults.runtimeType);
-        postsController.add(_allPagedResults.last);
+        postsController.add(posts);
         /*
         var allPosts = _allPagedResults.fold<List<QuerySnapshot>>([], (initialValue, pageItems) {
           return initialValue..addAll(pageItems);

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/components/FitBuddyActivityLog.dart';
+import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,8 @@ class TimeLineView extends StatefulWidget {
 }
 
 class _TimeLineViewState extends State<TimeLineView> {
-  late Stream<QuerySnapshot> _timelinePostsStream;
-  final StreamController<List<DocumentSnapshot>> _streamController = StreamController<List<DocumentSnapshot>>();
-  final ScrollController _scrollController = ScrollController();
+  late Stream<List<Post>> _timelinePostsStream;
+   final ScrollController _scrollController = ScrollController();
   DocumentSnapshot? _lastDocument;
   bool _isLoading = false;
   int _postsLoaded = 0;
@@ -67,7 +67,7 @@ class _TimeLineViewState extends State<TimeLineView> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+    return StreamBuilder<List<Post>>(
       stream: _timelinePostsStream,
       builder: (context, snapshot) {
         return Column(
@@ -96,17 +96,17 @@ class _TimeLineViewState extends State<TimeLineView> {
             ),
             if (snapshot.connectionState == ConnectionState.waiting) ... {
               Center(child: CircularProgressIndicator()),
-            } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) ... {
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) ... {
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
-                  itemCount: snapshot.data!.docs.length + (_isLoading ? 1 : 0),
+                  itemCount: snapshot.data!.length + (_isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index == snapshot.data!.docs.length && _isLoading) {
+                    if (index == snapshot.data!.length && _isLoading) {
                       return Padding(padding: EdgeInsets.symmetric(vertical: 20) ,child: Center(child: CircularProgressIndicator())); // Loading indicator at the end
                     }
-                    final post = snapshot.data!.docs[index];
-                    return FitBuddyActivityLog(activityData: post);
+                    final posts = snapshot.data!;
+                    return FitBuddyActivityLog(postData: posts[index]);
                   },
                 ),
               ),

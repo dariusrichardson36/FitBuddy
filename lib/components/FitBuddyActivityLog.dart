@@ -6,11 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FitBuddyActivityLog extends StatefulWidget {
-  final activityData;
+  final postData;
 
   const FitBuddyActivityLog({
     super.key,
-    required this.activityData
+    required this.postData
   });
 
   @override
@@ -40,7 +40,9 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
 
   @override
   Widget build(BuildContext context) {
-    var activities = widget.activityData["activities"];
+    print("Activity data:");
+    print(widget.postData.toString());
+    var activities = widget.postData["activities"];
     if (!_showAllActivities && activities.length > 2) {
       activities = activities.sublist(0, 2);
     }
@@ -57,9 +59,9 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
               profileHeader(),
               SizedBox(height: 10),
               // if no description, or description is empty don't show
-              ...(widget.activityData["description"] != null && widget.activityData["description"] != "")
+              ...(widget.postData["description"] != null && widget.postData["description"] != "")
                   ? [
-                Text(widget.activityData["description"], style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                Text(widget.postData["description"], style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
               ]
                   : [],
               Column(
@@ -92,7 +94,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                 }).toList(),
               ),
               SizedBox(height: 10),
-              if (!_showAllActivities && widget.activityData["activities"].length > 2)
+              if (!_showAllActivities && widget.postData["activities"].length > 2)
                 SizedBox(
                   height: 24,
                   child: IconButton(
@@ -105,7 +107,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                     icon: Icon(Icons.keyboard_arrow_down),
                   ),
                 ),
-              if (_showAllActivities && widget.activityData["activities"].length > 2)
+              if (_showAllActivities && widget.postData["activities"].length > 2)
                 SizedBox(
                   height: 24,
                   child: IconButton(
@@ -161,8 +163,8 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.activityData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text(formatDateForDisplay(widget.activityData["timestamp"]), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
+              Text(widget.postData["creator_userName"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(formatDateForDisplay(widget.postData["timestamp"]), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
             ],
           ),
         ],
