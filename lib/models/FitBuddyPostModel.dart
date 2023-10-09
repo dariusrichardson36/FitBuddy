@@ -17,15 +17,15 @@ class Post {
     required this.timestamp,
   });
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    var activitiesJson = json['activity'] as List;
-    List<Activity> activitiesList = activitiesJson.map((i) => Activity.fromJson(i)).toList();
+  factory Post.fromMap(Map<String, dynamic> map) {
+    var activitiesJson = map['activities'];
+    List<Activity> activitiesList = activitiesJson.map<Activity>((i) => Activity.fromMap(i)).toList();
     return Post(
       activities: activitiesList,
-      creatorUserName: json['creator_userName'],
-      description: json['description'],
-      creatorUid: json['creator_uid'],
-      timestamp: json['timestamp'],
+      creatorUserName: map['creator_userName'],
+      description: map['description'],
+      creatorUid: map['creator_uid'],
+      timestamp: map['timestamp'],
     );
   }
 }

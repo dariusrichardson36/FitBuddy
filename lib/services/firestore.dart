@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/services/auth.dart';
+import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
 class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
@@ -30,9 +31,9 @@ class Firestore {
 
     query.snapshots().listen((postSnapshot) {
       if (postSnapshot.docs.isNotEmpty) {
-        var generalTimeline = postSnapshot.docs.map((snapshot) =>
-            snapshot.data()).toList();
-        print(generalTimeline);
+        var posts = postSnapshot.docs
+            .map((snapshot) => Post.fromMap(snapshot.data())).toList();
+        print(posts);
         var pageExists = currentRequestIndex < _allPagedResults.length;
 
         if (pageExists) {
