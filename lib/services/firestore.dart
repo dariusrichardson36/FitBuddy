@@ -7,11 +7,11 @@ import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 class Firestore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
   DocumentSnapshot? _lastDocument;
-
+  bool _hasMorePosts = true;
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
-  List<QuerySnapshot> _allPagedResults = [];
+  List<List<Post>> _allPagedResults = [];
 
 
   void getTimelineStream() {
@@ -21,9 +21,11 @@ class Firestore {
         .where("creator_uid", whereIn: friendList)
         .orderBy('timestamp', descending: true)
         .limit(10);
-    print("this is the last document");
-    print(_lastDocument);
+
+    if (_hasMorePosts == false) return;
+
     if (_lastDocument != null) {
+      query = query.endAt(10);
       query = query.startAfterDocument(_lastDocument!);
     }
 
@@ -33,37 +35,26 @@ class Firestore {
       if (postSnapshot.docs.isNotEmpty) {
         var posts = postSnapshot.docs
             .map((snapshot) => Post.fromMap(snapshot.data())).toList();
-        print(posts);
-        print(posts.runtimeType);
+
         var pageExists = currentRequestIndex < _allPagedResults.length;
 
         if (pageExists) {
-          _allPagedResults[currentRequestIndex] = postSnapshot;
+          _allPagedResults[currentRequestIndex] = posts;
         } else {
-          _allPagedResults.add(postSnapshot);
+          _allPagedResults.add(posts);
         }
 
-        print(_allPagedResults.first.docs.first.data());
-        _allPagedResults.forEach((element) {
-          print(element.docs.first.data());
-        });
-        print(_allPagedResults.runtimeType);
-        postsController.add(posts);
-        /*
-        var allPosts = _allPagedResults.fold<List<QuerySnapshot>>([], (initialValue, pageItems) {
+        var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
           return initialValue..addAll(pageItems);
         });
 
         postsController.add(allPosts);
 
-
-         */
         if (currentRequestIndex == _allPagedResults.length - 1) {
-          print("this is the last document");
           _lastDocument = postSnapshot.docs.last;
-        } else {
-          print("this is NOT the last document");
         }
+
+        _hasMorePosts = posts.length == 10;
       }
 
     });
