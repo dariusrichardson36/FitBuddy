@@ -1,5 +1,8 @@
+import 'package:fit_buddy/constants/color_constants.dart';
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -39,7 +42,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Zachary',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 25,
                           fontWeight: FontWeight.bold
                         ),
@@ -68,7 +71,7 @@ class ProfilePage extends StatelessWidget {
                             onPressed: () {},
                             icon: Icon(
                               Icons.add,
-                              color: Colors.black 
+                              color: FitBuddyColorConstants.lOnPrimary 
                             )
                           ),
     
@@ -76,13 +79,20 @@ class ProfilePage extends StatelessWidget {
                             onPressed: () {},
                             icon: Icon(
                               Icons.restart_alt,
-                              color: Colors.black 
+                              color: FitBuddyColorConstants.lOnPrimary
                             )
                           ),
                         ],  
                       ),
                     ],
                   ),
+                  IconButton(
+                    onPressed: () => context.goNamed(FitBuddyRouterConstants.homePage),
+                    icon: Icon(
+                      Icons.arrow_forward,
+                      color: FitBuddyColorConstants.lOnPrimary
+                    )
+                  )
                 ],
               ),
     
@@ -98,7 +108,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     child: Text(
                       'Posts',
-                      style: TextStyle(color: Colors.black, fontSize: 32),
+                      style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 32),
                     )   
                   ),
     
@@ -110,7 +120,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     child: Text(
                       'Highlights',
-                      style: TextStyle(color: Colors.black, fontSize: 32),
+                      style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 32),
                     )   
                   ),
                 ],
@@ -124,14 +134,14 @@ class ProfilePage extends StatelessWidget {
                     onPressed: () {},
                     icon: Icon(
                       Icons.search,
-                      color: Colors.black 
+                      color: FitBuddyColorConstants.lOnPrimary 
                     )
                   ),
                 ],
               ),
               
               Divider(
-                color: Colors.black,
+                color: FitBuddyColorConstants.lOnPrimary,
                 thickness: 2,
               ),
     
@@ -158,7 +168,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Zachary',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15,
                           fontWeight: FontWeight.bold
                         ),
@@ -169,7 +179,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '8h ago',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 13
                         ),
                       )
@@ -188,7 +198,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Activity',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -198,7 +208,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Leg Press',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -208,7 +218,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Bicep Curl',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -223,7 +233,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                        '|',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -240,7 +250,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Sets',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -250,7 +260,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '2',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -260,7 +270,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '2',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -275,7 +285,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                        '|',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -292,7 +302,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Reps',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -302,7 +312,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '12',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -312,7 +322,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '12',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -327,7 +337,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                        '|',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -344,7 +354,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         'Weight',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: FitBuddyColorConstants.lOnSecondary,
                           fontSize: 15
                         ),
                       ),
@@ -354,7 +364,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '125',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -364,7 +374,7 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '125',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: FitBuddyColorConstants.lOnPrimary,
                           fontSize: 15
                         ),
                       ),
@@ -374,7 +384,7 @@ class ProfilePage extends StatelessWidget {
               ),
     
               Divider(
-                color: Colors.black,
+                color: FitBuddyColorConstants.lOnPrimary,
                 thickness: 2,
               ),
     
