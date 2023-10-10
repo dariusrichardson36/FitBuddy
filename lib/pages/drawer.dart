@@ -2,6 +2,7 @@ import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:fit_buddy/pages/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../services/auth.dart';
 
@@ -58,10 +59,7 @@ class DrawerPage extends StatelessWidget {
               SizedBox(width: 15),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ProfilePage()));
+                    context.go('/profile');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,

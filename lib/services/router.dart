@@ -3,6 +3,7 @@ import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/pages/auth_page.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
+import 'package:fit_buddy/pages/profile_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +46,14 @@ class FitBuddyRouter {
           pageBuilder: (context, state) {
             return MaterialPage(
                 child: CompleteAccountInformation()
+            );
+          }
+        ),
+        GoRoute(
+          path: '/profile' ,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+                child: ProfilePage()
             );
           }
         )
