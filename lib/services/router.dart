@@ -50,7 +50,8 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
-          path: '/profile' ,
+          path: '/profile',
+          name: FitBuddyRouterConstants.profilePage,
           pageBuilder: (context, state) {
             return MaterialPage(
                 child: ProfilePage()

@@ -1,3 +1,4 @@
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:fit_buddy/pages/profile_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,7 +60,7 @@ class DrawerPage extends StatelessWidget {
               SizedBox(width: 15),
               ElevatedButton(
                   onPressed: () {
-                    context.go('/profile');
+                    context.goNamed(FitBuddyRouterConstants.profilePage);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
