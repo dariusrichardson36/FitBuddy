@@ -34,7 +34,6 @@ class Firestore {
         .endAt([firstPost['timestamp']]);
 
     query.snapshots().listen((postSnapshot) {
-      print("Listening to object");
       var posts = postSnapshot.docs
           .map((snapshot) => Post.fromMap(snapshot.data())).toList();
       _allPagedResults[0] = posts;
@@ -44,11 +43,11 @@ class Firestore {
 
       postsController.add(allPosts);
     });
-    getTimelineStream();
+    getMoreTimeLinePosts();
   }
 
 
-  getTimelineStream() {
+  getMoreTimeLinePosts() {
     var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
     var query = _firebaseFirestoreInstance
         .collection("posts")
@@ -62,20 +61,9 @@ class Firestore {
       query = query.startAfterDocument(_lastDocument!);
     }
 
-    var currentRequestIndex = _allPagedResults.length + 1;
-    print(currentRequestIndex);
-    print(_allPagedResults[0].toString());
+    var currentRequestIndex = _allPagedResults.length;
     query.snapshots().listen((postSnapshot) {
       if (postSnapshot.docs.isNotEmpty) {
-        /*
-        print(postSnapshot.docChanges);
-        postSnapshot.docChanges.forEach((docChange) {
-          print('Type of change: ${docChange.type}');
-          print('Document ID: ${docChange.doc.id}');
-          print('Document data: ${docChange.doc.data()}');
-        });
-
-         */
         if (postSnapshot.docChanges.length < 10) {
           _hasMorePosts = false;
         }
@@ -83,11 +71,7 @@ class Firestore {
             .map((snapshot) => Post.fromMap(snapshot.data())).toList();
 
         var pageExists = currentRequestIndex < _allPagedResults.length;
-        print(pageExists);
-        print(_allPagedResults);
-        print(_allPagedResults.length);
-        print("here");
-        print(_allPagedResults[0][0].creatorUserName);
+
         if (pageExists) {
           _allPagedResults[currentRequestIndex] = posts;
         } else {
@@ -100,7 +84,7 @@ class Firestore {
 
         postsController.add(allPosts);
 
-        if (currentRequestIndex == _allPagedResults.length) {
+        if (currentRequestIndex + 1 == _allPagedResults.length) {
           _lastDocument = postSnapshot.docs.last;
         }
 
@@ -109,27 +93,6 @@ class Firestore {
 
     });
   }
-
-
-/*
-  Stream<QuerySnapshot> getTimelineStream([DocumentSnapshot? lastDoc]) {
-    var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
-    var query = _firebaseFirestoreInstance
-        .collection("posts")
-        .where("creator_uid", whereIn: friendList)
-        .orderBy('timestamp', descending: true)
-        .limit(10);
-
-    if (_lastDocument != null) {
-      query = query.startAfterDocument(_lastDocument!);
-    }
-
-    var currentRequestIndex = _allPagedResults.length;
-
-    return query.snapshots();
-  }
-
- */
 
   getUserData() async {
     return await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();

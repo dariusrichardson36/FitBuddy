@@ -40,7 +40,7 @@ class _TimeLineViewState extends State<TimeLineView> {
       setState(() {
         _isLoading = true;
       });
-      _firestore.getTimelineStream();
+      _firestore.getMoreTimeLinePosts();
       setState(() {
         _isLoading = false;
       });
