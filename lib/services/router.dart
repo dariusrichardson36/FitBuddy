@@ -61,7 +61,7 @@ class FitBuddyRouter {
       ],
 
     refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
-    redirect: (context, state) async {
+      redirect: (context, GoRouterState state) async {
         User? user = Auth().currentUser;
         if (user == null) {
           return state.namedLocation(FitBuddyRouterConstants.authPage);
@@ -70,8 +70,12 @@ class FitBuddyRouter {
         if (!doesUserDataExist) {
           return '/completeAccountInfo';
         }
+        //
+        if(state.matchedLocation != '/') {
+          return null;
+        }
         return '/';
-    }
+      }
   );
 }
 
