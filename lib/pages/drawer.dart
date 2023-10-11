@@ -1,3 +1,4 @@
+import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:fit_buddy/pages/profile_page.dart';
@@ -37,7 +38,7 @@ class DrawerPage extends StatelessWidget {
                   Text(
                     'Zachary@Zac.Graham',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: FitBuddyColorConstants.lOnPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
@@ -45,7 +46,7 @@ class DrawerPage extends StatelessWidget {
                   Text(
                     '215 Friends',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: FitBuddyColorConstants.lOnSecondary,
                       fontSize: 10,
                     ),
                   ),
@@ -56,26 +57,24 @@ class DrawerPage extends StatelessWidget {
           SizedBox(height: 50),
           Row(
             children: [
-              Icon(Icons.person, color: Colors.black, size: 35),
+              Icon(Icons.person, color: FitBuddyColorConstants.lOnPrimary, size: 35),
               SizedBox(width: 15),
               ElevatedButton(
-                  onPressed: () {
-                    context.goNamed(FitBuddyRouterConstants.profilePage);
-                  },
+                  onPressed: () => context.goNamed(FitBuddyRouterConstants.profilePage),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
                   child: Text(
                     'Profile',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
           SizedBox(height: 15),
           Row(
             children: [
-              Icon(Icons.settings, color: Colors.black, size: 35),
+              Icon(Icons.settings, color: FitBuddyColorConstants.lOnPrimary, size: 35),
               SizedBox(width: 15),
               ElevatedButton(
                   onPressed: () {},
@@ -85,14 +84,14 @@ class DrawerPage extends StatelessWidget {
                   ),
                   child: Text(
                     'Settings',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
           SizedBox(height: 15),
           Row(
             children: [
-              Icon(Icons.edit, color: Colors.black, size: 35),
+              Icon(Icons.edit, color: FitBuddyColorConstants.lOnPrimary, size: 35),
               SizedBox(width: 15),
               ElevatedButton(
                   onPressed: () {},
@@ -102,7 +101,7 @@ class DrawerPage extends StatelessWidget {
                   ),
                   child: Text(
                     'Log Workout',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
