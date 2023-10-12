@@ -47,7 +47,10 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
       activities = activities.sublist(0, 2);
     }
     return GestureDetector(
-      onTap: () {},
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        print(" tapped on activity log");
+      },
       child: Column(
         children: [
           Divider(),
