@@ -35,7 +35,7 @@ class Firestore {
 
     query.snapshots().listen((postSnapshot) {
       var posts = postSnapshot.docs
-          .map((snapshot) => Post.fromMap(snapshot.data())).toList();
+          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
       _allPagedResults[0] = posts;
       var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
         return initialValue..addAll(pageItems);
@@ -67,8 +67,9 @@ class Firestore {
         if (postSnapshot.docChanges.length < 10) {
           _hasMorePosts = false;
         }
+        print(postSnapshot);
         var posts = postSnapshot.docs
-            .map((snapshot) => Post.fromMap(snapshot.data())).toList();
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
 
         var pageExists = currentRequestIndex < _allPagedResults.length;
 

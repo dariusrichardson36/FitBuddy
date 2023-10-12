@@ -49,7 +49,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        print(" tapped on activity log");
+        print(" tapped on activity log ${widget.postData}");
       },
       child: Column(
         children: [
