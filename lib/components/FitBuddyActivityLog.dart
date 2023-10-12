@@ -46,85 +46,88 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
     if (!_showAllActivities && activities.length > 2) {
       activities = activities.sublist(0, 2);
     }
-    return Column(
-      children: [
-        Divider(),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile header
-              profileHeader(),
-              SizedBox(height: 10),
-              // if no description, or description is empty don't show
-              ...(widget.postData.description != "")
-                  ? [
-                Text(widget.postData.description, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-              ]
-                  : [],
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: activities.map<Widget>((activityData) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      // Activity name
-                      Text(activityData.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      SizedBox(height: 5),
-                      // Row containing three columns
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Column for reps
-                            buildDetailColumn("reps", activityData.setCollection),
-                            // Column for sets
-                            buildDetailColumn("sets", activityData.setCollection),
-                            // Column for weight
-                            buildDetailColumn("weight", activityData.setCollection),
-                          ],
+    return GestureDetector(
+      onTap: () {},
+      child: Column(
+        children: [
+          Divider(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Profile header
+                profileHeader(),
+                SizedBox(height: 10),
+                // if no description, or description is empty don't show
+                ...(widget.postData.description != "")
+                    ? [
+                  Text(widget.postData.description, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                ]
+                    : [],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: activities.map<Widget>((activityData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        // Activity name
+                        Text(activityData.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        SizedBox(height: 5),
+                        // Row containing three columns
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Column for reps
+                              buildDetailColumn("reps", activityData.setCollection),
+                              // Column for sets
+                              buildDetailColumn("sets", activityData.setCollection),
+                              // Column for weight
+                              buildDetailColumn("weight", activityData.setCollection),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 10),
-              if (!_showAllActivities && widget.postData.activities.length > 2)
-                SizedBox(
-                  height: 24,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        _showAllActivities = true;
-                      });
-                    },
-                    icon: Icon(Icons.keyboard_arrow_down),
-                  ),
+                      ],
+                    );
+                  }).toList(),
                 ),
-              if (_showAllActivities && widget.postData.activities.length > 2)
-                SizedBox(
-                  height: 24,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        _showAllActivities = false;
-                      });
-                    },
-                    icon: Icon(Icons.keyboard_arrow_up),
+                SizedBox(height: 10),
+                if (!_showAllActivities && widget.postData.activities.length > 2)
+                  SizedBox(
+                    height: 24,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() {
+                          _showAllActivities = true;
+                        });
+                      },
+                      icon: Icon(Icons.keyboard_arrow_down),
+                    ),
                   ),
-                ),
-              //SizedBox(height: 10),
-            ],
-          ),
-        )
-      ],
+                if (_showAllActivities && widget.postData.activities.length > 2)
+                  SizedBox(
+                    height: 24,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() {
+                          _showAllActivities = false;
+                        });
+                      },
+                      icon: Icon(Icons.keyboard_arrow_up),
+                    ),
+                  ),
+                //SizedBox(height: 10),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
