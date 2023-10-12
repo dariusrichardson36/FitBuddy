@@ -18,7 +18,6 @@ class TimeLineView extends StatefulWidget {
 class _TimeLineViewState extends State<TimeLineView> {
   late Stream<List<Post>> _timelinePostsStream;
    final ScrollController _scrollController = ScrollController();
-  DocumentSnapshot? _lastDocument;
   bool _isLoading = false;
   final _firestore = Firestore();
 
@@ -51,9 +50,6 @@ class _TimeLineViewState extends State<TimeLineView> {
 
 
   void loadTimeline() {
-    // Replace with actual currentUserId
-    //String currentUserId = 'exampleUserId';
-    //List<String> friendsIds = await getFriendsIds();
     setState(() {
       _firestore.initTimeLine();
       _timelinePostsStream = _firestore.postsController.stream;
