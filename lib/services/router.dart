@@ -50,8 +50,18 @@ class FitBuddyRouter {
             );
           }
         ),
-        GoRoute(path: '/search',
+        GoRoute(
+          path: '/search',
           name: FitBuddyRouterConstants.searchPage,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: SearchPage(),
+            );
+          }
+        ),
+        GoRoute(
+          path: '/post/:postId',
+          name: FitBuddyRouterConstants.singlePostPage,
           pageBuilder: (context, state) {
             return MaterialPage(
               child: SearchPage(),

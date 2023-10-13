@@ -2,8 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/FitBuddyPostModel.dart';
 import '../models/FitBuddyActivityModel.dart';
@@ -49,7 +51,8 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        print(" tapped on activity log ${widget.postData}");
+        print(" tapped on activity log ${widget.postData.postId}");
+        context.goNamed(FitBuddyRouterConstants.singlePostPage, pathParameters: {'postId': widget.postData.postId});
       },
       child: Column(
         children: [
