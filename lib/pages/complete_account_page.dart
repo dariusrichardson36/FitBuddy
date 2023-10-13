@@ -102,7 +102,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         GestureDetector(
           onTap: () {
             submitAccountData();
-            context.go('/homepage');
+            context.go('/');
           },
           child: Text(
             "skip account setup",
@@ -326,7 +326,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         break;
       case 3:
         submitAccountData();
-        context.go('/homepage');
+        context.go('/');
         break;
     }
   }

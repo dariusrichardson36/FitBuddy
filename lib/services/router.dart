@@ -8,6 +8,7 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fit_buddy/services/firestore.dart';
+import '../pages/search_page.dart';
 import '../services/auth.dart';
 import 'notifier.dart';
 
@@ -34,6 +35,7 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
+          name: FitBuddyRouterConstants.loadingPage,
           path: '/loading',
           pageBuilder: (context, state) {
             return MaterialPage(
@@ -57,6 +59,14 @@ class FitBuddyRouter {
                 child: ProfilePage()
             );
           }
+        ),
+        GoRoute(path: '/search',
+          name: FitBuddyRouterConstants.searchPage,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: SearchPage(),
+            );
+          }
         )
       ],
 
@@ -70,7 +80,6 @@ class FitBuddyRouter {
         if (!doesUserDataExist) {
           return '/completeAccountInfo';
         }
-        //
         if(state.matchedLocation != '/') {
           return null;
         }
