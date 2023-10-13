@@ -3,6 +3,7 @@ import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/pages/auth_page.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
+import 'package:fit_buddy/pages/single_post_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -64,7 +65,7 @@ class FitBuddyRouter {
           name: FitBuddyRouterConstants.singlePostPage,
           pageBuilder: (context, state) {
             return MaterialPage(
-              child: SearchPage(),
+              child: SinglePostPage(postId: state.pathParameters['postId']!),
             );
           }
         )

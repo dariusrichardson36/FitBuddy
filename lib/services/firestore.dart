@@ -67,7 +67,6 @@ class Firestore {
         if (postSnapshot.docChanges.length < 10) {
           _hasMorePosts = false;
         }
-        print(postSnapshot);
         var posts = postSnapshot.docs
             .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
 
@@ -94,6 +93,17 @@ class Firestore {
 
     });
   }
+
+  Future<Post> getSinglePost(String postId) async {
+    final docSnapshot = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+
+    if (docSnapshot.exists) {
+      return Post.fromMap(docSnapshot.data()!, postId);  // Assuming you have a named constructor `fromMap` in your `Post` class
+    } else {
+      throw Exception('Post not found');
+    }
+  }
+
 
   getUserData() async {
     return await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
