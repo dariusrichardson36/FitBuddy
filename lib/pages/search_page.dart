@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _search() async {
-    final results = await Firestore().searchUser(_controller.text);
+    final results = await FireStore.FireStore().searchUser(_controller.text);
     setState(() {
       _searchResults = results;
     });
@@ -84,7 +84,6 @@ class _SearchPageState extends State<SearchPage> {
                         .toString()
                         .toLowerCase()
                         .startsWith(searchQuery.toLowerCase())) {
-                      print(data);
                       return ListTile(
                         title: Text(
                           data['displayName'],

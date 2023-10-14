@@ -106,12 +106,10 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   register() async {
-    print("object");
     try {
        var result = await Auth().registerWithEmail(emailController.text.trim(), passwordController.text.trim());
-       print(result);
     } catch (e) {
-      print(e);
+
       return e;
     }
   }
@@ -253,12 +251,11 @@ class _AuthPageState extends State<AuthPage> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                print("here");
                 if (_registerFormKey.currentState!.validate()) {
                   _registerFormKey.currentState?.save();
                   register();
                 } else {
-                  print("not validated");
+                  // Not validated
                 }
               },
               child: Text(

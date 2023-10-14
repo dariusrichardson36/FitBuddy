@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'FitBuddyActivityModel.dart';
 
 class Post {
-  final List<Activity> activities;
+  final List<Activity> workout;
   final String creatorUserName;
   final String description;
   final String creatorUid;
@@ -11,7 +11,7 @@ class Post {
   final String postId;
 
   Post({
-    required this.activities,
+    required this.workout,
     required this.creatorUserName,
     required this.description,
     required this.creatorUid,
@@ -23,7 +23,7 @@ class Post {
     var activitiesJson = map['activities'];
     List<Activity> activitiesList = activitiesJson.map<Activity>((i) => Activity.fromMap(i)).toList();
     return Post(
-      activities: activitiesList,
+      workout: activitiesList,
       creatorUserName: map['creator_userName'],
       description: map['description'],
       creatorUid: map['creator_uid'],

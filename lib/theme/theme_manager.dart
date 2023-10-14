@@ -9,7 +9,6 @@ class ThemeManager with ChangeNotifier{
 
   toggleTheme() {
     _themeMode = _themeMode==ThemeMode.light?ThemeMode.dark:ThemeMode.light;
-    print("notifying");
     notifyListeners();
   }
 }

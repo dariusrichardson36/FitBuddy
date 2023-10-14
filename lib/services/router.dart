@@ -77,7 +77,7 @@ class FitBuddyRouter {
         if (user == null) {
           return state.namedLocation(FitBuddyRouterConstants.authPage);
         }
-        bool doesUserDataExist = await Firestore().doesUserDocumentExist(user.uid);
+        bool doesUserDataExist = await FireStore.FireStore().doesUserDocumentExist(user.uid);
         if (!doesUserDataExist) {
           return '/completeAccountInfo';
         }

@@ -20,7 +20,7 @@ class _SinglePostPageState extends State<SinglePostPage> {
   @override
   void initState() {
     super.initState();
-    postFuture = Firestore().getSinglePost(widget.postId);  // Assuming you have postId in your widget
+    postFuture = FireStore.FireStore().getSinglePost(widget.postId);  // Assuming you have postId in your widget
   }
 
   @override
@@ -39,7 +39,7 @@ class _SinglePostPageState extends State<SinglePostPage> {
               }
               Post? post = snapshot.data;
               if (post != null) {
-                return FitBuddyActivityLog(postData: post);
+                return FitBuddyTimelinePost(postData: post);
               } else {
                 return Text("Post not found");
               }

@@ -4,16 +4,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
-class Firestore {
+class FireStore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
   DocumentSnapshot? _lastDocument;
   bool _hasMorePosts = true;
   bool once = false;
+  List _streams = [];
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
   List<List<Post>> _allPagedResults = [[]];
 
+  // 1. Static instance of the class
+  static final FireStore _instance = FireStore._internal();
+
+  // 2. Factory constructor returning the static instance
+  factory FireStore.FireStore() {
+    return _instance;
+  }
+
+  // 3. Internal named constructor
+  FireStore._internal();
+
+  @override
+  onDispose() {
+    print("Dispose called");
+    postsController.close();
+  }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getFirstPost() {
     return _firebaseFirestoreInstance
@@ -62,7 +79,7 @@ class Firestore {
     }
 
     var currentRequestIndex = _allPagedResults.length;
-    query.snapshots().listen((postSnapshot) {
+    var test = query.snapshots().listen((postSnapshot) {
       if (postSnapshot.docs.isNotEmpty) {
         if (postSnapshot.docChanges.length < 10) {
           _hasMorePosts = false;
@@ -92,6 +109,8 @@ class Firestore {
       }
 
     });
+    _streams.add(test);
+    print(_streams.length);
   }
 
   Future<Post> getSinglePost(String postId) async {
@@ -141,7 +160,7 @@ class Firestore {
 
       return usernames;
     } catch (e) {
-      print("Error in searchUser: $e");
+      // print("Error in searchUser: $e");
       return [];
     }
   }

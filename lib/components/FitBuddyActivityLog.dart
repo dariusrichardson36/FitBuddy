@@ -10,19 +10,19 @@ import 'package:go_router/go_router.dart';
 import '../models/FitBuddyPostModel.dart';
 import '../models/FitBuddyActivityModel.dart';
 
-class FitBuddyActivityLog extends StatefulWidget {
+class FitBuddyTimelinePost extends StatefulWidget {
   final Post postData;
 
-  const FitBuddyActivityLog({
+  const FitBuddyTimelinePost({
     super.key,
     required this.postData
   });
 
   @override
-  _FitBuddyActivityLogState createState() => _FitBuddyActivityLogState();
+  _FitBuddyTimelinePostState createState() => _FitBuddyTimelinePostState();
 }
 
-class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
+class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
   bool _showAllActivities = false;
 
   String formatDateForDisplay(Timestamp timestamp) {
@@ -44,19 +44,19 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
 
   @override
   Widget build(BuildContext context) {
-    var activities = widget.postData.activities;
+    var activities = widget.postData.workout;
     if (!_showAllActivities && activities.length > 2) {
       activities = activities.sublist(0, 2);
     }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        print(" tapped on activity log ${widget.postData.postId}");
-        context.goNamed(FitBuddyRouterConstants.singlePostPage, pathParameters: {'postId': widget.postData.postId});
+        // This is to go to a single post page
+        // context.goNamed(FitBuddyRouterConstants.singlePostPage, pathParameters: {'postId': widget.postData.postId});
       },
       child: Column(
         children: [
-          Divider(),
+          Divider(height: 5),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -102,7 +102,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                   }).toList(),
                 ),
                 SizedBox(height: 10),
-                if (!_showAllActivities && widget.postData.activities.length > 2)
+                if (!_showAllActivities && widget.postData.workout.length > 2)
                   SizedBox(
                     height: 24,
                     child: IconButton(
@@ -115,7 +115,7 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
                       icon: Icon(Icons.keyboard_arrow_down),
                     ),
                   ),
-                if (_showAllActivities && widget.postData.activities.length > 2)
+                if (_showAllActivities && widget.postData.workout.length > 2)
                   SizedBox(
                     height: 24,
                     child: IconButton(
