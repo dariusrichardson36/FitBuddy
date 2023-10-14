@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
             TimeLineView(),
             MatchmakingView(),
             AchievementsView(),
-            MessagesView()
+            MessagesView(),
           ],
 
         ),
@@ -88,6 +88,13 @@ class _HomePageState extends State<HomePage> {
           icon: Icon(Icons.email),
           label: 'messages',
         ),
+        /*
+        BottomNavigationBarItem(
+          icon: Icon(Icons.edit),
+          label: 'messages',
+        ),
+
+         */
       ],
       showSelectedLabels: false, // Hide labels for selected item
       showUnselectedLabels: false, // Hide labels for unselected items
