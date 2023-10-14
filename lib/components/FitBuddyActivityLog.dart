@@ -2,25 +2,27 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/FitBuddyPostModel.dart';
 import '../models/FitBuddyActivityModel.dart';
 
-class FitBuddyActivityLog extends StatefulWidget {
+class FitBuddyTimelinePost extends StatefulWidget {
   final Post postData;
 
-  const FitBuddyActivityLog({
+  const FitBuddyTimelinePost({
     super.key,
     required this.postData
   });
 
   @override
-  _FitBuddyActivityLogState createState() => _FitBuddyActivityLogState();
+  _FitBuddyTimelinePostState createState() => _FitBuddyTimelinePostState();
 }
 
-class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
+class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
   bool _showAllActivities = false;
 
   String formatDateForDisplay(Timestamp timestamp) {
@@ -42,89 +44,96 @@ class _FitBuddyActivityLogState extends State<FitBuddyActivityLog> {
 
   @override
   Widget build(BuildContext context) {
-    var activities = widget.postData.activities;
+    var activities = widget.postData.workout;
     if (!_showAllActivities && activities.length > 2) {
       activities = activities.sublist(0, 2);
     }
-    return Column(
-      children: [
-        Divider(),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile header
-              profileHeader(),
-              SizedBox(height: 10),
-              // if no description, or description is empty don't show
-              ...(widget.postData.description != "")
-                  ? [
-                Text(widget.postData.description, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-              ]
-                  : [],
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: activities.map<Widget>((activityData) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      // Activity name
-                      Text(activityData.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      SizedBox(height: 5),
-                      // Row containing three columns
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Column for reps
-                            buildDetailColumn("reps", activityData.setCollection),
-                            // Column for sets
-                            buildDetailColumn("sets", activityData.setCollection),
-                            // Column for weight
-                            buildDetailColumn("weight", activityData.setCollection),
-                          ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        // This is to go to a single post page
+        // context.goNamed(FitBuddyRouterConstants.singlePostPage, pathParameters: {'postId': widget.postData.postId});
+      },
+      child: Column(
+        children: [
+          Divider(height: 5),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Profile header
+                profileHeader(),
+                SizedBox(height: 10),
+                // if no description, or description is empty don't show
+                ...(widget.postData.description != "")
+                    ? [
+                  Text(widget.postData.description, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                ]
+                    : [],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: activities.map<Widget>((activityData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        // Activity name
+                        Text(activityData.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        SizedBox(height: 5),
+                        // Row containing three columns
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Column for reps
+                              buildDetailColumn("reps", activityData.setCollection),
+                              // Column for sets
+                              buildDetailColumn("sets", activityData.setCollection),
+                              // Column for weight
+                              buildDetailColumn("weight", activityData.setCollection),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 10),
-              if (!_showAllActivities && widget.postData.activities.length > 2)
-                SizedBox(
-                  height: 24,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        _showAllActivities = true;
-                      });
-                    },
-                    icon: Icon(Icons.keyboard_arrow_down),
-                  ),
+                      ],
+                    );
+                  }).toList(),
                 ),
-              if (_showAllActivities && widget.postData.activities.length > 2)
-                SizedBox(
-                  height: 24,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        _showAllActivities = false;
-                      });
-                    },
-                    icon: Icon(Icons.keyboard_arrow_up),
+                SizedBox(height: 10),
+                if (!_showAllActivities && widget.postData.workout.length > 2)
+                  SizedBox(
+                    height: 24,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() {
+                          _showAllActivities = true;
+                        });
+                      },
+                      icon: Icon(Icons.keyboard_arrow_down),
+                    ),
                   ),
-                ),
-              //SizedBox(height: 10),
-            ],
-          ),
-        )
-      ],
+                if (_showAllActivities && widget.postData.workout.length > 2)
+                  SizedBox(
+                    height: 24,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() {
+                          _showAllActivities = false;
+                        });
+                      },
+                      icon: Icon(Icons.keyboard_arrow_up),
+                    ),
+                  ),
+                //SizedBox(height: 10),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
