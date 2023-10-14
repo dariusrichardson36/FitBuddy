@@ -43,21 +43,23 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: DrawerPage(),
       ),
-      body: PageView(
-        onPageChanged: (index) {
-          setState(() {
-            _currentPageIndex = index;
-          });
-        },
-        
-        controller: _pageController,
-        children: [
-          TimeLineView(),
-          MatchmakingView(),
-          AchievementsView(),
-          MessagesView()
-        ],
+      body: SafeArea(
+        child: PageView(
+          onPageChanged: (index) {
+            setState(() {
+              _currentPageIndex = index;
+            });
+          },
+          
+          controller: _pageController,
+          children: [
+            TimeLineView(),
+            MatchmakingView(),
+            AchievementsView(),
+            MessagesView()
+          ],
 
+        ),
       ),
       bottomNavigationBar: fitBuddyBottomNavigationBar(),
     );
