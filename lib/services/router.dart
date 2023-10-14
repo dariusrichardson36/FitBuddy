@@ -81,8 +81,7 @@ class FitBuddyRouter {
         if (!doesUserDataExist) {
           return '/completeAccountInfo';
         }
-         //
-        if(state.matchedLocation != '/') {
+        if(state.matchedLocation != '/' && state.matchedLocation != '/authentication' && state.matchedLocation != '/completeAccountInfo') {
           return null;
         }
         return '/';
