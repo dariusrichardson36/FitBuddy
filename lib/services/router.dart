@@ -8,6 +8,7 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fit_buddy/services/firestore.dart';
+import '../pages/choose_exercise_page.dart';
 import '../pages/create_workout_page.dart';
 import '../pages/search_page.dart';
 import '../services/auth.dart';
@@ -78,6 +79,15 @@ class FitBuddyRouter {
                 child: CreateWorkoutPage(),
               );
             }
+        ),
+        GoRoute(
+          path: '/create/choose',
+          name: FitBuddyRouterConstants.chooseExercisePage,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: ChooseExercisePage(),
+            );
+          }
         )
       ],
 
