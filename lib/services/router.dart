@@ -94,7 +94,8 @@ class FitBuddyRouter {
         if(state.matchedLocation != '/' && state.matchedLocation != '/authentication' && state.matchedLocation != '/completeAccountInfo') {
           return null;
         }
-        return '/';
+        return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
+        //return '/';
     }
   );
 }
