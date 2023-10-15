@@ -1,4 +1,6 @@
+import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../components/FitBuddyButton.dart';
 import '../components/FitBuddyVisibilitySelector.dart';
@@ -38,7 +40,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios_rounded),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -85,7 +87,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                 child: FitBuddyButton(
                   text: "Add exercise",
                   onPressed: () {
-                    //Navigator.of(context).pop();
+                    context.goNamed(FitBuddyRouterConstants.chooseExercisePage);
                   },
                 ),
               )

@@ -46,6 +46,7 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
+          name: FitBuddyRouterConstants.completeAccountPage,
           path: '/completeAccountInfo' ,
           pageBuilder: (context, state) {
             return MaterialPage(
@@ -93,19 +94,20 @@ class FitBuddyRouter {
 
     refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
     redirect: (context, GoRouterState state) async {
-        User? user = Auth().currentUser;
-        if (user == null) {
-          return state.namedLocation(FitBuddyRouterConstants.authPage);
-        }
+      User? user = Auth().currentUser;
+      if (user == null) {
+        return state.namedLocation(FitBuddyRouterConstants.authPage);
+      }
+      if (state.matchedLocation == '/authentication') {
         bool doesUserDataExist = await FireStore.FireStore().doesUserDocumentExist(user.uid);
         if (!doesUserDataExist) {
-          return '/completeAccountInfo';
+          return state.namedLocation(FitBuddyRouterConstants.completeAccountPage);
+        } else {
+          return state.namedLocation(FitBuddyRouterConstants.homePage);
         }
-        if(state.matchedLocation != '/' && state.matchedLocation != '/authentication' && state.matchedLocation != '/completeAccountInfo') {
-          return null;
-        }
+      }
         return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
-        //return '/';
+        return null;
     }
   );
 }
