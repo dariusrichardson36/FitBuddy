@@ -1,30 +1,131 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/services/auth.dart';
+import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
-class Firestore {
+class FireStore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
+  DocumentSnapshot? _lastDocument;
+  bool _hasMorePosts = true;
+  bool once = false;
+  List _streams = [];
+  final StreamController<List<Post>> postsController =
+      StreamController<List<Post>>.broadcast();
 
-  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime? dob, String? gender) async {
-    try {
-      await _firebaseFirestoreInstance.collection('users').doc(uid).set({
-        'experience': experience,
-        'goals': goals,
-        'liftingStyle': liftingStyle,
-        'dob': dob,
-        'isAccountComplete': isAccountComplete,
-        'username': username,
-        'displayName': displayName,
-        'gender': gender,
+  List<List<Post>> _allPagedResults = [[]];
+
+  // 1. Static instance of the class
+  static final FireStore _instance = FireStore._internal();
+
+  // 2. Factory constructor returning the static instance
+  factory FireStore.FireStore() {
+    return _instance;
+  }
+
+  // 3. Internal named constructor
+  FireStore._internal();
+
+  @override
+  onDispose() {
+    print("Dispose called");
+    postsController.close();
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFirstPost() {
+    return _firebaseFirestoreInstance
+        .collection("posts")
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.first);
+  }
+
+  void initTimeLine() async {
+    var firstPost = await getFirstPost();
+    _lastDocument = firstPost;
+
+    var query = _firebaseFirestoreInstance
+        .collection("posts")
+        .orderBy('timestamp', descending: true)
+        .endAt([firstPost['timestamp']]);
+
+    query.snapshots().listen((postSnapshot) {
+      var posts = postSnapshot.docs
+          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+      _allPagedResults[0] = posts;
+      var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+        return initialValue..addAll(pageItems);
       });
-    } catch (e) {
-      // todo
+
+      postsController.add(allPosts);
+    });
+    getMoreTimeLinePosts();
+  }
+
+
+  getMoreTimeLinePosts() {
+    var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
+    var query = _firebaseFirestoreInstance
+        .collection("posts")
+        .where("creator_uid", whereIn: friendList)
+        .orderBy('timestamp', descending: true)
+        .limit(10);
+
+    if (_hasMorePosts == false) return;
+
+    if (_lastDocument != null) {
+      query = query.startAfterDocument(_lastDocument!);
+    }
+
+    var currentRequestIndex = _allPagedResults.length;
+    var test = query.snapshots().listen((postSnapshot) {
+      if (postSnapshot.docs.isNotEmpty) {
+        if (postSnapshot.docChanges.length < 10) {
+          _hasMorePosts = false;
+        }
+        var posts = postSnapshot.docs
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+
+        var pageExists = currentRequestIndex < _allPagedResults.length;
+
+        if (pageExists) {
+          _allPagedResults[currentRequestIndex] = posts;
+        } else {
+          _allPagedResults.add(posts);
+        }
+
+        var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+          return initialValue..addAll(pageItems);
+        });
+
+        postsController.add(allPosts);
+
+        if (currentRequestIndex + 1 == _allPagedResults.length) {
+          _lastDocument = postSnapshot.docs.last;
+        }
+
+        _hasMorePosts = posts.length == 10;
+      }
+
+    });
+    _streams.add(test);
+    print(_streams.length);
+  }
+
+  Future<Post> getSinglePost(String postId) async {
+    final docSnapshot = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+
+    if (docSnapshot.exists) {
+      return Post.fromMap(docSnapshot.data()!, postId);  // Assuming you have a named constructor `fromMap` in your `Post` class
+    } else {
+      throw Exception('Post not found');
     }
   }
 
-  Stream<QuerySnapshot> getTimelineStream() {
-    return _firebaseFirestoreInstance
-        .collection('posts')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
+
+  getUserData() async {
+    return await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
   }
 
   Future<bool> doesUserDocumentExist(String userId) async {
@@ -59,8 +160,25 @@ class Firestore {
 
       return usernames;
     } catch (e) {
-      print("Error in searchUser: $e");
+      // print("Error in searchUser: $e");
       return [];
+    }
+  }
+
+  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime? dob, String? gender) async {
+    try {
+      await _firebaseFirestoreInstance.collection('users').doc(uid).set({
+        'experience': experience,
+        'goals': goals,
+        'liftingStyle': liftingStyle,
+        'dob': dob,
+        'isAccountComplete': isAccountComplete,
+        'username': username,
+        'displayName': displayName,
+        'gender': gender,
+      });
+    } catch (e) {
+      // todo
     }
   }
 

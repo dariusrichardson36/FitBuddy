@@ -4,6 +4,7 @@ import 'package:fit_buddy/pages/auth_page.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/pages/profile_page.dart';
+import 'package:fit_buddy/pages/single_post_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -60,11 +61,21 @@ class FitBuddyRouter {
             );
           }
         ),
-        GoRoute(path: '/search',
+        GoRoute(
+          path: '/search',
           name: FitBuddyRouterConstants.searchPage,
           pageBuilder: (context, state) {
             return MaterialPage(
               child: SearchPage(),
+            );
+          }
+        ),
+        GoRoute(
+          path: '/post/:postId',
+          name: FitBuddyRouterConstants.singlePostPage,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: SinglePostPage(postId: state.pathParameters['postId']!),
             );
           }
         )
@@ -76,11 +87,11 @@ class FitBuddyRouter {
         if (user == null) {
           return state.namedLocation(FitBuddyRouterConstants.authPage);
         }
-        bool doesUserDataExist = await Firestore().doesUserDocumentExist(user.uid);
+        bool doesUserDataExist = await FireStore.FireStore().doesUserDocumentExist(user.uid);
         if (!doesUserDataExist) {
           return '/completeAccountInfo';
         }
-        if(state.matchedLocation != '/') {
+        if(state.matchedLocation != '/' && state.matchedLocation != '/authentication' && state.matchedLocation != '/completeAccountInfo') {
           return null;
         }
         return '/';
