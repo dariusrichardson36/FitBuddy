@@ -14,8 +14,8 @@ class ProfileController extends GetxController
     super.onInit();
 
     usersProfileList.bindStream(
-      FirebaseFirestore.instance.collection("testUsers")
-          .where("uid", isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
+      FirebaseFirestore.instance.collection("users")
+          //.where("uid", isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .snapshots().map((QuerySnapshot queryDataSnapshot)
       {
         List<User> usersList = [];
