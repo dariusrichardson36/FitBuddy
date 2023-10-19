@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 
 class ChooseExerciseView extends StatefulWidget {
   static const String id = 'choose_exercise_page';
-  final VoidCallback onButtonPressed;
+  final VoidCallback onReturn;
+  final VoidCallback onExerciseSelected;
 
   const ChooseExerciseView({
     super.key,
-    required this.onButtonPressed
+    required this.onReturn,
+    required this.onExerciseSelected,
   });
 
   @override
@@ -31,7 +33,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
         _selectedTabIndex = _tabController.index;
       });
     });
-    //_favoriteExercises = FirestoreService.firestoreService().postService.getFavoriteExercises();
+    _favoriteExercises = FirestoreService.firestoreService().postService.getFavoriteExercises();
     _allExercises = FirestoreService.firestoreService().postService.getAllExercises();
   }
 
@@ -48,7 +50,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 30), onPressed: widget.onButtonPressed),
+                  IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 30), onPressed: widget.onReturn),
                   Expanded(
                     child: TabBar(
                       controller: _tabController,
@@ -127,24 +129,30 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
   }
 
   exercise(Exercise exercise, bool isFavorite) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(exercise.name),
-            IconButton(
-              onPressed: () {
-               // Todo
-              },
-              icon: isFavorite
-                  ? Icon(Icons.star_rounded, color: FitBuddyColorConstants.lAccent)
-                  : Icon(Icons.star_border_rounded, color: FitBuddyColorConstants.lAccent),
-            ),
-          ],
-        ),
-        Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      ],
+    return GestureDetector(
+      onTap: () {
+        print(exercise.id);
+        widget.onExerciseSelected(exercise);
+      },
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(exercise.name),
+              IconButton(
+                onPressed: () {
+                 // Todo
+                },
+                icon: isFavorite
+                    ? Icon(Icons.star_rounded, color: FitBuddyColorConstants.lAccent)
+                    : Icon(Icons.star_border_rounded, color: FitBuddyColorConstants.lAccent),
+              ),
+            ],
+          ),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+        ],
+      ),
     );
   }
 
