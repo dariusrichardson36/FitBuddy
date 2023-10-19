@@ -1,13 +1,8 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/homepage_views/achievements_view.dart';
 import 'package:fit_buddy/pages/homepage_views/matchmaking_view.dart';
 import 'package:fit_buddy/pages/homepage_views/messages_view.dart';
-import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
-import '../services/firestore/firestore.dart';
+
 import 'drawer.dart';
 import 'homepage_views/timeline_view.dart';
 

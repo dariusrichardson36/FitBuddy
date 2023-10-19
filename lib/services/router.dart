@@ -8,11 +8,7 @@ import 'package:fit_buddy/pages/single_post_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fit_buddy/services/firestore/firestore.dart';
-import '../pages/create_workout_views/choose_exercise_view.dart';
-import '../pages/create_workout_views/create_workout_view.dart';
 import '../pages/search_page.dart';
-import '../services/auth.dart';
 import 'firestore/firestore_service.dart';
 import 'notifier.dart';
 

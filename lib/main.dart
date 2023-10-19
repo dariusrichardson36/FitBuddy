@@ -1,17 +1,8 @@
-
-import 'package:fit_buddy/pages/auth_page.dart';
-import 'package:fit_buddy/pages/home_page.dart';
-import 'package:fit_buddy/services/auth.dart';
-import 'package:fit_buddy/services/firestore/firestore.dart';
 import 'package:fit_buddy/services/router.dart';
 import 'package:fit_buddy/theme/theme_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
-import 'firebase_options.dart';
-
 
 
 Future<void> main() async {
@@ -25,15 +16,12 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 
 class _MyAppState extends State<MyApp> {
-
 
   @override
   void initState() {

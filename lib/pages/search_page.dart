@@ -4,8 +4,6 @@ import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../services/firestore/firestore.dart';
 import '../services/firestore/firestore_service.dart';
 
 class SearchPage extends StatefulWidget {

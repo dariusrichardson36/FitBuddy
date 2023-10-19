@@ -1,12 +1,7 @@
-import 'dart:ffi';
-
 import 'package:fit_buddy/components/FitBuddyDropdownMenu.dart';
 import 'package:fit_buddy/components/FitBuddySelectableButton.dart';
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
-import 'package:fit_buddy/pages/complete_account_views/gender_selection.dart';
-import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/auth.dart';
-import 'package:fit_buddy/services/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
