@@ -2,7 +2,7 @@
 import 'package:fit_buddy/pages/auth_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
 import 'package:fit_buddy/services/auth.dart';
-import 'package:fit_buddy/services/firestore.dart';
+import 'package:fit_buddy/services/firestore/firestore.dart';
 import 'package:fit_buddy/services/router.dart';
 import 'package:fit_buddy/theme/theme_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';

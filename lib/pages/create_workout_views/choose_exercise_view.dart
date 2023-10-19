@@ -1,7 +1,7 @@
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
-import 'package:fit_buddy/services/firestore.dart';
+import 'package:fit_buddy/services/firestore/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

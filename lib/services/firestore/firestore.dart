@@ -197,7 +197,7 @@ class FireStore {
             List<DocumentSnapshot> documents = await Future.wait(fetchFutures);
 
             // Convert the DocumentSnapshots to Exercise objects
-            exercises = documents.map((doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>)).toList();
+            exercises = documents.map((doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>, doc.id, true)).toList();
           } else {
             print("favoriteExercises is null");
           }
@@ -212,13 +212,6 @@ class FireStore {
     });
   }
 
-
-  /*
-
-       var posts = postSnapshot.docs
-            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
-
-   */
 
   Future<List<Exercise>> getAllExercises() async {
     QuerySnapshot querySnapshot = await _firebaseFirestoreInstance.collection('exercises').get();
