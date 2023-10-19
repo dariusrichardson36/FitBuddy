@@ -2,6 +2,7 @@ import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
 import 'package:fit_buddy/services/firestore/firestore.dart';
+import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class ChooseExerciseView extends StatefulWidget {
 class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProviderStateMixin  {
   late TabController _tabController;
   int _selectedTabIndex = 0;
-  late Future _favoriteExercises;
+  late Stream _favoriteExercises;
   late Future _allExercises;
 
   @override
@@ -33,8 +34,8 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
         _selectedTabIndex = _tabController.index;
       });
     });
-    _favoriteExercises = FireStore.FireStore().getFavoriteExercises();
-    _allExercises = FireStore.FireStore().getAllExercises();
+    _favoriteExercises = FirestoreService.firestoreService().postService.getFavoriteExercises();
+    _allExercises = FirestoreService.firestoreService().postService.getAllExercises();
   }
 
   @override
@@ -118,7 +119,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
   }
 
   favoritesView() {
-    return FutureBuilder(future: _favoriteExercises, builder: (context, snapshot) {
+    return StreamBuilder(stream: _favoriteExercises, builder: (context, snapshot) {
       return snapshot.hasData ? ListView.builder(
         itemCount: snapshot.data.length,
         itemBuilder: (context, index) {

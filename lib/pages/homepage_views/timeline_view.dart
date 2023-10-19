@@ -7,6 +7,8 @@ import 'package:fit_buddy/services/firestore/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/firestore/firestore_service.dart';
+
 
 class TimeLineView extends StatefulWidget {
   const TimeLineView({super.key});
@@ -19,7 +21,7 @@ class _TimeLineViewState extends State<TimeLineView> {
   late Stream<List<Post>> _timelinePostsStream;
    final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
-  final _firestore = FireStore.FireStore();
+  final _firestore = FirestoreService.firestoreService();
 
   @override
   void initState() {
@@ -37,7 +39,7 @@ class _TimeLineViewState extends State<TimeLineView> {
       setState(() {
         _isLoading = true;
       });
-      _firestore.getMoreTimeLinePosts();
+      _firestore.timelineService.getMoreTimeLinePosts();
       setState(() {
         _isLoading = false;
       });
@@ -46,8 +48,8 @@ class _TimeLineViewState extends State<TimeLineView> {
 
   void loadTimeline() {
     setState(() {
-      _firestore.initTimeLine();
-      _timelinePostsStream = _firestore.postsController.stream;
+      _firestore.timelineService.initTimeLine();
+      _timelinePostsStream = _firestore.timelineService.postsController.stream;
     });
   }
 

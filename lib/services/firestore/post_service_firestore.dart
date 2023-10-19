@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../models/FitBuddyExerciseModel.dart';
+import '../auth.dart';
 import 'firestore_service.dart';
 
 class PostServiceFirestore {
   final FirestoreService firestoreService;
 
   PostServiceFirestore({required this.firestoreService});
-
 
   Stream<List<Exercise>> getFavoriteExercises() {
     DocumentReference docRef = firestoreService.instance.collection('users').doc(Auth().currentUser?.uid);
@@ -25,7 +25,7 @@ class PostServiceFirestore {
             List<DocumentSnapshot> documents = await Future.wait(fetchFutures);
 
             // Convert the DocumentSnapshots to Exercise objects
-            exercises = documents.map((doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>)).toList();
+            exercises = documents.map((doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>, doc.id, true)).toList();
           } else {
             print("favoriteExercises is null");
           }
@@ -39,7 +39,6 @@ class PostServiceFirestore {
       return exercises;
     });
   }
-
 
   Future<List<Exercise>> getAllExercises() async {
     QuerySnapshot querySnapshot = await firestoreService.instance.collection('exercises').get();

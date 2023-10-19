@@ -13,6 +13,7 @@ import '../pages/create_workout_views/choose_exercise_view.dart';
 import '../pages/create_workout_views/create_workout_view.dart';
 import '../pages/search_page.dart';
 import '../services/auth.dart';
+import 'firestore/firestore_service.dart';
 import 'notifier.dart';
 
 class FitBuddyRouter {
@@ -91,7 +92,7 @@ class FitBuddyRouter {
         return state.namedLocation(FitBuddyRouterConstants.authPage);
       }
       if (state.matchedLocation == '/authentication') {
-        bool doesUserDataExist = await FireStore.FireStore().doesUserDocumentExist(user.uid);
+        bool doesUserDataExist = await FirestoreService.firestoreService().userService.doesUserDocumentExist(user.uid);
         if (!doesUserDataExist) {
           return state.namedLocation(FitBuddyRouterConstants.completeAccountPage);
         } else {

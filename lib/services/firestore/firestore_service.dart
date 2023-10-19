@@ -6,23 +6,36 @@ import 'auth_service_firestore.dart';
 
 
 class FirestoreService {
-  final FirebaseFirestore _firebaseFirestoreInstance = FirebaseFirestore.instance;
+  final FirebaseFirestore _firebaseFirestoreInstance = FirebaseFirestore
+      .instance;
 
   FirebaseFirestore get instance => _firebaseFirestoreInstance;
 
-  late final AuthServiceFirestore authService;
+  late final UserServiceFirestore userService;
   late final TimelineServiceFirestore timelineService;
   late final PostServiceFirestore postService;
 
+  // 1. Static instance of the class
+  static final FirestoreService _instance = FirestoreService._internal();
+
+  // 2. Factory constructor returning the static instance
+  factory FirestoreService.firestoreService() {
+    return _instance;
+  }
+
+  // 3. Internal named constructor
+  FirestoreService._internal();
+
+
   FirestoreService() {
-    authService = AuthServiceFirestore(firestoreService: this);
+    userService = UserServiceFirestore(firestoreService: this);
     timelineService = TimelineServiceFirestore(firestoreService: this);
     postService = PostServiceFirestore(firestoreService: this);
   }
+
+
+  final FirestoreService firestoreServices = FirestoreService();
 }
-
-final FirestoreService firestoreServices = FirestoreService();
-
 /*
 firestoreServices.authService.someAuthMethod();
 firestoreServices.timelineService.someTimelineMethod();
@@ -30,4 +43,3 @@ firestoreServices.postService.somePostMethod();
 
 
  */
-}

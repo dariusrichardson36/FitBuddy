@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../services/firestore/firestore.dart';
+import '../services/firestore/firestore_service.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _search() async {
-    final results = await FireStore.FireStore().searchUser(_controller.text);
+    final results = await FirestoreService.firestoreService().userService.searchUser(_controller.text);
     setState(() {
       _searchResults = results;
     });

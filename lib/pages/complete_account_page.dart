@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../components/FitBuddyDateInputField.dart';
+import '../services/firestore/firestore_service.dart';
 
 final experienceList = <String>["0-3 Months", "6 Months - 1 Year", "1 - 2 Years", "2 - 4 Years", "5 Years+"];
 final goalList = <String>["Lose Weight", "Build Muscle", "Build Strength"];
@@ -271,7 +272,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
 
   Future<void> submitAccountData() async {
     try {
-      await FireStore.FireStore().createUser(
+      await FirestoreService.firestoreService().userService.createUser(
         Auth().currentUser!.uid,
         experienceValue.isEmpty ? null : experienceValue,
         goalValue.isEmpty ? null : goalValue,

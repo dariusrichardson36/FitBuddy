@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/FitBuddyPostModel.dart';
+import '../services/firestore/firestore_service.dart';
 
 class SinglePostPage extends StatefulWidget {
   final String postId;
@@ -20,7 +21,7 @@ class _SinglePostPageState extends State<SinglePostPage> {
   @override
   void initState() {
     super.initState();
-    postFuture = FireStore.FireStore().getSinglePost(widget.postId);  // Assuming you have postId in your widget
+    postFuture = FirestoreService.firestoreService().timelineService.getSinglePost(widget.postId);  // Assuming you have postId in your widget
   }
 
   @override
