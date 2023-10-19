@@ -8,8 +8,8 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fit_buddy/services/firestore.dart';
-import '../pages/choose_exercise_page.dart';
-import '../pages/create_workout_page.dart';
+import '../pages/create_workout_views/choose_exercise_view.dart';
+import '../pages/create_workout_views/create_workout_view.dart';
 import '../pages/search_page.dart';
 import '../services/auth.dart';
 import 'notifier.dart';
@@ -77,7 +77,7 @@ class FitBuddyRouter {
             name: FitBuddyRouterConstants.createWorkoutPage,
             pageBuilder: (context, state) {
               return MaterialPage(
-                child: CreateWorkoutPage(),
+                child: CreateWorkoutView(),
               );
             }
         ),
@@ -86,7 +86,7 @@ class FitBuddyRouter {
           name: FitBuddyRouterConstants.chooseExercisePage,
           pageBuilder: (context, state) {
             return MaterialPage(
-              child: ChooseExercisePage(),
+              child: ChooseExerciseView(),
             );
           }
         )
@@ -106,7 +106,7 @@ class FitBuddyRouter {
           return state.namedLocation(FitBuddyRouterConstants.homePage);
         }
       }
-        return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
+        return state.namedLocation(FitBuddyRouterConstants.chooseExercisePage);
         return null;
     }
   );

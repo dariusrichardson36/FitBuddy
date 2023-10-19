@@ -2,17 +2,17 @@ import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../components/FitBuddyButton.dart';
-import '../components/FitBuddyVisibilitySelector.dart';
+import '../../components/FitBuddyButton.dart';
+import '../../components/FitBuddyVisibilitySelector.dart';
 
-class CreateWorkoutPage extends StatefulWidget {
-  const CreateWorkoutPage({Key? key}) : super(key: key);
+class CreateWorkoutView extends StatefulWidget {
+  const CreateWorkoutView({Key? key}) : super(key: key);
 
   @override
-  State<CreateWorkoutPage> createState() => _CreateWorkoutPageState();
+  State<CreateWorkoutView> createState() => _CreateWorkoutViewState();
 }
 
-class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
+class _CreateWorkoutViewState extends State<CreateWorkoutView> {
   final TextEditingController _descriptionController = TextEditingController();
   String _dropdownValue = "Private";
   int _currentLength = 0;
@@ -26,7 +26,6 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
       });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
