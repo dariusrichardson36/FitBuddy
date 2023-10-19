@@ -6,7 +6,12 @@ import '../../components/FitBuddyButton.dart';
 import '../../components/FitBuddyVisibilitySelector.dart';
 
 class CreateWorkoutView extends StatefulWidget {
-  const CreateWorkoutView({Key? key}) : super(key: key);
+  final VoidCallback onButtonPressed;
+
+  const CreateWorkoutView({
+    super.key,
+    required this.onButtonPressed
+  });
 
   @override
   State<CreateWorkoutView> createState() => _CreateWorkoutViewState();
@@ -35,13 +40,14 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: [
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back_ios_rounded),
+                    icon: Icon(Icons.arrow_back_ios_rounded, size: 30),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      context.goNamed(FitBuddyRouterConstants.homePage);
                     },
                   ),
                   FitBuddyVisibilitySelector(
@@ -86,7 +92,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                 child: FitBuddyButton(
                   text: "Add exercise",
                   onPressed: () {
-                    context.goNamed(FitBuddyRouterConstants.chooseExercisePage);
+                      widget.onButtonPressed();
                   },
                 ),
               )

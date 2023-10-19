@@ -1,12 +1,17 @@
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
+import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChooseExerciseView extends StatefulWidget {
   static const String id = 'choose_exercise_page';
+  final VoidCallback onButtonPressed;
 
-  const ChooseExerciseView({super.key});
+  const ChooseExerciseView({
+    super.key,
+    required this.onButtonPressed
+  });
 
   @override
   State<ChooseExerciseView> createState() => _ChooseExerciseViewState();
@@ -15,6 +20,8 @@ class ChooseExerciseView extends StatefulWidget {
 class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProviderStateMixin  {
   late TabController _tabController;
   int _selectedTabIndex = 0;
+  late Future _favoriteExercises;
+
 
   @override
   void initState() {
@@ -25,6 +32,8 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
         _selectedTabIndex = _tabController.index;
       });
     });
+    _favoriteExercises = FireStore.FireStore().getFavoriteExercises();
+
   }
 
   @override
@@ -40,7 +49,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.arrow_back_ios_rounded, size: 30),
+                  IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 30), onPressed: widget.onButtonPressed),
                   Expanded(
                     child: TabBar(
                       controller: _tabController,
@@ -99,31 +108,31 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
   allExercisesView() {
     return Column(
       children: [
-        exercise(),
-        exercise(),
-        exercise(),
+
       ],
     );
   }
 
   favoritesView() {
-    return Column(
-      children: [
-          exercise(),
-          exercise(),
-          exercise(),
-      ],
-    );
+    return FutureBuilder(future: _favoriteExercises, builder: (context, snapshot) {
+      return snapshot.hasData ? ListView.builder(
+        itemCount: snapshot.data.length,
+        itemBuilder: (context, index) {
+          print(snapshot.data[index]);
+          //return exercise(snapshot.data[index]);
+        },
+      ) : Center(child: CircularProgressIndicator());
+    });
   }
 
-  exercise() {
+  exercise(String exerciseName) {
     bool isFavorite = false;
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Exercise Name"),
+            Text(exerciseName),
             IconButton(
               onPressed: () {
                // Todo

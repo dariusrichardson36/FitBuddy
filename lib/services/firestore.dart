@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
@@ -110,7 +111,6 @@ class FireStore {
 
     });
     _streams.add(test);
-    print(_streams.length);
   }
 
   Future<Post> getSinglePost(String postId) async {
@@ -182,4 +182,26 @@ class FireStore {
     }
   }
 
+  Future<List<Exercise>> getFavoriteExercises() async {
+    DocumentReference docRef = _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid);
+    DocumentSnapshot docSnapshot = await docRef.get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data() as Map<String, dynamic>?;
+      if (data != null && data.containsKey('favoriteExercises')) {
+        List<dynamic>? favoriteExercises = data['favoriteExercises'];
+        if (favoriteExercises != null) {
+          List<Future<DocumentSnapshot>> fetchFutures = favoriteExercises.map((dynamic reference) => (reference as DocumentReference).get()).toList();
+          return await Future.wait(fetchFutures.map((e) => null));
+          // Now, 'documents' is a list of DocumentSnapshots corresponding to each reference.
+        }
+        else {
+          print("favoriteExercises is null");
+        }
+      } else {
+        print("favoriteExercises not found");
+      }
+    } else {
+      print("Document doesn't exist");
+    }
+  }
 }

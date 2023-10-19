@@ -5,6 +5,5 @@ class FitBuddyRouterConstants {
   static String loadingPage = 'loading_page';
   static String singlePostPage = 'single_post_page';
   static String createWorkoutPage = 'create_workout_page';
-  static String chooseExercisePage = 'choose_exercise_page';
   static String completeAccountPage = 'complete_account_page';
 }
