@@ -1,5 +1,4 @@
 import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
-import 'package:fit_buddy/pages/create_workout_views/choose_exercise_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +9,6 @@ import '../constants/color_constants.dart';
 import '../constants/route_constants.dart';
 import '../models/FitBuddyActivityModel.dart';
 import '../services/firestore/firestore_service.dart';
-import 'create_workout_views/create_workout_view.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   // Create page variables
@@ -49,6 +47,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
 
   void _addExercise(Exercise exercise){
     setState(() {
+      print(exercise.name);
       widget._workout.add(Activity(name: exercise.name, setCollection: <SetCollection>[]));
     });
   }
@@ -75,7 +74,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
     }
   }
 
-  Widget _chooseExerciseView() {
+  Widget _createWorkoutView() {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -128,6 +127,25 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                 ),
               ),
               SizedBox(height: 20.0),
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget._workout.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(widget._workout[index].name),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete_rounded),
+                        onPressed: () {
+                          setState(() {
+                            widget._workout.removeAt(index);
+                          });
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
               Container(
                 width: double.infinity,
                 height: 50,
@@ -137,7 +155,8 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                     _switchView();
                   },
                 ),
-              )
+              ),
+              SizedBox(height: 20.0),
             ],
           ),
         ),
@@ -145,7 +164,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
     );
   }
 
-  Widget _createWorkoutView() {
+  Widget _chooseExerciseView() {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -237,8 +256,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
 
   exercise(Exercise exercise, bool isFavorite) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         _addExercise(exercise);
+        _switchView();
       },
       child: Column(
         children: [
