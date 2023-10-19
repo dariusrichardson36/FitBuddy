@@ -31,7 +31,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
         _selectedTabIndex = _tabController.index;
       });
     });
-    _favoriteExercises = FirestoreService.firestoreService().postService.getFavoriteExercises();
+    //_favoriteExercises = FirestoreService.firestoreService().postService.getFavoriteExercises();
     _allExercises = FirestoreService.firestoreService().postService.getAllExercises();
   }
 

@@ -24,6 +24,7 @@ class _TimeLineViewState extends State<TimeLineView> {
 
   @override
   void initState() {
+    print("initState");
     super.initState();
     loadTimeline();
     _scrollController.addListener(() {

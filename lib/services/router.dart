@@ -95,7 +95,7 @@ class FitBuddyRouter {
           return state.namedLocation(FitBuddyRouterConstants.homePage);
         }
       }
-      return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
+     // return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
         return null;
     }
   );

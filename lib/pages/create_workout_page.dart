@@ -22,8 +22,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage>{
   @override
   Widget build(BuildContext context) {
     if (_isCreate) {
+      print("entering create workout view");
       return CreateWorkoutView(onButtonPressed: _switchView);
     } else {
+      print("entering choose exercise view");
       return ChooseExerciseView(onButtonPressed: _switchView,);
     }
   }
