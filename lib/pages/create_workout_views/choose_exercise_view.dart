@@ -1,5 +1,6 @@
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
+import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
 import 'package:fit_buddy/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
   late TabController _tabController;
   int _selectedTabIndex = 0;
   late Future _favoriteExercises;
-
+  late Future _allExercises;
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
       });
     });
     _favoriteExercises = FireStore.FireStore().getFavoriteExercises();
-
+    _allExercises = FireStore.FireStore().getAllExercises();
   }
 
   @override
@@ -93,8 +94,8 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    favoritesView(),
                     allExercisesView(),
+                    favoritesView(),
                   ],
                 ),
               )
@@ -106,11 +107,14 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
   }
 
   allExercisesView() {
-    return Column(
-      children: [
-
-      ],
-    );
+    return FutureBuilder(future: _allExercises, builder: (context, snapshot) {
+      return snapshot.hasData ? ListView.builder(
+        itemCount: snapshot.data.length,
+        itemBuilder: (context, index) {
+          return exercise(snapshot.data[index], false);
+        },
+      ) : Center(child: CircularProgressIndicator());
+    });
   }
 
   favoritesView() {
@@ -118,21 +122,19 @@ class _ChooseExerciseViewState extends State<ChooseExerciseView> with TickerProv
       return snapshot.hasData ? ListView.builder(
         itemCount: snapshot.data.length,
         itemBuilder: (context, index) {
-          print(snapshot.data[index]);
-          //return exercise(snapshot.data[index]);
+          return exercise(snapshot.data[index], true);
         },
       ) : Center(child: CircularProgressIndicator());
     });
   }
 
-  exercise(String exerciseName) {
-    bool isFavorite = false;
+  exercise(Exercise exercise, bool isFavorite) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(exerciseName),
+            Text(exercise.name),
             IconButton(
               onPressed: () {
                // Todo

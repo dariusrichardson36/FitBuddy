@@ -1,11 +1,15 @@
 class Exercise {
-  final String Name;
+  final String name;
+  final String id;
+  bool isFavorite;
 
-  Exercise({required this.Name});
+  Exercise({required this.name, required this.id, required this.isFavorite});
 
-  factory Exercise.fromMap(Map<String, dynamic> json) {
+  factory Exercise.fromMap(Map<String, dynamic> json, String id, bool isFavorite) {
     return Exercise(
-      Name: json['name'],
+      name: json['name'],
+      id: id,
+      isFavorite: isFavorite,
     );
   }
 }

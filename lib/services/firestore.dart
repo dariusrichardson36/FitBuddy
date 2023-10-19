@@ -29,7 +29,6 @@ class FireStore {
 
   @override
   onDispose() {
-    print("Dispose called");
     postsController.close();
   }
 
@@ -182,26 +181,53 @@ class FireStore {
     }
   }
 
-  Future<List<Exercise>> getFavoriteExercises() async {
+  Stream<List<Exercise>> getFavoriteExercises() {
     DocumentReference docRef = _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid);
-    DocumentSnapshot docSnapshot = await docRef.get();
-    if (docSnapshot.exists) {
-      Map<String, dynamic>? data = docSnapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('favoriteExercises')) {
-        List<dynamic>? favoriteExercises = data['favoriteExercises'];
-        if (favoriteExercises != null) {
-          List<Future<DocumentSnapshot>> fetchFutures = favoriteExercises.map((dynamic reference) => (reference as DocumentReference).get()).toList();
-          return await Future.wait(fetchFutures.map((e) => null));
-          // Now, 'documents' is a list of DocumentSnapshots corresponding to each reference.
-        }
-        else {
-          print("favoriteExercises is null");
+
+    return docRef.snapshots().asyncMap((snapshot) async {
+      List<Exercise> exercises = [];
+
+      if (snapshot.exists) {
+        Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('favoriteExercises')) {
+          List<dynamic>? favoriteExercises = data['favoriteExercises'];
+
+          if (favoriteExercises != null) {
+            List<Future<DocumentSnapshot>> fetchFutures = favoriteExercises.map((dynamic reference) => (reference as DocumentReference).get()).toList();
+            List<DocumentSnapshot> documents = await Future.wait(fetchFutures);
+
+            // Convert the DocumentSnapshots to Exercise objects
+            exercises = documents.map((doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>)).toList();
+          } else {
+            print("favoriteExercises is null");
+          }
+        } else {
+          print("favoriteExercises not found");
         }
       } else {
-        print("favoriteExercises not found");
+        print("Document doesn't exist");
       }
-    } else {
-      print("Document doesn't exist");
-    }
+
+      return exercises;
+    });
   }
+
+
+  /*
+
+       var posts = postSnapshot.docs
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+
+   */
+
+  Future<List<Exercise>> getAllExercises() async {
+    QuerySnapshot querySnapshot = await _firebaseFirestoreInstance.collection('exercises').get();
+
+    List<Exercise> exercises = querySnapshot.docs.map(
+            (doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>, doc.id, false)
+    ).toList();
+
+    return exercises;
+  }
+
 }
