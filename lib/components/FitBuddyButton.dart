@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class FitBuddyButton extends StatelessWidget {
   final String text;
   final onPressed;
+  final double fontSize;
 
   const FitBuddyButton({
     super.key,
     required this.text,
     required this.onPressed,
+    this.fontSize = 20,
   });
 
   @override
@@ -18,7 +20,7 @@ class FitBuddyButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: fontSize,
           fontWeight: FontWeight.bold,
         ),
       ),

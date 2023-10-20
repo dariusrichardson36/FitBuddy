@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../components/FitBuddyActivityListItem.dart';
 import '../components/FitBuddyButton.dart';
 import '../components/FitBuddyVisibilitySelector.dart';
 import '../constants/color_constants.dart';
@@ -12,7 +13,11 @@ import '../services/firestore/firestore_service.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   // Create page variables
-  List<Activity> _workout = [];
+  List<Activity> _workout = [
+    Activity(name: "Bench Press", setCollection: <SetCollection>[SetCollection(reps: 5, sets: 8, weight: 210), SetCollection(reps: 2, sets: 4, weight: 10)]),
+    Activity(name: "Squat", setCollection: <SetCollection>[]),
+    Activity(name: "Deadlift", setCollection: <SetCollection>[]),
+  ];
   final TextEditingController _descriptionController = TextEditingController();
 
 
@@ -132,16 +137,8 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                   shrinkWrap: true,
                   itemCount: widget._workout.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(widget._workout[index].name),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete_rounded),
-                        onPressed: () {
-                          setState(() {
-                            widget._workout.removeAt(index);
-                          });
-                        },
-                      ),
+                    return FitBuddyActivityListItem(
+                      exercise: widget._workout[index],
                     );
                   },
                 ),
@@ -163,6 +160,14 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
       ),
     );
   }
+/*
+onPressed: () {
+setState(() {
+  widget._workout.removeAt(index);
+});
+}
+ */
+
 
   Widget _chooseExerciseView() {
     return Scaffold(
