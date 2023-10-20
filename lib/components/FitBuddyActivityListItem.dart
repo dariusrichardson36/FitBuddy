@@ -31,55 +31,60 @@ class FitBuddyActivityListItem extends StatelessWidget {
         SizedBox(height: 10),
         // add a row for every entry in exercise.sets
         for (var setCollection in exercise.setCollection)
-          Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text("sets"),
-                  ),
-                  SizedBox(
-                    width: 100,
-                    child: Text(setCollection.sets.toString()),
-                  ),
-                ]
-              ),
-              SizedBox(width: 10),
-              Column(
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      child: Text("reps"),
-                    ),
-                    SizedBox(
-                      width: 100,
-                      child: Text(setCollection.reps.toString()),
-                    ),
-                  ]
-              ),
-              SizedBox(width: 10),
-              Column(
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      child: Text("weight"),
-                    ),
-                    SizedBox(
-                      width: 100,
-                      child: Text(setCollection.weight.toString()),
-                    ),
-                  ]
-              ),
-            ],
-          ),
+          setCollectionRow(setCollection),
         SizedBox(height: 10),
       ],
     );
   }
 
-
+  Widget setCollectionRow(SetCollection setCollection) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text("sets"),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(setCollection.sets.toString()),
+                ),
+              ]
+          ),
+          SizedBox(width: 10),
+          Column(
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text("reps"),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(setCollection.reps.toString()),
+                ),
+              ]
+          ),
+          SizedBox(width: 10),
+          Column(
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text("weight"),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(setCollection.weight.toString()),
+                ),
+              ]
+          ),
+        ],
+      ),
+    );
+  }
 
 }
 
