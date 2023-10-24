@@ -1,5 +1,5 @@
 //import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_buddy/components/FitBuddyProfileHeader.dart';
+import 'package:fit_buddy/components/FitBuddyProfileUI.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/models/user.dart';
@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
         builder: (context, snapshot) {
           User? user = snapshot.data;
           if (user != null) {
-            return FitBuddyProfileHeader(userData: user);
+            return FitBuddyProfileUI(userData: user);
           }
           return Text('User not Found');
         });
