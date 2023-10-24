@@ -4,16 +4,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
-class Firestore {
+class FireStore {
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
   DocumentSnapshot? _lastDocument;
   bool _hasMorePosts = true;
   bool once = false;
+  List _streams = [];
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
   List<List<Post>> _allPagedResults = [[]];
 
+  // 1. Static instance of the class
+  static final FireStore _instance = FireStore._internal();
+
+  // 2. Factory constructor returning the static instance
+  factory FireStore.FireStore() {
+    return _instance;
+  }
+
+  // 3. Internal named constructor
+  FireStore._internal();
+
+  @override
+  onDispose() {
+    print("Dispose called");
+    postsController.close();
+  }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getFirstPost() {
     return _firebaseFirestoreInstance
@@ -35,7 +52,7 @@ class Firestore {
 
     query.snapshots().listen((postSnapshot) {
       var posts = postSnapshot.docs
-          .map((snapshot) => Post.fromMap(snapshot.data())).toList();
+          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
       _allPagedResults[0] = posts;
       var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
         return initialValue..addAll(pageItems);
@@ -62,13 +79,13 @@ class Firestore {
     }
 
     var currentRequestIndex = _allPagedResults.length;
-    query.snapshots().listen((postSnapshot) {
+    var test = query.snapshots().listen((postSnapshot) {
       if (postSnapshot.docs.isNotEmpty) {
         if (postSnapshot.docChanges.length < 10) {
           _hasMorePosts = false;
         }
         var posts = postSnapshot.docs
-            .map((snapshot) => Post.fromMap(snapshot.data())).toList();
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
 
         var pageExists = currentRequestIndex < _allPagedResults.length;
 
@@ -92,7 +109,20 @@ class Firestore {
       }
 
     });
+    _streams.add(test);
+    print(_streams.length);
   }
+
+  Future<Post> getSinglePost(String postId) async {
+    final docSnapshot = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+
+    if (docSnapshot.exists) {
+      return Post.fromMap(docSnapshot.data()!, postId);  // Assuming you have a named constructor `fromMap` in your `Post` class
+    } else {
+      throw Exception('Post not found');
+    }
+  }
+
 
   getUserData() async {
     return await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
@@ -130,7 +160,7 @@ class Firestore {
 
       return usernames;
     } catch (e) {
-      print("Error in searchUser: $e");
+      // print("Error in searchUser: $e");
       return [];
     }
   }

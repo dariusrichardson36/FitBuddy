@@ -19,7 +19,7 @@ class _TimeLineViewState extends State<TimeLineView> {
   late Stream<List<Post>> _timelinePostsStream;
    final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
-  final _firestore = Firestore();
+  final _firestore = FireStore.FireStore();
 
   @override
   void initState() {
@@ -32,9 +32,7 @@ class _TimeLineViewState extends State<TimeLineView> {
     });
   }
 
-
   Future<void> loadMorePosts() async {
-    print("LOADING MORE POSTS");
     if (!_isLoading) {
       setState(() {
         _isLoading = true;
@@ -45,9 +43,6 @@ class _TimeLineViewState extends State<TimeLineView> {
       });
     }
   }
-
-
-
 
   void loadTimeline() {
     setState(() {
@@ -97,7 +92,7 @@ class _TimeLineViewState extends State<TimeLineView> {
                       return Padding(padding: EdgeInsets.symmetric(vertical: 20) ,child: Center(child: CircularProgressIndicator())); // Loading indicator at the end
                     }
                     final posts = snapshot.data!;
-                    return FitBuddyActivityLog(postData: posts[index]);
+                    return FitBuddyTimelinePost(postData: posts[index]);
                   },
                 ),
               ),

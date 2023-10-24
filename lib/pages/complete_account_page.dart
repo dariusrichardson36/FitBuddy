@@ -271,7 +271,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
 
   Future<void> submitAccountData() async {
     try {
-      await Firestore().createUser(
+      await FireStore.FireStore().createUser(
         Auth().currentUser!.uid,
         experienceValue.isEmpty ? null : experienceValue,
         goalValue.isEmpty ? null : goalValue,
