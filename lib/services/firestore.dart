@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
@@ -124,8 +125,14 @@ class FireStore {
   }
 
 
-  getUserData() async {
-    return await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
+  Future<User> getUserData() async {
+    final docSnapshot = await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
+
+    if (docSnapshot.exists) {
+      return User.fromDataSnapshot(docSnapshot.data()!);
+    } else {
+      throw Exception('User not found');
+    }
   }
 
   Future<bool> doesUserDocumentExist(String userId) async {

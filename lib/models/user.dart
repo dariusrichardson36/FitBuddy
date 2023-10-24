@@ -23,20 +23,20 @@ class User
     this.gymExperience,
 });
 
-  static User fromDataSnapshot(DocumentSnapshot snapshot){
-    var dataSnapshot = snapshot.data() as Map<String, dynamic>;
+  static User fromDataSnapshot(Map<String, dynamic> map){
+    //var dataSnapshot = snapshot.data() as Map<String, dynamic>;
 
     return User(
       //personal info
-      name: dataSnapshot['name'],
-      username: dataSnapshot['username'],
-      age: dataSnapshot['age'],
-      email: dataSnapshot['email'],
+      name: map['name'],
+      username: map['username'],
+      age: map['age'],
+      email: map['email'],
 
       //fitness info
-      liftingStyle: dataSnapshot['liftingStyle'],
-      gymGoals: dataSnapshot['gymGoals'],
-      gymExperience: dataSnapshot['gymExperience'],
+      liftingStyle: map['liftingStyle'],
+      gymGoals: map['gymGoals'],
+      gymExperience: map['gymExperience'],
     );
   }
 
