@@ -14,8 +14,8 @@ Future<List<User>> getUsersFromFirestore() async {
 class MatchmakingView extends StatelessWidget {
   const MatchmakingView({Key? key}) : super(key: key);
 
-  // Define your placeholder image URL here
   static const String placeholderImageUrl = 'https://www.seekpng.com/png/detail/847-8474751_download-empty-profile.png';
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +32,19 @@ class MatchmakingView extends StatelessWidget {
 
         final users = snapshot.data;
 
+        final group1Users = users?.where((user) => isUserInGroup(user, 'A', 'F')).toList();
+        final group2Users = users?.where((user) => isUserInGroup(user, 'G', 'M')).toList();
+        final group3Users = users?.where((user) => isUserInGroup(user, 'N', 'S')).toList();
+        final group4Users = users?.where((user) => isUserInGroup(user, 'T', 'Z')).toList();
+
         return AppinioSwiper(
-          cardsCount: users?.length ?? 0,
+          cardsCount: group1Users?.length ?? 0,
           onSwiping: (AppinioSwiperDirection direction) {
             print(direction.toString());
           },
 
           cardsBuilder: (BuildContext context, int index) {
-            final user = users?[index];
+            final user = group1Users?[index];
             final imageUrl = user?.image_url ?? placeholderImageUrl;
 
             return Container(
@@ -193,6 +198,15 @@ class MatchmakingView extends StatelessWidget {
         );
       },
     );
+  }
+  bool isUserInGroup(User? user, String startLetter, String endLetter) {
+    final displayName = user?.displayName;
+    if (displayName != null && displayName.isNotEmpty) {
+      final firstLetter = displayName[0].toUpperCase();
+      return firstLetter.compareTo(startLetter) >= 0 &&
+          firstLetter.compareTo(endLetter) <= 0;
+    }
+    return false;
   }
 }
 
