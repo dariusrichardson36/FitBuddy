@@ -20,15 +20,15 @@ class ProfilePage extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: FutureBuilder<User>(
-                        future: test,
-                        builder: (context, snapshot) {
-                          User? user = snapshot.data;
-                          if (user != null) {
-                            return FitBuddyProfileHeader(userData: user);
-                          }
-                          return Text('User not Found');
-                        }
-                      ),
+            future: test,
+            builder: (context, snapshot) {
+              User? user = snapshot.data;
+                if (user != null) {
+                  return FitBuddyProfileHeader(userData: user);
+                }
+                  return Text('User not Found 25');
+            }
+          ),
         )
       )
     );

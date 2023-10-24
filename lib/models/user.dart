@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User
-{
+class User {
   //Personal Info
   String? name;
+  Timestamp? age;
   String? username;
-  String? age;
   String? email;
+  String? gender;
+  bool? accountCompletion;
+  String? image;
 
   //Fitness Info
   String? liftingStyle;
@@ -15,41 +17,32 @@ class User
 
   User({
     this.name,
-    this.username,
     this.age,
-    this.email,
-    this.liftingStyle,
-    this.gymGoals,
     this.gymExperience,
-});
+    this.gender,
+    this.gymGoals,
+    this.accountCompletion,
+    this.liftingStyle,
+    this.username,
+    this.email,
+    this.image,
+  });
 
-  static User fromDataSnapshot(Map<String, dynamic> map){
-    //var dataSnapshot = snapshot.data() as Map<String, dynamic>;
-
+  static User fromDataSnapshot(Map<String, dynamic> map) {
     return User(
       //personal info
-      name: map['name'],
+      name: map['displayName'],
+      age: map['dob'],
       username: map['username'],
-      age: map['age'],
       email: map['email'],
+      image: map['image_url'],
+      gender: map['gender'],
+      accountCompletion: map['isAccountComplete'],
 
       //fitness info
       liftingStyle: map['liftingStyle'],
-      gymGoals: map['gymGoals'],
-      gymExperience: map['gymExperience'],
+      gymGoals: map['goals'],
+      gymExperience: map['experience'],
     );
   }
-
-  Map<String,dynamic> toJson() => {
-    //personal info
-    "name": name,
-    "username": username,
-    "age": age,
-    "email": email,
-
-    //fitness info
-    "liftingStyle": liftingStyle,
-    "gymGoals": gymGoals,
-    "gymExperience": gymExperience,
-  };
 }

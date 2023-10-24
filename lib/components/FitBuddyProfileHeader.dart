@@ -12,8 +12,8 @@ class FitBuddyProfileHeader extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-        if (userData.name != null) {
-          var name = userData.age;
+        if (userData.image != null) {
+          var name = userData.image;
           return Text(
           name!,
           style: TextStyle(

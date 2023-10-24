@@ -127,7 +127,7 @@ class FireStore {
 
   Future<User> getUserData() async {
     final docSnapshot = await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
-
+    
     if (docSnapshot.exists) {
       return User.fromDataSnapshot(docSnapshot.data()!);
     } else {
