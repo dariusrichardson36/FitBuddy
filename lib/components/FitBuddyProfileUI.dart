@@ -13,11 +13,19 @@ class FitBuddyProfileUI extends StatelessWidget {
   Widget build(BuildContext context) {
     String? name;
     String? image;
+
+    // sets name variable and gives default value if NULL.
     if (userData.name != null) {
       name = userData.name;
+    } else {
+      name = "Name Unknown";
     }
+
+    // sets image variable and gives default value if NULL.
     if (userData.image != null) {
       image = userData.image;
+    } else {
+      image = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
     }
 
     return SafeArea(
@@ -49,6 +57,7 @@ class FitBuddyProfileUI extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 10),
+                      // Users display name.
                       Text(
                         name!,
                         style: TextStyle(
@@ -57,6 +66,7 @@ class FitBuddyProfileUI extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 10),
+                      // Row of badges on display + button to change order.
                       Row(
                         children: [
                           Icon(Icons.military_tech, color: Colors.amber),
@@ -75,6 +85,7 @@ class FitBuddyProfileUI extends StatelessWidget {
                       ),
                     ],
                   ),
+                  // Button that brings you back to the home page.
                   IconButton(
                       onPressed: () =>
                           context.goNamed(FitBuddyRouterConstants.homePage),
@@ -85,6 +96,7 @@ class FitBuddyProfileUI extends StatelessWidget {
               SizedBox(height: 25),
               Row(
                 children: [
+                  // Button to see all the User's Posts.
                   ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
@@ -97,6 +109,7 @@ class FitBuddyProfileUI extends StatelessWidget {
                             color: FitBuddyColorConstants.lOnPrimary,
                             fontSize: 32),
                       )),
+                  // Button to only see highlighted posts.
                   ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
@@ -114,6 +127,7 @@ class FitBuddyProfileUI extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(width: 270),
+                  // Button to search user's posts
                   IconButton(
                       onPressed: () {},
                       icon: Icon(Icons.search,
@@ -131,8 +145,7 @@ class FitBuddyProfileUI extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(
-                          image), // Replace with your image URL
+                      image: NetworkImage(image), // Replace with your image URL
                       fit: BoxFit.cover,
                     ),
                   ),
