@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../components/FitBuddyActivityListItem.dart';
 import '../components/FitBuddyButton.dart';
 import '../components/FitBuddyVisibilitySelector.dart';
+import '../components/test.dart';
 import '../constants/color_constants.dart';
 import '../constants/route_constants.dart';
 import '../models/FitBuddyActivityModel.dart';
@@ -96,16 +97,48 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                       context.goNamed(FitBuddyRouterConstants.homePage);
                     },
                   ),
-                  FitBuddyVisibilitySelector(
-                    value: _dropdownValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _dropdownValue = value;
-                      });
-                    },
-                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          print("Publish button pressed");
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: FitBuddyColorConstants.lAccent,
+                            borderRadius: BorderRadius.horizontal(left: Radius.circular(20.0))
+                          ),
+                          height: 40,
+                          width: 70,
+
+                          child: Center(
+                            child: Text(
+                              "Publish",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      FitBuddyVisibilitySelector(
+                        value: _dropdownValue,
+                        onChanged: (value) {
+                          setState(() {
+                            _dropdownValue = value;
+                          });
+                        },
+                      ),
+                    ],
+                  )
+
                 ],
               ),
+
+
               SizedBox(height: 20.0),
               TextField(
                 controller: _descriptionController,
