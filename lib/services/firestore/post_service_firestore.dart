@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/models/FitBuddyActivityModel.dart';
 
 import '../../models/FitBuddyExerciseModel.dart';
 import '../auth.dart';
@@ -48,6 +49,17 @@ class PostServiceFirestore {
     ).toList();
 
     return exercises;
+  }
+
+
+  void publishPost(List<Activity> activity, description) {
+    firestoreService.instance.collection('posts').add({
+      'activities': activity.map((e) => e.toMap()).toList(),
+      'timestamp': FieldValue.serverTimestamp(),
+      'creator_uid': Auth().currentUser?.uid,
+      'creator_userName': Auth().currentUser?.displayName,
+      'description': description,
+    });
   }
 
 

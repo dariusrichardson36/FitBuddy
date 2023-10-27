@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../components/FitBuddyActivityListItem.dart';
 import '../components/FitBuddyButton.dart';
 import '../components/FitBuddyVisibilitySelector.dart';
-import '../components/test.dart';
 import '../constants/color_constants.dart';
 import '../constants/route_constants.dart';
 import '../models/FitBuddyActivityModel.dart';
@@ -15,9 +14,7 @@ import '../services/firestore/firestore_service.dart';
 class CreateWorkoutPage extends StatefulWidget {
   // Create page variables
   List<Activity> _workout = [
-    Activity(name: "Bench Press", setCollection: <SetCollection>[SetCollection(reps: 5, sets: 8, weight: 210), SetCollection(reps: 2, sets: 4, weight: 10)]),
-    Activity(name: "Squat", setCollection: <SetCollection>[]),
-    Activity(name: "Deadlift", setCollection: <SetCollection>[]),
+
   ];
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -33,7 +30,6 @@ class CreateWorkoutPage extends StatefulWidget {
 
 class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProviderStateMixin {
   // Create page variables
-  List<Activity> _workout = [];
   final TextEditingController _descriptionController = TextEditingController();
   bool _isCreate = true;
   String _dropdownValue = "Private";
@@ -53,7 +49,6 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
 
   void _addExercise(Exercise exercise){
     setState(() {
-      print(exercise.name);
       widget._workout.add(Activity(name: exercise.name, setCollection: <SetCollection>[]));
     });
   }
@@ -103,6 +98,8 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                       GestureDetector(
                         onTap: () {
                           print("Publish button pressed");
+                          FirestoreService.firestoreService().postService.publishPost(widget._workout, _descriptionController.text);
+                          print(widget._workout);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -172,6 +169,19 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                   itemBuilder: (context, index) {
                     return FitBuddyActivityListItem(
                       exercise: widget._workout[index],
+                      onRemove: () {
+                        setState(() {
+                          widget._workout.removeAt(index);
+                        });
+                      },
+                      onAddSet: () {
+                        setState(() {
+                          widget._workout[index].setCollection.add(SetCollection(reps: 0, sets: 0, weight: 0));
+                        });
+                      },
+                      update: () {
+                        setState(() {});
+                      },
                     );
                   },
                 ),
@@ -193,13 +203,6 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
       ),
     );
   }
-/*
-onPressed: () {
-setState(() {
-  widget._workout.removeAt(index);
-});
-}
- */
 
 
   Widget _chooseExerciseView() {

@@ -5,10 +5,16 @@ import 'package:flutter/material.dart';
 
 class FitBuddyActivityListItem extends StatelessWidget {
   final Activity exercise;
+  final Function onRemove;
+  final Function onAddSet;
+  final Function update;
 
   FitBuddyActivityListItem({
     super.key,
     required this.exercise,
+    required this.onRemove,
+    required this.onAddSet,
+    required this.update,
   });
 
   @override
@@ -18,12 +24,14 @@ class FitBuddyActivityListItem extends StatelessWidget {
         Row(
           children: [
             SizedBox(width: 100 ,child: Text(exercise.name, style: TextStyle(fontWeight: FontWeight.bold),)),
-            FitBuddyButton(text: "Add set", onPressed: () {}, fontSize: 14,),
+            FitBuddyButton(text: "Add set", onPressed: () {
+              onAddSet();
+            }, fontSize: 14,),
             Spacer(),
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-
+                onRemove();
               }
             ),
           ],
@@ -41,45 +49,61 @@ class FitBuddyActivityListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text("sets"),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: Text(setCollection.sets.toString()),
-                ),
-              ]
+          Row(
+            children: [
+              IconButton(onPressed: () {
+                setCollection.sets--;
+                update();
+              }, icon: Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              Column(
+                children: [
+                  Text("sets"),
+                  Text(setCollection.sets.toString()),
+                ]
+              ),
+              IconButton(onPressed: () {
+                setCollection.sets++;
+                update();
+              }, icon: Icon(Icons.add), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+            ],
           ),
-          SizedBox(width: 10),
-          Column(
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text("reps"),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: Text(setCollection.reps.toString()),
-                ),
-              ]
+          Row(
+            children: [
+              IconButton(onPressed: () {
+                setCollection.reps--;
+                update();
+              }, icon: Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              Column(
+                  children: [
+                    Text("reps"),
+                    Text(setCollection.reps.toString()),
+                  ]
+              ),
+              IconButton(onPressed: () {
+                setCollection.reps++;
+                update();
+              }, icon: Icon(Icons.add), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+            ],
           ),
-          SizedBox(width: 10),
-          Column(
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: Text("weight"),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: Text(setCollection.weight.toString()),
-                ),
-              ]
+          Row(
+            children: [
+              IconButton(onPressed: () {
+                setCollection.weight--;
+                update();
+              }, icon: Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              Column(
+                  children: [
+                    Text("weight"),
+                    Text(setCollection.weight.toString()),
+                  ]
+              ),
+              IconButton(onPressed: () {
+                setCollection.weight++;
+                update();
+              }, icon: Icon(Icons.add), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+            ],
           ),
         ],
       ),

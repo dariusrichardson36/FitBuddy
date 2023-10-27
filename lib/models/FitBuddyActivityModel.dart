@@ -12,12 +12,19 @@ class Activity {
       name: json['name'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'activity': setCollection.map((e) => e.toMap()).toList(),
+      'name': name,
+    };
+  }
 }
 
 class SetCollection {
-  final int reps;
-  final int sets;
-  final int weight;
+  int reps;
+  int sets;
+  int weight;
 
   SetCollection({required this.reps, required this.sets, required this.weight});
 
@@ -34,5 +41,13 @@ class SetCollection {
       sets: json['sets'],
       weight: json['weight'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'reps': reps,
+      'sets': sets,
+      'weight': weight,
+    };
   }
 }
