@@ -86,11 +86,16 @@ class FitBuddyProfileUI extends StatelessWidget {
                     ],
                   ),
                   // Button that brings you back to the home page.
-                  IconButton(
-                      onPressed: () =>
-                          context.goNamed(FitBuddyRouterConstants.homePage),
-                      icon: Icon(Icons.arrow_forward,
-                          color: FitBuddyColorConstants.lOnPrimary))
+                  Column(
+                    children: [
+                      IconButton(
+                          onPressed: () =>
+                              context.goNamed(FitBuddyRouterConstants.homePage),
+                          icon: Icon(Icons.arrow_forward,
+                              color: FitBuddyColorConstants.lOnPrimary)),
+                      SizedBox(height: 45)
+                    ],
+                  )
                 ],
               ),
               SizedBox(height: 25),
