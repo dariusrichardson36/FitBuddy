@@ -47,7 +47,7 @@ class FitBuddyRouter {
           name: FitBuddyRouterConstants.completeAccountPage,
           path: '/completeAccountInfo' ,
           pageBuilder: (context, state) {
-            return MaterialPage(
+            return const MaterialPage(
                 child: CompleteAccountInformation()
             );
           }
@@ -95,7 +95,7 @@ class FitBuddyRouter {
           return state.namedLocation(FitBuddyRouterConstants.homePage);
         }
       }
-      //return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
+      return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
         return null;
     }
   );

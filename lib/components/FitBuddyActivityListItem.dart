@@ -1,6 +1,5 @@
 import 'package:fit_buddy/components/FitBuddyButton.dart';
 import 'package:fit_buddy/models/FitBuddyActivityModel.dart';
-import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
 import 'package:flutter/material.dart';
 
 class FitBuddyActivityListItem extends StatelessWidget {
@@ -23,24 +22,24 @@ class FitBuddyActivityListItem extends StatelessWidget {
       children: [
         Row(
           children: [
-            SizedBox(width: 100 ,child: Text(exercise.name, style: TextStyle(fontWeight: FontWeight.bold),)),
+            SizedBox(width: 100 ,child: Text(exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),)),
             FitBuddyButton(text: "Add set", onPressed: () {
               onAddSet();
             }, fontSize: 14,),
-            Spacer(),
+            const Spacer(),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () {
                 onRemove();
               }
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         // add a row for every entry in exercise.sets
         for (var setCollection in exercise.setCollection)
           setCollectionRow(setCollection),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -56,17 +55,17 @@ class FitBuddyActivityListItem extends StatelessWidget {
               IconButton(onPressed: () {
                 setCollection.sets--;
                 update();
-              }, icon: Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              }, icon: const Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
               Column(
                 children: [
-                  Text("sets"),
+                  const Text("sets"),
                   Text(setCollection.sets.toString()),
                 ]
               ),
               IconButton(onPressed: () {
                 setCollection.sets++;
                 update();
-              }, icon: Icon(Icons.add), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              }, icon: const Icon(Icons.add), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
             ],
           ),
           Row(
@@ -74,10 +73,10 @@ class FitBuddyActivityListItem extends StatelessWidget {
               IconButton(onPressed: () {
                 setCollection.reps--;
                 update();
-              }, icon: Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              }, icon: const Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
               Column(
                   children: [
-                    Text("reps"),
+                    const Text("reps"),
                     Text(setCollection.reps.toString()),
                   ]
               ),
@@ -102,7 +101,7 @@ class FitBuddyActivityListItem extends StatelessWidget {
               IconButton(onPressed: () {
                 setCollection.weight++;
                 update();
-              }, icon: Icon(Icons.add), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              }, icon: const Icon(Icons.add), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
             ],
           ),
         ],

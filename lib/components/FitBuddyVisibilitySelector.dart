@@ -19,30 +19,21 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
       width: 75,
       height: 40,
       child: DropdownButtonFormField<String>(
-        icon: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black,),
+        icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black,),
         //alignment: Alignment.center,
         decoration: InputDecoration(
           isDense: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.horizontal(right: Radius.circular(10.0)),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.horizontal(right: Radius.circular(30.0)),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderRadius: BorderRadius.horizontal(right: Radius.circular(30.0)),
             borderSide: BorderSide.none,
           ),
           filled: true,
           fillColor: FitBuddyColorConstants.lAccent,
-
         ),
         isDense: true,
         alignment: Alignment.center,
-        borderRadius: BorderRadius.horizontal(right: Radius.circular(10.0)),
-        style: TextStyle(color: Colors.black),
+        borderRadius: const BorderRadius.horizontal(right: Radius.circular(10.0)),
+        style: const TextStyle(color: Colors.black),
         onChanged: onChanged,
         value: value,
         items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
