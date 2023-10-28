@@ -9,7 +9,7 @@ class FitBuddyActivityListItem extends StatelessWidget {
   final Function onAddSet;
   final Function update;
 
-  FitBuddyActivityListItem({
+  const FitBuddyActivityListItem({
     super.key,
     required this.exercise,
     required this.onRemove,
@@ -84,7 +84,7 @@ class FitBuddyActivityListItem extends StatelessWidget {
               IconButton(onPressed: () {
                 setCollection.reps++;
                 update();
-              }, icon: Icon(Icons.add), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              }, icon: const Icon(Icons.add), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
             ],
           ),
           Row(
@@ -92,10 +92,10 @@ class FitBuddyActivityListItem extends StatelessWidget {
               IconButton(onPressed: () {
                 setCollection.weight--;
                 update();
-              }, icon: Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              }, icon: const Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
               Column(
                   children: [
-                    Text("weight"),
+                    const Text("weight"),
                     Text(setCollection.weight.toString()),
                   ]
               ),

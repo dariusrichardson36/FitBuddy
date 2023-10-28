@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class FitBuddyButton extends StatelessWidget {
   final String text;
-  final onPressed;
+  final VoidCallback onPressed;
   final double fontSize;
 
   const FitBuddyButton({
