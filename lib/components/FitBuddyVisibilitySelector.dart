@@ -6,7 +6,7 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
   final onChanged;
   final String value;
 
-  FitBuddyVisibilitySelector({
+  const FitBuddyVisibilitySelector({
     super.key,
     required this.onChanged,
     required this.value,
@@ -32,23 +32,22 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
         ),
         isDense: true,
         alignment: Alignment.center,
-        borderRadius: const BorderRadius.horizontal(right: Radius.circular(10.0)),
+        borderRadius: BorderRadius.circular(10.0),
         style: const TextStyle(color: Colors.black),
         onChanged: onChanged,
         value: value,
         items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Row(
-              children: [
-                Icon(value == 'Private' ? Icons.visibility_off : Icons.visibility),
-              ],
+            alignment: Alignment.center,
+            child: ButtonTheme(
+                buttonColor: FitBuddyColorConstants.lAccent,
+                alignedDropdown: true,
+                child: SizedBox(width: 10, child: Icon(value == 'Private' ? Icons.visibility_off : Icons.visibility))
             ),
           );
         }).toList(),
       ),
     );
   }
-
-
 }
