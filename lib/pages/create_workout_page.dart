@@ -82,12 +82,12 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back_ios_rounded, size: 30),
+                    icon: const Icon(Icons.arrow_back_ios_rounded, size: 30),
                     onPressed: () {
                       context.goNamed(FitBuddyRouterConstants.homePage);
                     },
@@ -97,19 +97,40 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                     children: [
                       GestureDetector(
                         onTap: () {
-                          print("Publish button pressed");
-                          FirestoreService.firestoreService().postService.publishPost(widget._workout, _descriptionController.text);
-                          print(widget._workout);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Are you sure you want to post the workout?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();  // Close the dialog
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Post'),
+                                    onPressed: () {
+                                      FirestoreService.firestoreService().postService.publishPost(widget._workout, _descriptionController.text);
+                                      Navigator.of(context).pop();  // Close the dialog
+                                      context.goNamed(FitBuddyRouterConstants.homePage);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
                             color: FitBuddyColorConstants.lAccent,
-                            borderRadius: BorderRadius.horizontal(left: Radius.circular(20.0))
+                            borderRadius: const BorderRadius.horizontal(left: Radius.circular(20.0))
                           ),
                           height: 40,
                           width: 70,
 
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               "Publish",
                               style: TextStyle(
