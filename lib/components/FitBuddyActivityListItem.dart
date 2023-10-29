@@ -1,5 +1,6 @@
 import 'package:fit_buddy/components/FitBuddyButton.dart';
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
+import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/FitBuddyActivityModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,9 +38,51 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
             }, fontSize: 14,),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.delete),
+              icon: const Icon(Icons.more_vert),
               onPressed: () {
-                widget.onRemove();
+                showModalBottomSheet<void>(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (BuildContext context) {
+                    return Container(
+                      padding: const EdgeInsets.all(20),
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: FitBuddyColorConstants.lSecondary,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(widget.exercise.name),
+                          const Divider(),
+                          const Row(
+                            children: [
+                              Icon(Icons.delete),
+                              SizedBox(width: 10,),
+                              Text("Delete exercise"),
+                            ],
+                          ),
+                          const Divider(),
+                          const Row(
+                            children: [
+                              Icon(Icons.check_box),
+                              SizedBox(width: 10,),
+                              Text("Select sets to delete"),
+                            ],
+                          ),
+
+
+
+                        ],
+                      ),
+                    );
+                  },
+                );
               }
             ),
           ],
