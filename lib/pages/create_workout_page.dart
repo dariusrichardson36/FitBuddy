@@ -49,7 +49,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
 
   void _addExercise(Exercise exercise){
     setState(() {
-      widget._workout.add(Activity(name: exercise.name, setCollection: <SetCollection>[]));
+      widget._workout.add(Activity(name: exercise.name, setCollection: <SetCollection>[SetCollection()]));
     });
   }
 
@@ -155,34 +155,32 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
 
                 ],
               ),
-
-
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               TextField(
                 controller: _descriptionController,
                 maxLength: 60,
                 maxLines: 2,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(0),
-                  counterStyle: TextStyle(
+                  contentPadding: const EdgeInsets.all(0),
+                  counterStyle: const TextStyle(
                     height: double.minPositive,
                   ),
                   counterText: "$_currentLength/60",
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
                   labelText: 'Workout description',
                   floatingLabelBehavior: FloatingLabelBehavior.never,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -207,7 +205,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                   },
                 ),
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: FitBuddyButton(
@@ -217,7 +215,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                   },
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
             ],
           ),
         ),
@@ -233,18 +231,18 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 30), onPressed: _switchView),
+                  IconButton(icon: const Icon(Icons.arrow_back_ios_rounded, size: 30), onPressed: _switchView),
                   Expanded(
                     child: TabBar(
                       controller: _tabController,
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(width: 2.0, color: FitBuddyColorConstants.lAccent),
-                        insets: EdgeInsets.symmetric(horizontal: 50.0),
+                        insets: const EdgeInsets.symmetric(horizontal: 50.0),
                       ),
                       tabs: [
                         Text(
@@ -266,15 +264,15 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                       ],
                     ),
                   ),
-                  SizedBox(width: 30.0)
+                  const SizedBox(width: 30.0)
                 ],
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 decoration: InputDecoration(
                   hintText: "Search",
-                  prefixIcon: Padding(padding: EdgeInsets.only(right: 20) ,child: Icon(Icons.search_rounded, size: 30, color: FitBuddyColorConstants.lOnPrimary,)),
-                  prefixIconConstraints: BoxConstraints(minWidth: 30, minHeight: 24),
+                  prefixIcon: Padding(padding: const EdgeInsets.only(right: 20) ,child: Icon(Icons.search_rounded, size: 30, color: FitBuddyColorConstants.lOnPrimary,)),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 30, minHeight: 24),
                   border: InputBorder.none,
                 ),
               ),
@@ -301,7 +299,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
         itemBuilder: (context, index) {
           return exercise(snapshot.data[index], false);
         },
-      ) : Center(child: CircularProgressIndicator());
+      ) : const Center(child: CircularProgressIndicator());
     });
   }
 
@@ -312,7 +310,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
         itemBuilder: (context, index) {
           return exercise(snapshot.data[index], true);
         },
-      ) : Center(child: CircularProgressIndicator());
+      ) : const Center(child: CircularProgressIndicator());
     });
   }
 

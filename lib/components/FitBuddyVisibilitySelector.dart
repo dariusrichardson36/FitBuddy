@@ -19,7 +19,7 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
       width: 75,
       height: 40,
       child: DropdownButtonFormField<String>(
-        icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black,),
+        icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white,),
         //alignment: Alignment.center,
         decoration: InputDecoration(
           isDense: true,
@@ -36,14 +36,19 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
         style: const TextStyle(color: Colors.black),
         onChanged: onChanged,
         value: value,
+        itemHeight: null,
         items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            alignment: Alignment.center,
-            child: ButtonTheme(
-                buttonColor: FitBuddyColorConstants.lAccent,
-                alignedDropdown: true,
-                child: SizedBox(width: 10, child: Icon(value == 'Private' ? Icons.visibility_off : Icons.visibility))
+
+            child: Container(
+              color: FitBuddyColorConstants.lAccent, // Set your desired color here
+              child: Center(
+                child: Icon(
+                  value == 'Private' ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.white, // Set your desired icon color here
+                ),
+              ),
             ),
           );
         }).toList(),

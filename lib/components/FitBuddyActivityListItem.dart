@@ -1,8 +1,10 @@
 import 'package:fit_buddy/components/FitBuddyButton.dart';
+import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
 import 'package:fit_buddy/models/FitBuddyActivityModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class FitBuddyActivityListItem extends StatelessWidget {
+class FitBuddyActivityListItem extends StatefulWidget {
   final Activity exercise;
   final Function onRemove;
   final Function onAddSet;
@@ -17,27 +19,34 @@ class FitBuddyActivityListItem extends StatelessWidget {
   });
 
   @override
+  State<FitBuddyActivityListItem> createState() => _FitBuddyActivityListItemState();
+}
+
+class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
+  final weightController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
-            SizedBox(width: 100 ,child: Text(exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),)),
+            SizedBox(width: 100 ,child: Text(widget.exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),)),
             FitBuddyButton(text: "Add set", onPressed: () {
-              onAddSet();
+              widget.onAddSet();
             }, fontSize: 14,),
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                onRemove();
+                widget.onRemove();
               }
             ),
           ],
         ),
         const SizedBox(height: 10),
         // add a row for every entry in exercise.sets
-        for (var setCollection in exercise.setCollection)
+        for (var setCollection in widget.exercise.setCollection)
           setCollectionRow(setCollection),
         const SizedBox(height: 10),
       ],
@@ -54,55 +63,70 @@ class FitBuddyActivityListItem extends StatelessWidget {
             children: [
               IconButton(onPressed: () {
                 setCollection.sets--;
-                update();
-              }, icon: const Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
+                widget.update();
+              }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
               Column(
                 children: [
                   const Text("sets"),
+                  const SizedBox(height: 10),
                   Text(setCollection.sets.toString()),
                 ]
               ),
               IconButton(onPressed: () {
                 setCollection.sets++;
-                update();
-              }, icon: const Icon(Icons.add), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
+                widget.update();
+              }, icon: const Icon(Icons.add), constraints: const BoxConstraints(),),
             ],
           ),
           Row(
             children: [
               IconButton(onPressed: () {
                 setCollection.reps--;
-                update();
-              }, icon: const Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+                widget.update();
+              }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
               Column(
                   children: [
                     const Text("reps"),
+                    const SizedBox(height: 10),
                     Text(setCollection.reps.toString()),
                   ]
               ),
               IconButton(onPressed: () {
                 setCollection.reps++;
-                update();
-              }, icon: const Icon(Icons.add), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
+                widget.update();
+              }, icon: const Icon(Icons.add), constraints: const BoxConstraints(),),
             ],
           ),
-          Row(
+          Column(
             children: [
-              IconButton(onPressed: () {
-                setCollection.weight--;
-                update();
-              }, icon: const Icon(Icons.remove, ), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
-              Column(
-                  children: [
-                    const Text("weight"),
-                    Text(setCollection.weight.toString()),
-                  ]
+              const Text("weight"),
+              SizedBox(
+                height: 30,
+                width: 70,
+                child: TextFormField(
+                  initialValue: '0',
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(0),
+                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d{0,4}(\.\d{0,2})?$'), replacementString: '9999.99'),
+
+                  ],
+                  onChanged: (value) {
+                    if (value != "") {
+                      double parsedValue = double.parse(value);
+                      setCollection.weight = parsedValue;
+                      widget.update();
+                    }
+                  },
+
+                ),
               ),
-              IconButton(onPressed: () {
-                setCollection.weight++;
-                update();
-              }, icon: const Icon(Icons.add), padding: EdgeInsets.zero, constraints: const BoxConstraints(),),
-            ],
+            ]
           ),
         ],
       ),

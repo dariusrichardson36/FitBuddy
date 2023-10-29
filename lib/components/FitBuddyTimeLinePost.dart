@@ -125,7 +125,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                           _showAllActivities = false;
                         });
                       },
-                      icon: Icon(Icons.keyboard_arrow_up),
+                      icon: const Icon(Icons.keyboard_arrow_up),
                     ),
                   ),
                 //SizedBox(height: 10),
@@ -142,8 +142,8 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
         ...activityData.map<Widget>((detail) => Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Text(detail.getProperty(label).toString(), style: TextStyle(fontSize: 14))
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(detail.getProperty(label).toString(), style: const TextStyle(fontSize: 14))
         )).toList(),
       ],
     );
@@ -158,7 +158,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
           Container(
             width: 40.0,
             height: 40.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'),
@@ -172,7 +172,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.postData.creatorUserName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(widget.postData.creatorUserName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text(formatDateForDisplay(widget.postData.timestamp), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
             ],
           ),

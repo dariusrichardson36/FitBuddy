@@ -38,7 +38,7 @@ class FitBuddyRouter {
           name: FitBuddyRouterConstants.loadingPage,
           path: '/loading',
           pageBuilder: (context, state) {
-            return MaterialPage(
+            return const MaterialPage(
               child: CircularProgressIndicator(),
             );
           }

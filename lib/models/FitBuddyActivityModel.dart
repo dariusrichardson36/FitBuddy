@@ -24,11 +24,15 @@ class Activity {
 class SetCollection {
   int reps;
   int sets;
-  int weight;
+  double weight;
 
-  SetCollection({required this.reps, required this.sets, required this.weight});
+  SetCollection({
+    this.reps = 0,
+    this.sets = 0,
+    this.weight = 0});
 
-  int getProperty(String label) {
+
+  getProperty(String label) {
     if (label == 'reps') return reps;
     if (label == 'sets') return sets;
     if (label == 'weight') return weight;
@@ -50,4 +54,15 @@ class SetCollection {
       'weight': weight,
     };
   }
+
+  String formatWeight() {
+    if (weight == weight.truncateToDouble()) {
+      // If weight is a whole number
+      return weight.truncate().toString();
+    } else {
+      // If weight has decimal places
+      return weight.toStringAsFixed(2); // This will give you 2 decimal places
+    }
+  }
+
 }
