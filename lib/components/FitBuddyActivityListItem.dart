@@ -25,9 +25,11 @@ class FitBuddyActivityListItem extends StatefulWidget {
 
 class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
   final weightController = TextEditingController();
+  bool _deleteMode = false;
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Row(
@@ -58,26 +60,41 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Text(widget.exercise.name),
+                          Text(widget.exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),),
+                          const SizedBox(height: 10,),
                           const Divider(),
-                          const Row(
-                            children: [
-                              Icon(Icons.delete),
-                              SizedBox(width: 10,),
-                              Text("Delete exercise"),
-                            ],
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              widget.onRemove();
+                              Navigator.pop(context);
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.delete),
+                                SizedBox(width: 10,),
+                                Text("Delete exercise"),
+                              ],
+                            ),
                           ),
                           const Divider(),
-                          const Row(
-                            children: [
-                              Icon(Icons.check_box),
-                              SizedBox(width: 10,),
-                              Text("Select sets to delete"),
-                            ],
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              setState(() {
+                                _deleteMode = !_deleteMode;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.check_box_outlined),
+                                SizedBox(width: 10,),
+                                Text("Select sets to delete"),
+                              ],
+                            ),
                           ),
-
-
-
+                          const Divider(),
                         ],
                       ),
                     );
@@ -105,7 +122,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
           Row(
             children: [
               IconButton(onPressed: () {
-                setCollection.sets--;
+                setCollection.decrementSets();
                 widget.update();
               }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
               Column(
@@ -116,7 +133,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                 ]
               ),
               IconButton(onPressed: () {
-                setCollection.sets++;
+                setCollection.incrementSets();
                 widget.update();
               }, icon: const Icon(Icons.add), constraints: const BoxConstraints(),),
             ],
@@ -124,7 +141,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
           Row(
             children: [
               IconButton(onPressed: () {
-                setCollection.reps--;
+                setCollection.decrementReps();
                 widget.update();
               }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
               Column(
@@ -135,7 +152,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                   ]
               ),
               IconButton(onPressed: () {
-                setCollection.reps++;
+                setCollection.incrementReps();
                 widget.update();
               }, icon: const Icon(Icons.add), constraints: const BoxConstraints(),),
             ],
@@ -171,6 +188,11 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
               ),
             ]
           ),
+          !_deleteMode ? const SizedBox(width: 50,) :
+          IconButton(onPressed: () {
+            widget.exercise.setCollection.remove(setCollection);
+            widget.update();
+          }, icon: const Icon(Icons.delete), constraints: const BoxConstraints(),),
         ],
       ),
     );

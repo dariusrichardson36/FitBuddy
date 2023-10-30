@@ -40,7 +40,6 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
         items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-
             child: Container(
               color: FitBuddyColorConstants.lAccent, // Set your desired color here
               child: Center(

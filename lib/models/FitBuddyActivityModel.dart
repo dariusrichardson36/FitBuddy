@@ -65,4 +65,20 @@ class SetCollection {
     }
   }
 
+  void incrementReps() {
+    reps++;
+  }
+
+  void decrementReps() {
+    if (reps > 0) reps--;
+  }
+
+  void incrementSets() {
+    sets++;
+  }
+
+  void decrementSets() {
+    if (sets > 0) sets--;
+  }
+
 }
