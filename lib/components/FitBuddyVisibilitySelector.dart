@@ -1,6 +1,7 @@
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class FitBuddyVisibilitySelector extends StatelessWidget {
   final onChanged;
@@ -16,41 +17,48 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox (
-      width: 75,
+      width: 60,
       height: 40,
-      child: DropdownButtonFormField<String>(
-        icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white,),
-        //alignment: Alignment.center,
-        decoration: InputDecoration(
-          isDense: true,
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.horizontal(right: Radius.circular(30.0)),
-            borderSide: BorderSide.none,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          iconStyleData: const IconStyleData(
+            icon: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white,),
+            openMenuIcon: Icon(Icons.keyboard_arrow_up_rounded, color: Colors.white,),
+            iconSize: 24,
           ),
-          filled: true,
-          fillColor: FitBuddyColorConstants.lAccent,
-        ),
-        isDense: true,
-        alignment: Alignment.center,
-        borderRadius: BorderRadius.circular(10.0),
-        style: const TextStyle(color: Colors.black),
-        onChanged: onChanged,
-        value: value,
-        itemHeight: null,
-        items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Container(
-              color: FitBuddyColorConstants.lAccent, // Set your desired color here
-              child: Center(
-                child: Icon(
-                  value == 'Private' ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.white, // Set your desired icon color here
-                ),
-              ),
+          buttonStyleData: ButtonStyleData(
+            height: 40,
+            width: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              color: FitBuddyColorConstants.lAccent,
+              borderRadius: const BorderRadius.horizontal(right: Radius.circular(20.0)),
             ),
-          );
-        }).toList(),
+          ),
+          dropdownStyleData: DropdownStyleData(
+            isOverButton: false,
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: FitBuddyColorConstants.lAccent,
+              borderRadius: BorderRadius.circular(10)
+            )
+          ),
+          onChanged: onChanged,
+          value: value,
+          items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Row(
+                children: [
+                  Icon(
+                    value == 'Private' ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.white, // Set your desired icon color here
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

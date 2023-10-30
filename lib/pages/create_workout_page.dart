@@ -128,8 +128,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                             borderRadius: const BorderRadius.horizontal(left: Radius.circular(20.0))
                           ),
                           height: 40,
-                          width: 70,
-
+                          width: 80,
                           child: const Center(
                             child: Text(
                               "Publish",
