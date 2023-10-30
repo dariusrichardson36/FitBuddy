@@ -48,13 +48,9 @@ class FitBuddyVisibilitySelector extends StatelessWidget {
           items: <String>['Private', 'Public'].map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Row(
-                children: [
-                  Icon(
-                    value == 'Private' ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.white, // Set your desired icon color here
-                  ),
-                ],
+              child: Icon(
+                value == 'Private' ? Icons.visibility_off : Icons.visibility,
+                color: Colors.white, // Set your desired icon color here
               ),
             );
           }).toList(),
