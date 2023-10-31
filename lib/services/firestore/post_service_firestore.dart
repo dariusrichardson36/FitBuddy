@@ -11,7 +11,9 @@ class PostServiceFirestore {
   PostServiceFirestore({required this.firestoreService});
 
   Stream<List<Exercise>> getFavoriteExercises() {
-    DocumentReference docRef = firestoreService.instance.collection('users').doc(Auth().currentUser?.uid);
+    DocumentReference docRef = firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid);
 
     return docRef.snapshots().asyncMap((snapshot) async {
       List<Exercise> exercises = [];
@@ -22,11 +24,17 @@ class PostServiceFirestore {
           List<dynamic>? favoriteExercises = data['favoriteExercises'];
 
           if (favoriteExercises != null) {
-            List<Future<DocumentSnapshot>> fetchFutures = favoriteExercises.map((dynamic reference) => (reference as DocumentReference).get()).toList();
+            List<Future<DocumentSnapshot>> fetchFutures = favoriteExercises
+                .map((dynamic reference) =>
+                    (reference as DocumentReference).get())
+                .toList();
             List<DocumentSnapshot> documents = await Future.wait(fetchFutures);
 
             // Convert the DocumentSnapshots to Exercise objects
-            exercises = documents.map((doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>, doc.id, true)).toList();
+            exercises = documents
+                .map((doc) => Exercise.fromMap(
+                    doc.data() as Map<String, dynamic>, doc.id, true))
+                .toList();
           } else {
             print("favoriteExercises is null");
           }
@@ -42,27 +50,25 @@ class PostServiceFirestore {
   }
 
   Future<List<Exercise>> getAllExercises() async {
-    QuerySnapshot querySnapshot = await firestoreService.instance.collection('exercises').get();
+    QuerySnapshot querySnapshot =
+        await firestoreService.instance.collection('exercises').get();
 
-    List<Exercise> exercises = querySnapshot.docs.map(
-            (doc) => Exercise.fromMap(doc.data() as Map<String, dynamic>, doc.id, false)
-    ).toList();
+    List<Exercise> exercises = querySnapshot.docs
+        .map((doc) =>
+            Exercise.fromMap(doc.data() as Map<String, dynamic>, doc.id, false))
+        .toList();
 
     return exercises;
   }
 
-
-  void publishPost(List<Activity> activity, description) {
+  void publishPost(List<Activity> activity, description, visibility) {
     firestoreService.instance.collection('posts').add({
       'activities': activity.map((e) => e.toMap()).toList(),
       'timestamp': FieldValue.serverTimestamp(),
       'creator_uid': Auth().currentUser?.uid,
       'creator_userName': Auth().currentUser?.displayName,
       'description': description,
+      'visibility': visibility,
     });
   }
-
-
-
-
 }

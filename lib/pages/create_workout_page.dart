@@ -133,8 +133,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage>
                                     onPressed: () {
                                       FirestoreService.firestoreService()
                                           .postService
-                                          .publishPost(widget._workout,
-                                              _descriptionController.text);
+                                          .publishPost(
+                                              widget._workout,
+                                              _descriptionController.text,
+                                              _dropdownValue);
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
                                       context.goNamed(
