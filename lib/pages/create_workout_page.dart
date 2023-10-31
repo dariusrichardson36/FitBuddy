@@ -34,6 +34,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
   bool _isCreate = true;
   String _dropdownValue = "Private";
   int _currentLength = 0;
+  TextEditingController _searchController = TextEditingController();
 
   // Choose exercise page variables
   late TabController _tabController;
@@ -280,6 +281,12 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
               ),
               const SizedBox(height: 10.0),
               TextFormField(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() {
+                    _searchController.text = value;
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: "Search",
                   prefixIcon: Padding(padding: const EdgeInsets.only(right: 20) ,child: Icon(Icons.search_rounded, size: 30, color: FitBuddyColorConstants.lOnPrimary,)),
@@ -308,7 +315,15 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
       return snapshot.hasData ? ListView.builder(
         itemCount: snapshot.data.length,
         itemBuilder: (context, index) {
-          return exercise(snapshot.data[index], false);
+          if (_searchController.text.isNotEmpty) {
+            if (snapshot.data[index].name.toLowerCase().contains(_searchController.text.toLowerCase())) {
+              return exercise(snapshot.data[index], false);
+            } else {
+              return const SizedBox.shrink();
+            }
+          } else {
+            return exercise(snapshot.data[index], false);
+          }
         },
       ) : const Center(child: CircularProgressIndicator());
     });
