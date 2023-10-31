@@ -8,6 +8,7 @@ import 'package:fit_buddy/pages/single_post_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../pages/search_page.dart';
 import 'firestore/firestore_service.dart';
 import 'notifier.dart';
@@ -17,59 +18,51 @@ class FitBuddyRouter {
   GoRouter router = GoRouter(
       routes: [
         GoRoute(
-          name: FitBuddyRouterConstants.homePage,
-          path: '/',
-          pageBuilder: (context, state) {
-            return const MaterialPage(
+            name: FitBuddyRouterConstants.homePage,
+            path: '/',
+            pageBuilder: (context, state) {
+              return const MaterialPage(
                 child: HomePage(),
-            );
-          }
-        ),
+              );
+            }),
         GoRoute(
-          name: FitBuddyRouterConstants.authPage,
-          path: '/authentication',
-          pageBuilder: (context, state) {
+            name: FitBuddyRouterConstants.authPage,
+            path: '/authentication',
+            pageBuilder: (context, state) {
               return const MaterialPage(
                 child: AuthPage(),
               );
-          }
-        ),
+            }),
         GoRoute(
-          name: FitBuddyRouterConstants.loadingPage,
-          path: '/loading',
-          pageBuilder: (context, state) {
-            return const MaterialPage(
-              child: CircularProgressIndicator(),
-            );
-          }
-        ),
+            name: FitBuddyRouterConstants.loadingPage,
+            path: '/loading',
+            pageBuilder: (context, state) {
+              return const MaterialPage(
+                child: CircularProgressIndicator(),
+              );
+            }),
         GoRoute(
-          name: FitBuddyRouterConstants.completeAccountPage,
-          path: '/completeAccountInfo' ,
-          pageBuilder: (context, state) {
-            return const MaterialPage(
-                child: CompleteAccountInformation()
-            );
-          }
-        ),
+            name: FitBuddyRouterConstants.completeAccountPage,
+            path: '/completeAccountInfo',
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: CompleteAccountInformation());
+            }),
         GoRoute(
-          path: '/search',
-          name: FitBuddyRouterConstants.searchPage,
-          pageBuilder: (context, state) {
-            return const MaterialPage(
-              child: SearchPage(),
-            );
-          }
-        ),
+            path: '/search',
+            name: FitBuddyRouterConstants.searchPage,
+            pageBuilder: (context, state) {
+              return const MaterialPage(
+                child: SearchPage(),
+              );
+            }),
         GoRoute(
-          path: '/post/:postId',
-          name: FitBuddyRouterConstants.singlePostPage,
-          pageBuilder: (context, state) {
-            return MaterialPage(
-              child: SinglePostPage(postId: state.pathParameters['postId']!),
-            );
-          }
-        ),
+            path: '/post/:postId',
+            name: FitBuddyRouterConstants.singlePostPage,
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                child: SinglePostPage(postId: state.pathParameters['postId']!),
+              );
+            }),
         GoRoute(
             path: '/create',
             name: FitBuddyRouterConstants.createWorkoutPage,
@@ -77,27 +70,25 @@ class FitBuddyRouter {
               return MaterialPage(
                 child: CreateWorkoutPage(),
               );
-            }
-        ),
+            }),
       ],
-
-    refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
-    redirect: (context, GoRouterState state) async {
-      User? user = Auth().currentUser;
-      if (user == null) {
-        return state.namedLocation(FitBuddyRouterConstants.authPage);
-      }
-      if (state.matchedLocation == '/authentication') {
-        bool doesUserDataExist = await FirestoreService.firestoreService().userService.doesUserDocumentExist(user.uid);
-        if (!doesUserDataExist) {
-          return state.namedLocation(FitBuddyRouterConstants.completeAccountPage);
-        } else {
-          return state.namedLocation(FitBuddyRouterConstants.homePage);
+      refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
+      redirect: (context, GoRouterState state) async {
+        User? user = Auth().currentUser;
+        if (user == null) {
+          return state.namedLocation(FitBuddyRouterConstants.authPage);
         }
-      }
-      return state.namedLocation(FitBuddyRouterConstants.createWorkoutPage);
+        if (state.matchedLocation == '/authentication') {
+          bool doesUserDataExist = await FirestoreService.firestoreService()
+              .userService
+              .doesUserDocumentExist(user.uid);
+          if (!doesUserDataExist) {
+            return state
+                .namedLocation(FitBuddyRouterConstants.completeAccountPage);
+          } else {
+            return state.namedLocation(FitBuddyRouterConstants.homePage);
+          }
+        }
         return null;
-    }
-  );
+      });
 }
-

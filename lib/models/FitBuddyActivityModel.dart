@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Activity {
   final List<SetCollection> setCollection;
   final String name;
@@ -6,7 +8,8 @@ class Activity {
 
   factory Activity.fromMap(Map<String, dynamic> json) {
     var setCollection = json['activity'] as List;
-    List<SetCollection> setCollectionList = setCollection.map((i) => SetCollection.fromMap(i)).toList();
+    List<SetCollection> setCollectionList =
+        setCollection.map((i) => SetCollection.fromMap(i)).toList();
     return Activity(
       setCollection: setCollectionList,
       name: json['name'],
@@ -34,11 +37,15 @@ class SetCollection {
     this.deleteSet = false,
   });
 
+  String formatWeight() {
+    final numberFormat = NumberFormat('###.##');
+    return numberFormat.format(weight);
+  }
 
   getProperty(String label) {
     if (label == 'reps') return reps;
     if (label == 'sets') return sets;
-    if (label == 'weight') return weight;
+    if (label == 'weight') return formatWeight();
     throw Exception('Invalid property name');
   }
 
@@ -58,6 +65,7 @@ class SetCollection {
     };
   }
 
+  /*
   String formatWeight() {
     if (weight == weight.truncateToDouble()) {
       // If weight is a whole number
@@ -68,6 +76,8 @@ class SetCollection {
     }
   }
 
+
+   */
   void incrementReps() {
     reps++;
   }
@@ -83,5 +93,4 @@ class SetCollection {
   void decrementSets() {
     if (sets > 0) sets--;
   }
-
 }
