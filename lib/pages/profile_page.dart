@@ -139,7 +139,12 @@ class ProfilePage extends StatelessWidget {
                           color: FitBuddyColorConstants.lOnPrimary)),
                 ],
               ),
-              UserPostsView()
+              Expanded(
+                child: SizedBox(
+                  height: 250,
+                  child: UserPostsView()
+                )
+              )
             ],
           ),
         ),

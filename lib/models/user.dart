@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   //Personal Info
   String? name;
-  Timestamp? age;
+  String? age;
   String? username;
   String? email;
   String? gender;

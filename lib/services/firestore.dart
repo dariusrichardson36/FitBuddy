@@ -6,6 +6,7 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 
 class FireStore {
+  String? uid = Auth().currentUser?.uid;
   final _firebaseFirestoreInstance = FirebaseFirestore.instance;
   DocumentSnapshot? _lastDocument;
   bool _hasMorePosts = true;
@@ -53,9 +54,11 @@ class FireStore {
 
     query.snapshots().listen((postSnapshot) {
       var posts = postSnapshot.docs
-          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
+          .toList();
       _allPagedResults[0] = posts;
-      var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+      var allPosts =
+          _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
         return initialValue..addAll(pageItems);
       });
 
@@ -63,7 +66,6 @@ class FireStore {
     });
     getMoreTimeLinePosts();
   }
-
 
   getMoreTimeLinePosts() {
     var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
@@ -86,7 +88,8 @@ class FireStore {
           _hasMorePosts = false;
         }
         var posts = postSnapshot.docs
-            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
+            .toList();
 
         var pageExists = currentRequestIndex < _allPagedResults.length;
 
@@ -96,7 +99,8 @@ class FireStore {
           _allPagedResults.add(posts);
         }
 
-        var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+        var allPosts =
+            _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
           return initialValue..addAll(pageItems);
         });
 
@@ -108,26 +112,113 @@ class FireStore {
 
         _hasMorePosts = posts.length == 10;
       }
-
     });
     _streams.add(test);
     print(_streams.length);
   }
 
   Future<Post> getSinglePost(String postId) async {
-    final docSnapshot = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+    final docSnapshot =
+        await FirebaseFirestore.instance.collection('posts').doc(postId).get();
 
     if (docSnapshot.exists) {
-      return Post.fromMap(docSnapshot.data()!, postId);  // Assuming you have a named constructor `fromMap` in your `Post` class
+      return Post.fromMap(docSnapshot.data()!,
+          postId); // Assuming you have a named constructor `fromMap` in your `Post` class
     } else {
       throw Exception('Post not found');
     }
   }
 
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFirstUserPost() {
+    return _firebaseFirestoreInstance
+        .collection("posts")
+        .where('creator_uid', isEqualTo: uid)
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.first);
+  }
+
+  void initProfile() async {
+    var firstPost = await getFirstUserPost();
+    _lastDocument = firstPost;
+
+    var query = _firebaseFirestoreInstance
+        .collection("posts")
+        .where('creator_uid', isEqualTo: uid)
+        .orderBy('timestamp', descending: true)
+        .endAt([firstPost['timestamp']]);
+
+    query.snapshots().listen((postSnapshot) {
+      var posts = postSnapshot.docs
+          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
+          .toList();
+      _allPagedResults[0] = posts;
+      var allPosts =
+          _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+        return initialValue..addAll(pageItems);
+      });
+
+      postsController.add(allPosts);
+    });
+    getMoreUserPosts();
+  }
+
+  getMoreUserPosts() {
+    var query = _firebaseFirestoreInstance
+        .collection("posts")
+        .where("creator_uid", isEqualTo: uid)
+        .orderBy('timestamp', descending: true)
+        .limit(10);
+
+    if (_hasMorePosts == false) return;
+
+    if (_lastDocument != null) {
+      query = query.startAfterDocument(_lastDocument!);
+    }
+
+    var currentRequestIndex = _allPagedResults.length;
+    var test = query.snapshots().listen((postSnapshot) {
+      if (postSnapshot.docs.isNotEmpty) {
+        if (postSnapshot.docChanges.length < 10) {
+          _hasMorePosts = false;
+        }
+        var posts = postSnapshot.docs
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
+            .toList();
+
+        var pageExists = currentRequestIndex < _allPagedResults.length;
+
+        if (pageExists) {
+          _allPagedResults[currentRequestIndex] = posts;
+        } else {
+          _allPagedResults.add(posts);
+        }
+
+        var allPosts =
+            _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+          return initialValue..addAll(pageItems);
+        });
+
+        postsController.add(allPosts);
+
+        if (currentRequestIndex + 1 == _allPagedResults.length) {
+          _lastDocument = postSnapshot.docs.last;
+        }
+
+        _hasMorePosts = posts.length == 10;
+      }
+    });
+    _streams.add(test);
+    print(_streams.length);
+  }
 
   Future<User> getUserData() async {
-    final docSnapshot = await _firebaseFirestoreInstance.collection('users').doc(Auth().currentUser?.uid).get();
-    
+    final docSnapshot = await _firebaseFirestoreInstance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .get();
+
     if (docSnapshot.exists) {
       return User.fromDataSnapshot(docSnapshot.data()!);
     } else {
@@ -137,7 +228,8 @@ class FireStore {
 
   Future<bool> doesUserDocumentExist(String userId) async {
     // Reference to the "users" collection and the specific document
-    DocumentReference userDocRef = _firebaseFirestoreInstance.collection("users").doc(userId);
+    DocumentReference userDocRef =
+        _firebaseFirestoreInstance.collection("users").doc(userId);
 
     // Try to retrieve the document snapshot
     DocumentSnapshot docSnapshot = await userDocRef.get();
@@ -162,7 +254,8 @@ class FireStore {
 
       // Extracting usernames from the query snapshot
       List<String> usernames = snapshot.docs.map((doc) {
-        return (doc['username'] as String?) ?? ''; // Adjust if the username is nested or has a different field name
+        return (doc['username'] as String?) ??
+            ''; // Adjust if the username is nested or has a different field name
       }).toList();
 
       return usernames;
@@ -172,7 +265,16 @@ class FireStore {
     }
   }
 
-  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime? dob, String? gender) async {
+  Future createUser(
+      String uid,
+      String? experience,
+      String? goals,
+      String? liftingStyle,
+      String username,
+      String displayName,
+      bool isAccountComplete,
+      DateTime? dob,
+      String? gender) async {
     try {
       await _firebaseFirestoreInstance.collection('users').doc(uid).set({
         'experience': experience,
@@ -188,5 +290,4 @@ class FireStore {
       // todo
     }
   }
-
 }

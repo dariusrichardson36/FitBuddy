@@ -12,11 +12,11 @@ class UserPostsView extends StatefulWidget {
   const UserPostsView({super.key});
 
   @override
-  _TimeLineViewState createState() => _TimeLineViewState();
+  _UserPostsViewState createState() => _UserPostsViewState();
 }
 
-class _TimeLineViewState extends State<UserPostsView> {
-  late Stream<List<Post>> _timelinePostsStream;
+class _UserPostsViewState extends State<UserPostsView> {
+  late Stream<List<Post>> _userPostsStream;
    final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   final _firestore = FireStore.FireStore();
@@ -37,7 +37,7 @@ class _TimeLineViewState extends State<UserPostsView> {
       setState(() {
         _isLoading = true;
       });
-      _firestore.getMoreTimeLinePosts();
+      _firestore.getMoreUserPosts();
       setState(() {
         _isLoading = false;
       });
@@ -46,15 +46,15 @@ class _TimeLineViewState extends State<UserPostsView> {
 
   void loadTimeline() {
     setState(() {
-      _firestore.initTimeLine();
-      _timelinePostsStream = _firestore.postsController.stream;
+      _firestore.initProfile();
+      _userPostsStream = _firestore.postsController.stream;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Post>>(
-      stream: _timelinePostsStream,
+      stream: _userPostsStream,
       builder: (context, snapshot) {
         return Column(
           mainAxisSize: MainAxisSize.max,
