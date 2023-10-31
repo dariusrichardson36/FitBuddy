@@ -2,10 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
-import 'package:fit_buddy/constants/route_constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../models/FitBuddyPostModel.dart';
 import '../models/FitBuddyActivityModel.dart';
@@ -58,18 +55,18 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
         children: [
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Profile header
                 profileHeader(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // if no description, or description is empty don't show
                 ...(widget.postData.description != "")
                     ? [
-                  Text(widget.postData.description, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                  Text(widget.postData.description, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
                 ]
                     : [],
                 Column(
@@ -78,10 +75,10 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         // Activity name
-                        Text(activityData.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                        SizedBox(height: 5),
+                        Text(activityData.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        const SizedBox(height: 5),
                         // Row containing three columns
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
@@ -101,7 +98,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 if (!_showAllActivities && widget.postData.workout.length > 2)
                   SizedBox(
                     height: 24,
@@ -112,7 +109,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                           _showAllActivities = true;
                         });
                       },
-                      icon: Icon(Icons.keyboard_arrow_down),
+                      icon: const Icon(Icons.keyboard_arrow_down),
                     ),
                   ),
                 if (_showAllActivities && widget.postData.workout.length > 2)
@@ -166,7 +163,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

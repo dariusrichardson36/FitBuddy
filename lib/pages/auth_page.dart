@@ -1,8 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_buddy/pages/complete_account_page.dart';
-import 'package:fit_buddy/pages/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../services/auth.dart';
@@ -11,7 +7,7 @@ import '../components/FitBuddyThirdPartyBox.dart';
 
 
 class AuthPage extends StatefulWidget {
-  AuthPage({super.key});
+  const AuthPage({super.key});
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -51,7 +47,7 @@ class _AuthPageState extends State<AuthPage> {
         stream: Auth().authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
           return SafeArea(
             child: Padding(
@@ -64,7 +60,7 @@ class _AuthPageState extends State<AuthPage> {
                     height: 100,
                     child: Image.asset('lib/images/logo.png'),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     "FitBuddy",
                     style: GoogleFonts.fugazOne(
@@ -72,21 +68,21 @@ class _AuthPageState extends State<AuthPage> {
                       fontWeight: FontWeight.bold
                     ) ,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (loginState) ... [
                     loginEmailPw()
                   ] else
                     ...[
                       registerEmailPw()
                     ],
-                  Spacer(),
+                  const Spacer(),
 
-                  Divider(
+                  const Divider(
                     thickness: 1,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   otherLoginMethods(),
-                  SizedBox(height: 75),
+                  const SizedBox(height: 75),
                 ]
               ),
             )
@@ -126,7 +122,7 @@ class _AuthPageState extends State<AuthPage> {
                 fontSize: 16
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           FitBuddyTextFormField(
             controller: emailController,
             hintText: 'Email',
@@ -149,9 +145,9 @@ class _AuthPageState extends State<AuthPage> {
               }
               return null;
             },
-            icon: Icon(Icons.visibility_off),
+            icon: const Icon(Icons.visibility_off),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -162,7 +158,7 @@ class _AuthPageState extends State<AuthPage> {
                   login();
                 }
               },
-              child: Text(
+              child: const Text(
                 "Log in",
                 style: TextStyle(
                   fontSize: 20,
@@ -171,13 +167,13 @@ class _AuthPageState extends State<AuthPage> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Text("No FitBuddy account yet? "),
+              const Text("No FitBuddy account yet? "),
               GestureDetector(
                 onTap: toggleLoginState,
-                child: Text(
+                child: const Text(
                     "Register here",
                 style: TextStyle(
                     color: Colors.blue,
@@ -197,14 +193,14 @@ class _AuthPageState extends State<AuthPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Register a account on FitBuddy',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 16
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           FitBuddyTextFormField(
             controller: emailController,
             hintText: 'email',
@@ -244,7 +240,7 @@ class _AuthPageState extends State<AuthPage> {
               return null;
             },
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -257,7 +253,7 @@ class _AuthPageState extends State<AuthPage> {
                   // Not validated
                 }
               },
-              child: Text(
+              child: const Text(
                 "Register",
                 style: TextStyle(
                   fontSize: 20,
@@ -266,13 +262,13 @@ class _AuthPageState extends State<AuthPage> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Text("Already have a FitBuddy account? "),
+              const Text("Already have a FitBuddy account? "),
               GestureDetector(
                 onTap: toggleLoginState,
-                child: Text(
+                child: const Text(
                     "Log in here",
                     style: TextStyle(
                         color: Colors.blue,
@@ -298,7 +294,7 @@ class _AuthPageState extends State<AuthPage> {
 
             },
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // apple button
           FitBuddyThirdPartyBox(
               imagePath: 'lib/images/apple.png',

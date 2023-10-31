@@ -1,5 +1,4 @@
 import 'package:fit_buddy/models/FitBuddyExerciseModel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,14 +12,10 @@ import '../services/firestore/firestore_service.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   // Create page variables
-  List<Activity> _workout = [
-
-  ];
+  final List<Activity> _workout = [];
   final TextEditingController _descriptionController = TextEditingController();
 
-
   // Choose exercise page variables
-
 
   CreateWorkoutPage({super.key});
 
@@ -28,13 +23,13 @@ class CreateWorkoutPage extends StatefulWidget {
   State<CreateWorkoutPage> createState() => _CreateWorkoutPageState();
 }
 
-class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProviderStateMixin {
+class _CreateWorkoutPageState extends State<CreateWorkoutPage>
+    with TickerProviderStateMixin {
   // Create page variables
   final TextEditingController _descriptionController = TextEditingController();
   bool _isCreate = true;
   String _dropdownValue = "Private";
-  int _currentLength = 0;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   // Choose exercise page variables
   late TabController _tabController;
@@ -48,9 +43,11 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
     });
   }
 
-  void _addExercise(Exercise exercise){
+  void _addExercise(Exercise exercise) {
     setState(() {
-      widget._workout.add(Activity(name: exercise.name, setCollection: <SetCollection>[SetCollection()]));
+      widget._workout.add(Activity(
+          name: exercise.name,
+          setCollection: <SetCollection>[SetCollection()]));
     });
   }
 
@@ -63,8 +60,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
         _selectedTabIndex = _tabController.index;
       });
     });
-    _favoriteExercises = FirestoreService.firestoreService().postService.getFavoriteExercises();
-    _allExercises = FirestoreService.firestoreService().postService.getAllExercises();
+    _favoriteExercises =
+        FirestoreService.firestoreService().postService.getFavoriteExercises();
+    _allExercises =
+        FirestoreService.firestoreService().postService.getAllExercises();
   }
 
   @override
@@ -88,7 +87,8 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
 
   void addSetToExercise(int index) {
     setState(() {
-      widget._workout[index].setCollection.add(SetCollection(reps: 0, sets: 0, weight: 0));
+      widget._workout[index].setCollection
+          .add(SetCollection(reps: 0, sets: 0, weight: 0));
     });
   }
 
@@ -118,20 +118,27 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text('Are you sure you want to post the workout?'),
+                                title: const Text(
+                                    'Are you sure you want to post the workout?'),
                                 actions: <Widget>[
                                   TextButton(
                                     child: const Text('Cancel'),
                                     onPressed: () {
-                                      Navigator.of(context).pop();  // Close the dialog
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
                                     },
                                   ),
                                   TextButton(
                                     child: const Text('Post'),
                                     onPressed: () {
-                                      FirestoreService.firestoreService().postService.publishPost(widget._workout, _descriptionController.text);
-                                      Navigator.of(context).pop();  // Close the dialog
-                                      context.goNamed(FitBuddyRouterConstants.homePage);
+                                      FirestoreService.firestoreService()
+                                          .postService
+                                          .publishPost(widget._workout,
+                                              _descriptionController.text);
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                      context.goNamed(
+                                          FitBuddyRouterConstants.homePage);
                                     },
                                   ),
                                 ],
@@ -141,9 +148,9 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: FitBuddyColorConstants.lAccent,
-                            borderRadius: const BorderRadius.horizontal(left: Radius.circular(20.0))
-                          ),
+                              color: FitBuddyColorConstants.lAccent,
+                              borderRadius: const BorderRadius.horizontal(
+                                  left: Radius.circular(20.0))),
                           height: 40,
                           width: 80,
                           child: const Center(
@@ -168,7 +175,6 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                       ),
                     ],
                   )
-
                 ],
               ),
               const SizedBox(height: 20.0),
@@ -177,21 +183,20 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                 maxLength: 60,
                 maxLines: 2,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(0),
-                  counterStyle: const TextStyle(
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(0),
+                  counterStyle: TextStyle(
                     height: double.minPositive,
                   ),
-                  counterText: "$_currentLength/60",
-                  enabledBorder: const OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
-                  focusedBorder: const OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
                   labelText: 'Workout description',
                   floatingLabelBehavior: FloatingLabelBehavior.never,
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
                 ),
@@ -235,7 +240,6 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
     );
   }
 
-
   Widget _chooseExerciseView() {
     return Scaffold(
       body: SafeArea(
@@ -248,19 +252,24 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(icon: const Icon(Icons.arrow_back_ios_rounded, size: 30), onPressed: _switchView),
+                  IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_rounded, size: 30),
+                      onPressed: _switchView),
                   Expanded(
                     child: TabBar(
                       controller: _tabController,
                       indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(width: 2.0, color: FitBuddyColorConstants.lAccent),
+                        borderSide: BorderSide(
+                            width: 2.0, color: FitBuddyColorConstants.lAccent),
                         insets: const EdgeInsets.symmetric(horizontal: 50.0),
                       ),
                       tabs: [
                         Text(
                           "All",
                           style: TextStyle(
-                            fontWeight: _selectedTabIndex == 0 ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: _selectedTabIndex == 0
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             color: FitBuddyColorConstants.lAccent,
                             fontSize: 16.0,
                           ),
@@ -268,7 +277,9 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                         Text(
                           "Favorites",
                           style: TextStyle(
-                            fontWeight: _selectedTabIndex == 1 ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: _selectedTabIndex == 1
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             color: FitBuddyColorConstants.lAccent,
                             fontSize: 16.0,
                           ),
@@ -289,8 +300,15 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                 },
                 decoration: InputDecoration(
                   hintText: "Search",
-                  prefixIcon: Padding(padding: const EdgeInsets.only(right: 20) ,child: Icon(Icons.search_rounded, size: 30, color: FitBuddyColorConstants.lOnPrimary,)),
-                  prefixIconConstraints: const BoxConstraints(minWidth: 30, minHeight: 24),
+                  prefixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Icon(
+                        Icons.search_rounded,
+                        size: 30,
+                        color: FitBuddyColorConstants.lOnPrimary,
+                      )),
+                  prefixIconConstraints:
+                      const BoxConstraints(minWidth: 30, minHeight: 24),
                   border: InputBorder.none,
                 ),
               ),
@@ -311,33 +329,43 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
   }
 
   allExercisesView() {
-    return FutureBuilder(future: _allExercises, builder: (context, snapshot) {
-      return snapshot.hasData ? ListView.builder(
-        itemCount: snapshot.data.length,
-        itemBuilder: (context, index) {
-          if (_searchController.text.isNotEmpty) {
-            if (snapshot.data[index].name.toLowerCase().contains(_searchController.text.toLowerCase())) {
-              return exercise(snapshot.data[index], false);
-            } else {
-              return const SizedBox.shrink();
-            }
-          } else {
-            return exercise(snapshot.data[index], false);
-          }
-        },
-      ) : const Center(child: CircularProgressIndicator());
-    });
+    return FutureBuilder(
+        future: _allExercises,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    if (_searchController.text.isNotEmpty) {
+                      if (snapshot.data[index].name
+                          .toLowerCase()
+                          .contains(_searchController.text.toLowerCase())) {
+                        return exercise(snapshot.data[index], false);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    } else {
+                      return exercise(snapshot.data[index], false);
+                    }
+                  },
+                )
+              : const Center(child: CircularProgressIndicator());
+        });
   }
 
   favoritesView() {
-    return StreamBuilder(stream: _favoriteExercises, builder: (context, snapshot) {
-      return snapshot.hasData ? ListView.builder(
-        itemCount: snapshot.data.length,
-        itemBuilder: (context, index) {
-          return exercise(snapshot.data[index], true);
-        },
-      ) : const Center(child: CircularProgressIndicator());
-    });
+    return StreamBuilder(
+        stream: _favoriteExercises,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return exercise(snapshot.data[index], true);
+                  },
+                )
+              : const Center(child: CircularProgressIndicator());
+        });
   }
 
   exercise(Exercise exercise, bool isFavorite) {
@@ -358,8 +386,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                   // Todo
                 },
                 icon: isFavorite
-                    ? Icon(Icons.star_rounded, color: FitBuddyColorConstants.lAccent)
-                    : Icon(Icons.star_border_rounded, color: FitBuddyColorConstants.lAccent),
+                    ? Icon(Icons.star_rounded,
+                        color: FitBuddyColorConstants.lAccent)
+                    : Icon(Icons.star_border_rounded,
+                        color: FitBuddyColorConstants.lAccent),
               ),
             ],
           ),

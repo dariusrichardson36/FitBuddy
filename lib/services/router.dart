@@ -20,7 +20,7 @@ class FitBuddyRouter {
           name: FitBuddyRouterConstants.homePage,
           path: '/',
           pageBuilder: (context, state) {
-            return MaterialPage(
+            return const MaterialPage(
                 child: HomePage(),
             );
           }
@@ -29,7 +29,7 @@ class FitBuddyRouter {
           name: FitBuddyRouterConstants.authPage,
           path: '/authentication',
           pageBuilder: (context, state) {
-              return MaterialPage(
+              return const MaterialPage(
                 child: AuthPage(),
               );
           }
@@ -56,7 +56,7 @@ class FitBuddyRouter {
           path: '/search',
           name: FitBuddyRouterConstants.searchPage,
           pageBuilder: (context, state) {
-            return MaterialPage(
+            return const MaterialPage(
               child: SearchPage(),
             );
           }

@@ -1,6 +1,4 @@
 import 'package:fit_buddy/components/FitBuddyButton.dart';
-import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
-import 'package:fit_buddy/components/fitbuddy_setcollectionrow.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/FitBuddyActivityModel.dart';
 import 'package:flutter/material.dart';

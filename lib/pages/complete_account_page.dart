@@ -41,7 +41,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -51,16 +51,16 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
 
                 //constraints: const BoxConstraints(minWidth: 20, maxWidth: 30),
                 onPressed: previousPage,
-                icon: Icon(Icons.arrow_back_rounded),
+                icon: const Icon(Icons.arrow_back_rounded),
                 iconSize: 40,
 
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Expanded(
                 child: PageView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
                     nameAndUsername(),
@@ -75,7 +75,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
                 height: 50,
                 child: ElevatedButton(
                   onPressed: nextPage,
-                  child: Text(
+                  child: const Text(
                     "Continue",
                     style: TextStyle(
                       fontSize: 20,
@@ -100,7 +100,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             submitAccountData();
             context.go('/');
           },
-          child: Text(
+          child: const Text(
             "skip account setup",
             style: TextStyle(color: Colors.blue, fontSize: 16),
           ),
@@ -113,8 +113,8 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("I am a", style: TextStyle(fontSize: 20),),
-        SizedBox(height: 20),
+        const Text("I am a", style: TextStyle(fontSize: 20),),
+        const SizedBox(height: 20),
         FitBuddySelectableButton(
           text: "MAN",
           onTap: () {
@@ -125,7 +125,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           },
           isSelected: isManSelected,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         FitBuddySelectableButton(
           text: "WOMAN",
           onTap: () {
@@ -136,7 +136,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
           },
           isSelected: isWomanSelected,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         skipSetup(),
       ],
     );
@@ -146,14 +146,14 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("My birthday is", style: TextStyle(fontSize: 20)),
-        SizedBox(height: 20),
+        const Text("My birthday is", style: TextStyle(fontSize: 20)),
+        const SizedBox(height: 20),
         FitBuddyDateInputField(
           onDateSelected: (selectedDate) {
             _selectedDate = selectedDate;
           },
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         skipSetup(),
       ],
     );
@@ -165,12 +165,12 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("To create an account, we need to know your name and username"),
-          SizedBox(
+          const Text("To create an account, we need to know your name and username"),
+          const SizedBox(
             height: 10,
           ),
-          Text("No stress, you can change this later"),
-          SizedBox(
+          const Text("No stress, you can change this later"),
+          const SizedBox(
             height: 10,
           ),
           FitBuddyTextFormField(
@@ -216,9 +216,9 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text("Please complete these questions so we can match you to the right people."),
-        Text("Don't worry, you can always do this later or change it."),
-        SizedBox(
+        const Text("Please complete these questions so we can match you to the right people."),
+        const Text("Don't worry, you can always do this later or change it."),
+        const SizedBox(
           height: 30,
         ),
         FitBuddyDropdownMenu(
@@ -231,7 +231,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         FitBuddyDropdownMenu(
@@ -244,7 +244,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         FitBuddyDropdownMenu(
@@ -257,7 +257,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         skipSetup(),
@@ -278,7 +278,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
         _selectedDate,
         getGender(),
       );
-    } on Exception catch (e) {
+    } on Exception {
       // TODO
     }
   }
@@ -303,7 +303,7 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
       Auth().signOutUser();
     } else {
       _pageController.previousPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.linear,
       );
     }
@@ -313,12 +313,12 @@ class _CompleteAccountInformationState extends State<CompleteAccountInformation>
     switch (_pageController.page?.toInt()) {
       case 0:
         if (_formKey.currentState!.validate()) {
-          _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.linear);
+          _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.linear);
         }
         break;
       case 1:
       case 2:
-        _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.linear);
+        _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.linear);
         break;
       case 3:
         submitAccountData();

@@ -11,11 +11,11 @@ class TimelineServiceFirestore {
   DocumentSnapshot? _lastDocument;
   bool _hasMorePosts = true;
   bool once = false;
-  List _streams = [];
+  final List _streams = [];
   final StreamController<List<Post>> postsController =
   StreamController<List<Post>>.broadcast();
 
-  List<List<Post>> _allPagedResults = [[]];
+  final List<List<Post>> _allPagedResults = [[]];
 
 
   TimelineServiceFirestore({required this.firestoreService});

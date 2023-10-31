@@ -5,7 +5,7 @@ class MatchmakingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("This is matchmaking"),);
+    return const Center(child: Text("This is matchmaking"),);
   }
 
 }

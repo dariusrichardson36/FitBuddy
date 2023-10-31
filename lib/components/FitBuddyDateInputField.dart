@@ -40,21 +40,21 @@ class FitBuddyDateInputFieldState extends State<FitBuddyDateInputField> {
     return TextFormField(
       controller: _controller,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lError),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lError),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
         ),
         fillColor: fitBuddyLightTheme.colorScheme.secondary,
@@ -65,9 +65,9 @@ class FitBuddyDateInputFieldState extends State<FitBuddyDateInputField> {
           style: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
         ),
         helperText: "",
-        helperStyle: TextStyle(height: 0.5),
+        helperStyle: const TextStyle(height: 0.5),
         // make the error text closer to the field
-        errorStyle: TextStyle(height: 0.5),
+        errorStyle: const TextStyle(height: 0.5),
         ),
       readOnly: true, // makes this field read-only
       onTap: _selectDate,
