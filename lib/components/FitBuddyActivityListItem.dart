@@ -1,5 +1,6 @@
 import 'package:fit_buddy/components/FitBuddyButton.dart';
 import 'package:fit_buddy/components/FitBuddyTextFormField.dart';
+import 'package:fit_buddy/components/fitbuddy_setcollectionrow.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/FitBuddyActivityModel.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,20 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
         Row(
           children: [
             SizedBox(width: 100 ,child: Text(widget.exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),)),
-            FitBuddyButton(text: "Add set", onPressed: () {
-              widget.onAddSet();
-            }, fontSize: 14,),
+            _deleteMode ?
+              FitBuddyButton(
+                text: "Delete sets",
+                onPressed: () {
+                  // Iterate through the set collections and remove those with deleteSet set to true
+                  widget.exercise.setCollection.removeWhere((setCollection) => setCollection.deleteSet);
+                  _deleteMode = false;
+                  widget.update();
+                }, fontSize: 14,
+              ) : FitBuddyButton(
+              text: "Add set",
+              onPressed: () {
+                widget.onAddSet();
+              }, fontSize: 14,),
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.more_vert),
@@ -107,6 +119,11 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
         const SizedBox(height: 10),
         // add a row for every entry in exercise.sets
         for (var setCollection in widget.exercise.setCollection)
+          /*
+          SetCollectionRow(onRemove: () {
+            widget.exercise.setCollection.remove(setCollection);
+          }, onUpdate: widget.update(), setCollection: setCollection, deleteMode: _deleteMode),
+          */
           setCollectionRow(setCollection),
         const SizedBox(height: 10),
       ],
@@ -122,6 +139,9 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
           Row(
             children: [
               IconButton(onPressed: () {
+                if (setCollection.sets == 0) {
+                  widget.exercise.setCollection.remove(setCollection);
+                }
                 setCollection.decrementSets();
                 widget.update();
               }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
@@ -174,7 +194,6 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                   maxLines: 1,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'^\d{0,4}(\.\d{0,2})?$'), replacementString: '9999.99'),
-
                   ],
                   onChanged: (value) {
                     if (value != "") {
@@ -188,11 +207,18 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
               ),
             ]
           ),
-          !_deleteMode ? const SizedBox(width: 50,) :
+          !_deleteMode ? const SizedBox(width: 40,) :
           IconButton(onPressed: () {
-            widget.exercise.setCollection.remove(setCollection);
-            widget.update();
-          }, icon: const Icon(Icons.delete), constraints: const BoxConstraints(),),
+            print(setCollection.deleteSet);
+            print("delete set");
+            setState(() {
+              setCollection.deleteSet = !setCollection.deleteSet;
+            });
+          },
+            icon: setCollection.deleteSet
+              ? const Icon(Icons.check_box_outlined)
+              : const Icon(Icons.check_box_outline_blank),
+            constraints: const BoxConstraints(),),
         ],
       ),
     );

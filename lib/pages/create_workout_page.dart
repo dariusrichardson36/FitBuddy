@@ -75,6 +75,22 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
     }
   }
 
+  void removeExercise(int index) {
+    setState(() {
+      widget._workout.removeAt(index);
+    });
+  }
+
+  void update() {
+    setState(() {});
+  }
+
+  void addSetToExercise(int index) {
+    setState(() {
+      widget._workout[index].setCollection.add(SetCollection(reps: 0, sets: 0, weight: 0));
+    });
+  }
+
   Widget _createWorkoutView() {
     return Scaffold(
       body: SafeArea(
@@ -188,17 +204,13 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> with TickerProvid
                     return FitBuddyActivityListItem(
                       exercise: widget._workout[index],
                       onRemove: () {
-                        setState(() {
-                          widget._workout.removeAt(index);
-                        });
+                        removeExercise(index);
                       },
                       onAddSet: () {
-                        setState(() {
-                          widget._workout[index].setCollection.add(SetCollection(reps: 0, sets: 0, weight: 0));
-                        });
+                        addSetToExercise(index);
                       },
                       update: () {
-                        setState(() {});
+                        update();
                       },
                     );
                   },

@@ -25,11 +25,14 @@ class SetCollection {
   int reps;
   int sets;
   double weight;
+  bool deleteSet;
 
   SetCollection({
     this.reps = 0,
     this.sets = 0,
-    this.weight = 0});
+    this.weight = 0,
+    this.deleteSet = false,
+  });
 
 
   getProperty(String label) {
