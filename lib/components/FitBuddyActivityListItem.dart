@@ -155,6 +155,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
         children: [
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                   onPressed: () {
@@ -167,6 +168,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                     setCollection.decrementSets();
                     widget.update();
                   },
+                  padding: EdgeInsets.zero,
                   icon: const Icon(
                     Icons.remove,
                   ),
@@ -182,6 +184,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                     setCollection.incrementSets();
                     widget.update();
                   },
+                  padding: EdgeInsets.zero,
                   icon: const Icon(Icons.add),
                   constraints: const BoxConstraints(),
                 ),
@@ -190,12 +193,14 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
           ),
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                   onPressed: () {
                     setCollection.decrementReps();
                     widget.update();
                   },
+                  padding: EdgeInsets.zero,
                   icon: const Icon(
                     Icons.remove,
                   ),
@@ -211,6 +216,7 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                     setCollection.incrementReps();
                     widget.update();
                   },
+                  padding: EdgeInsets.zero,
                   icon: const Icon(Icons.add),
                   constraints: const BoxConstraints(),
                 ),
