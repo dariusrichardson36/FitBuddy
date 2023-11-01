@@ -34,7 +34,7 @@ class DrawerPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Zachary@Zac.Graham',
                     style: TextStyle(
                         color: FitBuddyColorConstants.lOnPrimary,
@@ -66,7 +66,7 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Profile',
                     style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
@@ -84,7 +84,7 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Settings',
                     style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
@@ -104,7 +104,7 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Log Workout',
                     style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),

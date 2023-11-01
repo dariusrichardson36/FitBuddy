@@ -67,15 +67,6 @@ class FitBuddyRouter {
           }
         ),
         GoRoute(
-            path: '/search',
-            name: FitBuddyRouterConstants.searchPage,
-            pageBuilder: (context, state) {
-              return const MaterialPage(
-                child: SearchPage(),
-              );
-            }
-          ),
-        GoRoute(
             path: '/post/:postId',
             name: FitBuddyRouterConstants.singlePostPage,
             pageBuilder: (context, state) {

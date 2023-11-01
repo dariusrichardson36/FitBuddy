@@ -1,8 +1,9 @@
-import 'package:fit_buddy/components/fit_buddy_users_posts_view.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/models/user.dart';
-import 'package:fit_buddy/services/firestore.dart';
+import 'package:fit_buddy/pages/profile_feed_view.dart';
+import 'package:fit_buddy/services/firestore/firestore_service.dart';
+import 'package:fit_buddy/services/firestore/profile_service_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -139,10 +140,10 @@ class ProfilePage extends StatelessWidget {
                           color: FitBuddyColorConstants.lOnPrimary)),
                 ],
               ),
-              Expanded(
+              const Expanded(
                 child: SizedBox(
                   height: 250,
-                  child: UserPostsView()
+                  child: ProfileFeedView()
                 )
               )
             ],
@@ -154,7 +155,7 @@ class ProfilePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    Future<User> test = FireStore.FireStore().getUserData();
+    Future<User> test = FirestoreService.firestoreService().profileService.getUserData();
 
     return FutureBuilder(
         future: test,
