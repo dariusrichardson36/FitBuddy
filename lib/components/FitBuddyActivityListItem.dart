@@ -19,7 +19,8 @@ class FitBuddyActivityListItem extends StatefulWidget {
   });
 
   @override
-  State<FitBuddyActivityListItem> createState() => _FitBuddyActivityListItemState();
+  State<FitBuddyActivityListItem> createState() =>
+      _FitBuddyActivityListItemState();
 }
 
 class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
@@ -28,90 +29,108 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Row(
           children: [
-            SizedBox(width: 100 ,child: Text(widget.exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),)),
-            _deleteMode ?
-              FitBuddyButton(
-                text: "Delete sets",
-                onPressed: () {
-                  // Iterate through the set collections and remove those with deleteSet set to true
-                  widget.exercise.setCollection.removeWhere((setCollection) => setCollection.deleteSet);
-                  _deleteMode = false;
-                  widget.update();
-                }, fontSize: 14,
-              ) : FitBuddyButton(
-              text: "Add set",
-              onPressed: () {
-                widget.onAddSet();
-              }, fontSize: 14,),
+            SizedBox(
+                width: 100,
+                child: Text(
+                  widget.exercise.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )),
+            _deleteMode
+                ? FitBuddyButton(
+                    text: "Delete sets",
+                    onPressed: () {
+                      // Iterate through the set collections and remove those with deleteSet set to true
+                      widget.exercise.setCollection.removeWhere(
+                          (setCollection) => setCollection.deleteSet);
+                      _deleteMode = false;
+                      widget.update();
+                    },
+                    fontSize: 14,
+                  )
+                : FitBuddyButton(
+                    text: "Add set",
+                    onPressed: () {
+                      widget.onAddSet();
+                    },
+                    fontSize: 14,
+                  ),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  builder: (BuildContext context) {
-                    return Container(
-                      padding: const EdgeInsets.all(20),
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: FitBuddyColorConstants.lSecondary,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
+                icon: const Icon(Icons.more_vert),
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (BuildContext context) {
+                      return Container(
+                        padding: const EdgeInsets.all(20),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: FitBuddyColorConstants.lSecondary,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(widget.exercise.name, style: const TextStyle(fontWeight: FontWeight.bold),),
-                          const SizedBox(height: 10,),
-                          const Divider(),
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              widget.onRemove();
-                              Navigator.pop(context);
-                            },
-                            child: const Row(
-                              children: [
-                                Icon(Icons.delete),
-                                SizedBox(width: 10,),
-                                Text("Delete exercise"),
-                              ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              widget.exercise.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          const Divider(),
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              setState(() {
-                                _deleteMode = !_deleteMode;
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: const Row(
-                              children: [
-                                Icon(Icons.check_box_outlined),
-                                SizedBox(width: 10,),
-                                Text("Select sets to delete"),
-                              ],
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                          const Divider(),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              }
-            ),
+                            const Divider(),
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                widget.onRemove();
+                                Navigator.pop(context);
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.delete),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Delete exercise"),
+                                ],
+                              ),
+                            ),
+                            const Divider(),
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                setState(() {
+                                  _deleteMode = !_deleteMode;
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.check_box_outlined),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Select sets to delete"),
+                                ],
+                              ),
+                            ),
+                            const Divider(),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
           ],
         ),
         const SizedBox(height: 10),
@@ -134,49 +153,72 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              IconButton(onPressed: () {
-                if (setCollection.sets == 0) {
-                  widget.exercise.setCollection.remove(setCollection);
-                }
-                setCollection.decrementSets();
-                widget.update();
-              }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
-              Column(
-                children: [
+          Expanded(
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    if (setCollection.sets == 0) {
+                      widget.exercise.setCollection.remove(setCollection);
+                      if (widget.exercise.setCollection.isEmpty) {
+                        widget.onRemove();
+                      }
+                    }
+                    setCollection.decrementSets();
+                    widget.update();
+                  },
+                  icon: const Icon(
+                    Icons.remove,
+                  ),
+                  constraints: const BoxConstraints(),
+                ),
+                Column(children: [
                   const Text("sets"),
                   const SizedBox(height: 10),
                   Text(setCollection.sets.toString()),
-                ]
-              ),
-              IconButton(onPressed: () {
-                setCollection.incrementSets();
-                widget.update();
-              }, icon: const Icon(Icons.add), constraints: const BoxConstraints(),),
-            ],
+                ]),
+                IconButton(
+                  onPressed: () {
+                    setCollection.incrementSets();
+                    widget.update();
+                  },
+                  icon: const Icon(Icons.add),
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
           ),
-          Row(
-            children: [
-              IconButton(onPressed: () {
-                setCollection.decrementReps();
-                widget.update();
-              }, icon: const Icon(Icons.remove, ), constraints: const BoxConstraints(),),
-              Column(
-                  children: [
-                    const Text("reps"),
-                    const SizedBox(height: 10),
-                    Text(setCollection.reps.toString()),
-                  ]
-              ),
-              IconButton(onPressed: () {
-                setCollection.incrementReps();
-                widget.update();
-              }, icon: const Icon(Icons.add), constraints: const BoxConstraints(),),
-            ],
+          Expanded(
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    setCollection.decrementReps();
+                    widget.update();
+                  },
+                  icon: const Icon(
+                    Icons.remove,
+                  ),
+                  constraints: const BoxConstraints(),
+                ),
+                Column(children: [
+                  const Text("reps"),
+                  const SizedBox(height: 10),
+                  Text(setCollection.reps.toString()),
+                ]),
+                IconButton(
+                  onPressed: () {
+                    setCollection.incrementReps();
+                    widget.update();
+                  },
+                  icon: const Icon(Icons.add),
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
           ),
-          Column(
-            children: [
+          Expanded(
+            child: Column(children: [
               const Text("weight"),
               SizedBox(
                 height: 30,
@@ -187,11 +229,14 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(0),
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d{0,4}(\.\d{0,2})?$'), replacementString: '9999.99'),
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d{0,4}(\.\d{0,2})?$'),
+                        replacementString: '9999.99'),
                   ],
                   onChanged: (value) {
                     if (value != "") {
@@ -200,26 +245,27 @@ class _FitBuddyActivityListItemState extends State<FitBuddyActivityListItem> {
                       widget.update();
                     }
                   },
-
                 ),
               ),
-            ]
+            ]),
           ),
-          !_deleteMode ? const SizedBox(width: 40,) :
-          IconButton(onPressed: () {
-            print(setCollection.deleteSet);
-            print("delete set");
-            setState(() {
-              setCollection.deleteSet = !setCollection.deleteSet;
-            });
-          },
-            icon: setCollection.deleteSet
-              ? const Icon(Icons.check_box_outlined)
-              : const Icon(Icons.check_box_outline_blank),
-            constraints: const BoxConstraints(),),
+          !_deleteMode
+              ? const SizedBox(
+                  width: 40,
+                )
+              : IconButton(
+                  onPressed: () {
+                    setState(() {
+                      setCollection.deleteSet = !setCollection.deleteSet;
+                    });
+                  },
+                  icon: setCollection.deleteSet
+                      ? const Icon(Icons.check_box_outlined)
+                      : const Icon(Icons.check_box_outline_blank),
+                  constraints: const BoxConstraints(),
+                ),
         ],
       ),
     );
   }
 }
-
