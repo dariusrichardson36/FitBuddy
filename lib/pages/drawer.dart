@@ -2,7 +2,6 @@
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +21,7 @@ class DrawerPage extends StatelessWidget {
               Container(
                 width: 75.0,
                 height: 75.0,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     image: NetworkImage(
@@ -31,18 +30,18 @@ class DrawerPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Zachary@Zac.Graham',
                     style: TextStyle(
                         color: FitBuddyColorConstants.lOnPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 35),
+                  const SizedBox(height: 35),
                   Text(
                     '215 Friends',
                     style: TextStyle(
@@ -54,7 +53,7 @@ class DrawerPage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Row(
             children: [
               Icon(Icons.person, color: FitBuddyColorConstants.lOnPrimary, size: 35),
@@ -67,51 +66,55 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: Text(
+                  child: const Text(
                     'Profile',
                     style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             children: [
               Icon(Icons.settings, color: FitBuddyColorConstants.lOnPrimary, size: 35),
               SizedBox(width: 15),
+
               ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: Text(
+                  child: const Text(
                     'Settings',
                     style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             children: [
               Icon(Icons.edit, color: FitBuddyColorConstants.lOnPrimary, size: 35),
               SizedBox(width: 15),
+
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.goNamed(FitBuddyRouterConstants.createWorkoutPage);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: Text(
+                  child: const Text(
                     'Log Workout',
                     style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             children: [
-              Icon(Icons.search, color: Colors.black, size: 35),
-              SizedBox(width: 15),
+              const Icon(Icons.search, color: Colors.black, size: 35),
+              const SizedBox(width: 15),
               ElevatedButton(
                   onPressed: () {
                     context.goNamed(FitBuddyRouterConstants.searchPage);
@@ -120,22 +123,22 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: Text(
+                  child: const Text(
                     'Search',
                     style: TextStyle(color: Colors.black, fontSize: 18),
                   )),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                   onPressed: () => Auth().signOutUser(),
-                  icon: Icon(Icons.logout_rounded)),
+                  icon: const Icon(Icons.logout_rounded)),
               IconButton(
                   onPressed: () => ThemeManager().toggleTheme(),
-                  icon: Icon(Icons.sunny))
+                  icon: const Icon(Icons.sunny))
             ],
           ),
         ]),

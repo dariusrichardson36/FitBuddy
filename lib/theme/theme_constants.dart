@@ -8,9 +8,9 @@ final ThemeData fitBuddyLightTheme = ThemeData(
   brightness: Brightness.light,
   //scaffoldBackgroundColor: Colors.red,
   colorScheme: ThemeData().colorScheme.copyWith(
-    secondary: Color(0xFFF2F2F2),
-    onSecondary: Color(0xFF757575),
-    tertiary: Color(0xFF4D54F0)
+    secondary: const Color(0xFFF2F2F2),
+    onSecondary: const Color(0xFF757575),
+    tertiary: const Color(0xFF4D54F0)
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(

@@ -41,21 +41,21 @@ class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
         obscureText: _obscureText,
         validator: widget.validator,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: FitBuddyColorConstants.lError),
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: FitBuddyColorConstants.lError),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
           ),
           fillColor: fitBuddyLightTheme.colorScheme.secondary,
@@ -66,11 +66,11 @@ class _FitBuddyTextFormFieldState extends State<FitBuddyTextFormField> {
             style: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
           ),
           helperText: "",
-          helperStyle: TextStyle(height: 0.5),
+          helperStyle: const TextStyle(height: 0.5),
           // make the error text closer to the field
-          errorStyle: TextStyle(height: 0.5),
+          errorStyle: const TextStyle(height: 0.5),
           suffixIcon: widget.isPassword ? IconButton(
-            icon: _obscureText ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+            icon: _obscureText ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
             onPressed: () {
               setState(() {
                 _obscureText = !_obscureText;

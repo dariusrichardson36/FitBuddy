@@ -73,14 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.2"
-  cross_file:
-    dependency: transitive
+  cool_dropdown:
+    dependency: "direct main"
     description:
-      name: cross_file
-      sha256: fd832b5384d0d6da4f6df60b854d33accaaeb63aa9e10e736a87381f08dee2cb
+      name: cool_dropdown
+      sha256: "24400f57740b4779407586121e014bef241699ad2a52c506a7e1e7616cb68653"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3+5"
+    version: "2.1.0"
   crypto:
     dependency: transitive
     description:
@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.9"
   fake_async:
     dependency: transitive
     description:
@@ -384,6 +392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   js:
     dependency: transitive
     description:

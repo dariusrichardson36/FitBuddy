@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../services/firestore.dart';
+import '../services/firestore/firestore_service.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key? key}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SearchPageState();
@@ -32,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _search() async {
-    final results = await FireStore.FireStore().searchUser(_controller.text);
+    final results = await FirestoreService.firestoreService().userService.searchUser(_controller.text);
     setState(() {
       _searchResults = results;
     });
@@ -50,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         title: TextField(
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.search),
+            suffixIcon: const Icon(Icons.search),
             hintText: 'Search...',
             border: InputBorder.none,
             focusColor: FitBuddyColorConstants.lOnPrimary,
@@ -67,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshots) {
           if ((snapshots.connectionState == ConnectionState.waiting)) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
@@ -105,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         leading: CircleAvatar(
                           backgroundImage: (data['image_url'] != null && data['image_url'].isNotEmpty)
-                              ? NetworkImage(data['image_url']) : AssetImage('lib/images/default_profile.png') as ImageProvider,
+                              ? NetworkImage(data['image_url']) : const AssetImage('lib/images/default_profile.png') as ImageProvider,
                         ),
                         onTap: () {
                           //Navigator.of(context).pushNamed('/profile');
