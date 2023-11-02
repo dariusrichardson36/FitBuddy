@@ -1,18 +1,13 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/homepage_views/achievements_view.dart';
 import 'package:fit_buddy/pages/homepage_views/matchmaking_view.dart';
 import 'package:fit_buddy/pages/homepage_views/messages_view.dart';
-import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
-import '../services/firestore.dart';
+
 import 'drawer.dart';
 import 'homepage_views/timeline_view.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -30,7 +25,7 @@ class _HomePageState extends State<HomePage> {
         _currentPageIndex = index;
         _pageController.animateToPage(
           index,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -40,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
+      drawer: const Drawer(
         child: DrawerPage(),
       ),
       body: SafeArea(
@@ -52,11 +47,11 @@ class _HomePageState extends State<HomePage> {
           },
           
           controller: _pageController,
-          children: [
+          children: const [
             TimeLineView(),
             MatchmakingView(),
             AchievementsView(),
-            MessagesView()
+            MessagesView(),
           ],
 
         ),
@@ -88,6 +83,13 @@ class _HomePageState extends State<HomePage> {
           icon: Icon(Icons.email),
           label: 'messages',
         ),
+        /*
+        BottomNavigationBarItem(
+          icon: Icon(Icons.edit),
+          label: 'messages',
+        ),
+
+         */
       ],
       showSelectedLabels: false, // Hide labels for selected item
       showUnselectedLabels: false, // Hide labels for unselected items

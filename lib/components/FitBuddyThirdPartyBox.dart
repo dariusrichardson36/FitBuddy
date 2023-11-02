@@ -19,7 +19,7 @@ class FitBuddyThirdPartyBox extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child:Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: Border.all(color: FitBuddyColorConstants.lOnSecondary),
             borderRadius: BorderRadius.circular(50),
@@ -37,7 +37,7 @@ class FitBuddyThirdPartyBox extends StatelessWidget {
               Text(
                 text,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 50,
               )
             ],
