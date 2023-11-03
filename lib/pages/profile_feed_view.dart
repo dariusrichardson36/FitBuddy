@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'package:fit_buddy/components/FitBuddyTimeLinePost.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
+import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/firestore/firestore_service.dart';
 
 
 class ProfileFeedView extends StatefulWidget {
+
   const ProfileFeedView({super.key});
 
   @override
@@ -18,6 +20,7 @@ class _ProfileFeedState extends State<ProfileFeedView> {
    final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   final _firestore = FirestoreService.firestoreService();
+  String? uid = Auth().currentUser?.uid;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _ProfileFeedState extends State<ProfileFeedView> {
       setState(() {
         _isLoading = true;
       });
-      _firestore.profileService.getMoreUserPosts();
+      _firestore.profileService.getMoreUserPosts(uid);
       setState(() {
         _isLoading = false;
       });
@@ -45,7 +48,7 @@ class _ProfileFeedState extends State<ProfileFeedView> {
 
   void loadProfileFeed() {
     setState(() {
-      _firestore.profileService.initProfile();
+      _firestore.profileService.initProfile(uid);
       _ProfilePostsStream = _firestore.profileService.postsController.stream;
     });
   }

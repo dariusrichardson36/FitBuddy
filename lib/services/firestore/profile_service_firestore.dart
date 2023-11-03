@@ -10,7 +10,6 @@ import 'firestore_service.dart';
 class ProfileServiceFirestore {
   final FirestoreService firestoreService;
 
-  String? uid = Auth().currentUser?.uid;
   DocumentSnapshot? _lastDocument;
   bool _hasMorePosts = true;
   bool once = false;
@@ -28,7 +27,7 @@ class ProfileServiceFirestore {
     postsController.close();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> _getFirstUserPost() {
+  Future<DocumentSnapshot<Map<String, dynamic>>> _getFirstUserPost(String? uid) {
     return firestoreService.instance
         .collection("posts")
         .where('creator_uid', isEqualTo: uid)
@@ -38,8 +37,8 @@ class ProfileServiceFirestore {
         .then((querySnapshot) => querySnapshot.docs.first);
   }
 
-  void initProfile() async {
-    var firstPost = await _getFirstUserPost();
+  void initProfile(String? uid) async {
+    var firstPost = await _getFirstUserPost(uid);
     _lastDocument = firstPost;
 
     var query = firestoreService.instance
@@ -58,11 +57,11 @@ class ProfileServiceFirestore {
 
       postsController.add(allPosts);
     });
-    getMoreUserPosts();
+    getMoreUserPosts(uid);
   }
 
 
-  getMoreUserPosts() {
+  getMoreUserPosts(String? uid) {
     var query = firestoreService.instance
         .collection("posts")
         .where('creator_uid', isEqualTo: uid)
