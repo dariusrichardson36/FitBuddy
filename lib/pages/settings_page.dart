@@ -33,7 +33,71 @@ class SettingsPage extends StatelessWidget {
                     fontSize: 25
                   )
                 ),
-              )
+              ),
+              const SizedBox(height: 35),
+              
+              Row (
+                children: [
+                  const Icon(Icons.person, color: Colors.black, size: 30),
+                  const SizedBox(width: 15),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: const Text(
+                      'Account',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    )),
+                ]
+              ),
+              Divider(
+                thickness: 2,
+                color: FitBuddyColorConstants.lAccent
+              ),
+
+              Row (
+                children: [
+                  const Icon(Icons.notifications, color: Colors.black, size: 30),
+                  const SizedBox(width: 15),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: const Text(
+                      'Notifications',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    )),
+                ]
+              ),
+              Divider(
+                thickness: 2,
+                color: FitBuddyColorConstants.lAccent
+              ),
+
+              Row (
+                children: [
+                  const Icon(Icons.settings, color: Colors.black, size: 30),
+                  const SizedBox(width: 15),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: const Text(
+                      'General',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    )),
+                ]
+              ),
+              Divider(
+                thickness: 2,
+                color: FitBuddyColorConstants.lAccent
+              ),
             ],
           ),
         )
