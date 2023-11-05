@@ -94,6 +94,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage>
 
   Widget _createWorkoutView() {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
