@@ -1,19 +1,14 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:flutter/material.dart';
 
-import '../models/FitBuddyPostModel.dart';
 import '../models/FitBuddyActivityModel.dart';
+import '../models/FitBuddyPostModel.dart';
 
 class FitBuddyTimelinePost extends StatefulWidget {
   final Post postData;
 
-  const FitBuddyTimelinePost({
-    super.key,
-    required this.postData
-  });
+  const FitBuddyTimelinePost({super.key, required this.postData});
 
   @override
   _FitBuddyTimelinePostState createState() => _FitBuddyTimelinePostState();
@@ -37,7 +32,6 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
       return '${postDate.month}/${postDate.day}';
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +60,10 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                 // if no description, or description is empty don't show
                 ...(widget.postData.description != "")
                     ? [
-                  Text(widget.postData.description, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-                ]
+                        Text(widget.postData.description,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16)),
+                      ]
                     : [],
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,7 +73,9 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                       children: [
                         const SizedBox(height: 10),
                         // Activity name
-                        Text(activityData.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text(activityData.name,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                         const SizedBox(height: 5),
                         // Row containing three columns
                         SizedBox(
@@ -86,11 +84,14 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               // Column for reps
-                              buildDetailColumn("reps", activityData.setCollection),
+                              buildDetailColumn(
+                                  "reps", activityData.setCollection),
                               // Column for sets
-                              buildDetailColumn("sets", activityData.setCollection),
+                              buildDetailColumn(
+                                  "sets", activityData.setCollection),
                               // Column for weight
-                              buildDetailColumn("weight", activityData.setCollection),
+                              buildDetailColumn(
+                                  "weight", activityData.setCollection),
                             ],
                           ),
                         ),
@@ -137,11 +138,17 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
   Widget buildDetailColumn(String label, List<SetCollection> activityData) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: FitBuddyColorConstants.lOnSecondary)),
-        ...activityData.map<Widget>((detail) => Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Text(detail.getProperty(label).toString(), style: const TextStyle(fontSize: 14))
-        )).toList(),
+        Text(label,
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: FitBuddyColorConstants.lOnSecondary)),
+        ...activityData
+            .map<Widget>((detail) => Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(detail.getProperty(label).toString(),
+                    style: const TextStyle(fontSize: 14))))
+            .toList(),
       ],
     );
   }
@@ -158,7 +165,8 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: NetworkImage('https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'),
+                image: NetworkImage(
+                    'https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -169,8 +177,14 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.postData.creatorUserName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text(formatDateForDisplay(widget.postData.timestamp), style: TextStyle(fontWeight: FontWeight.w100, fontSize: 12, color: FitBuddyColorConstants.lOnSecondary)),
+              Text(widget.postData.user.name!,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18)),
+              Text(formatDateForDisplay(widget.postData.timestamp),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w100,
+                      fontSize: 12,
+                      color: FitBuddyColorConstants.lOnSecondary)),
             ],
           ),
         ],
@@ -178,4 +192,3 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
     );
   }
 }
-

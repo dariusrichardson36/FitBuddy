@@ -15,10 +15,9 @@ class ProfileServiceFirestore {
   bool once = false;
   final List _streams = [];
   final StreamController<List<Post>> postsController =
-  StreamController<List<Post>>.broadcast();
+      StreamController<List<Post>>.broadcast();
 
   final List<List<Post>> _allPagedResults = [[]];
-
 
   ProfileServiceFirestore({required this.firestoreService});
 
@@ -27,7 +26,8 @@ class ProfileServiceFirestore {
     postsController.close();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> _getFirstUserPost(String? uid) {
+  Future<DocumentSnapshot<Map<String, dynamic>>> _getFirstUserPost(
+      String? uid) {
     return firestoreService.instance
         .collection("posts")
         .where('creator_uid', isEqualTo: uid)
@@ -49,9 +49,11 @@ class ProfileServiceFirestore {
 
     query.snapshots().listen((postSnapshot) {
       var posts = postSnapshot.docs
-          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
+          .toList();
       _allPagedResults[0] = posts;
-      var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+      var allPosts =
+          _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
         return initialValue..addAll(pageItems);
       });
 
@@ -59,7 +61,6 @@ class ProfileServiceFirestore {
     });
     getMoreUserPosts(uid);
   }
-
 
   getMoreUserPosts(String? uid) {
     var query = firestoreService.instance
@@ -81,7 +82,8 @@ class ProfileServiceFirestore {
           _hasMorePosts = false;
         }
         var posts = postSnapshot.docs
-            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id)).toList();
+            .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
+            .toList();
 
         var pageExists = currentRequestIndex < _allPagedResults.length;
 
@@ -91,7 +93,8 @@ class ProfileServiceFirestore {
           _allPagedResults.add(posts);
         }
 
-        var allPosts = _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+        var allPosts =
+            _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
           return initialValue..addAll(pageItems);
         });
 
@@ -103,23 +106,27 @@ class ProfileServiceFirestore {
 
         _hasMorePosts = posts.length == 10;
       }
-
     });
     _streams.add(test);
   }
 
   Future<Post> getSinglePost(String postId) async {
-    final docSnapshot = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+    final docSnapshot =
+        await FirebaseFirestore.instance.collection('posts').doc(postId).get();
 
     if (docSnapshot.exists) {
-      return Post.fromMap(docSnapshot.data()!, postId);  // Assuming you have a named constructor `fromMap` in your `Post` class
+      return Post.fromMap(docSnapshot.data()!,
+          postId); // Assuming you have a named constructor `fromMap` in your `Post` class
     } else {
       throw Exception('Post not found');
     }
   }
 
   Future<User> getUserData() async {
-    final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(Auth().currentUser?.uid).get();
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .get();
 
     if (docSnapshot.exists) {
       return User.fromDataSnapshot(docSnapshot.data()!);

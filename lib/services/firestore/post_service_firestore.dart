@@ -66,7 +66,6 @@ class PostServiceFirestore {
       'activities': activity.map((e) => e.toMap()).toList(),
       'timestamp': FieldValue.serverTimestamp(),
       'creator_uid': Auth().currentUser?.uid,
-      'creator_userName': Auth().currentUser?.displayName,
       'description': description,
       'visibility': visibility,
     });
