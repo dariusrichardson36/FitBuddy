@@ -9,31 +9,18 @@ import 'firestore_service.dart';
 
 class TimelineServiceFirestore {
   final FirestoreService firestoreService;
+  final bool profileTimeline;
 
   DocumentSnapshot? _lastDocument;
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
   List<List<Post>> _allPagedResults = [];
-  late Query<Map<String, dynamic>> query;
-  late List friendList = [""];
 
-  TimelineServiceFirestore.publicTimeline({required this.firestoreService}) {
-    query = firestoreService.instance
-        .collection("posts")
-        .where("creator_uid", whereIn: friendList)
-        .where("visibility", isEqualTo: "Public")
-        .orderBy('timestamp', descending: true)
-        .limit(10);
-  }
-
-  TimelineServiceFirestore.privateTimeline({required this.firestoreService}) {
-    query = firestoreService.instance
-        .collection("posts")
-        .where("creator_uid", isEqualTo: Auth().currentUser?.uid)
-        .orderBy('timestamp', descending: true)
-        .limit(10);
-  }
+  TimelineServiceFirestore({
+    required this.firestoreService,
+    required this.profileTimeline,
+  });
 
   Future<List> getFriendList() async {
     var data = await firestoreService.instance
@@ -50,8 +37,6 @@ class TimelineServiceFirestore {
   }
 
   void initTimeLine() async {
-    friendList = await getFriendList();
-    print("test: $friendList");
     getMoreTimeLinePosts();
   }
 
@@ -63,8 +48,26 @@ class TimelineServiceFirestore {
   }
 
   Future getMoreTimeLinePosts() async {
-    print(query.parameters);
+    List friendList = await getFriendList();
 
+    // ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1","VMmofqrvRVck3whXU1RugWT2lAt2"];
+    Query<Map<String, dynamic>> query;
+    if (profileTimeline) {
+      query = firestoreService.instance
+          .collection("posts")
+          .where("creator_uid", isEqualTo: Auth().currentUser?.uid)
+          .orderBy('timestamp', descending: true)
+          .limit(10);
+    } else {
+      query = firestoreService.instance
+          .collection("posts")
+          .where("creator_uid", whereIn: friendList)
+          .where("visibility", isEqualTo: "Public")
+          .orderBy('timestamp', descending: true)
+          .limit(10);
+    }
+    print(query.parameters);
+    print("last document: $_lastDocument");
     if (_lastDocument != null) {
       query = query.startAfterDocument(_lastDocument!);
     }

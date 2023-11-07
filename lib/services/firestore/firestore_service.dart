@@ -28,8 +28,9 @@ class FirestoreService {
   FirestoreService._internal() {
     userService = UserServiceFirestore(firestoreService: this);
     // userService.init();
-    timelineService =
-        TimelineServiceFirestore.publicTimeline(firestoreService: this);
+    timelineService = TimelineServiceFirestore(
+        firestoreService: this, profileTimeline: false);
+    //timelineService.getFriendList();
     postService = PostServiceFirestore(firestoreService: this);
     profileService = ProfileServiceFirestore(firestoreService: this);
   }
