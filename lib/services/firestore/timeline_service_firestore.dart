@@ -16,13 +16,14 @@ class TimelineServiceFirestore {
 
   List<List<Post>> _allPagedResults = [];
   late Query<Map<String, dynamic>> query;
-  late List<String> friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
+  late List<String> friendList =
+      FirestoreService.firestoreService().userService.user.friendList;
 
   TimelineServiceFirestore.publicTimeline({required this.firestoreService}) {
     query = firestoreService.instance
         .collection("posts")
         .where("creator_uid", whereIn: friendList)
-        .where("visibility", isEqualTo: "public")
+        .where("visibility", isEqualTo: "Public")
         .orderBy('timestamp', descending: true)
         .limit(10);
   }
@@ -52,6 +53,8 @@ class TimelineServiceFirestore {
   }
 
   Future getMoreTimeLinePosts() async {
+    print(query.parameters);
+
     if (_lastDocument != null) {
       query = query.startAfterDocument(_lastDocument!);
     }

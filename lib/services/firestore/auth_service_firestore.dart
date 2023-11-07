@@ -82,6 +82,7 @@ class UserServiceFirestore {
         'username': username,
         'displayName': displayName,
         'gender': gender,
+        'friendList': [],
       });
     } catch (e) {
       // todo

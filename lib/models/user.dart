@@ -7,7 +7,7 @@ class User {
   String? gender;
   bool? accountCompletion;
   String image;
-
+  List<String> friendList = [];
   //Fitness Info
   String? liftingStyle;
   String? gymGoals;
@@ -24,6 +24,7 @@ class User {
     required this.username,
     this.email,
     required this.image,
+    required this.friendList,
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {
@@ -36,7 +37,7 @@ class User {
       image: map['image_url'],
       gender: map['gender'],
       accountCompletion: map['isAccountComplete'],
-
+      friendList: map['friendList'] ?? [],
       //fitness info
       liftingStyle: map['liftingStyle'],
       gymGoals: map['goals'],
