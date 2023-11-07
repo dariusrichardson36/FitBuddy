@@ -16,8 +16,7 @@ class TimelineServiceFirestore {
 
   List<List<Post>> _allPagedResults = [];
   late Query<Map<String, dynamic>> query;
-  late List<String> friendList =
-      FirestoreService.firestoreService().userService.user.friendList;
+  late List friendList = [""];
 
   TimelineServiceFirestore.publicTimeline({required this.firestoreService}) {
     query = firestoreService.instance
@@ -36,12 +35,23 @@ class TimelineServiceFirestore {
         .limit(10);
   }
 
+  Future<List> getFriendList() async {
+    var data = await firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .get();
+    print("friend list:");
+    return User.fromDataSnapshot(data.data()!).friendList;
+  }
+
   onDispose() {
     _allPagedResults = []; // clear list of posts
     _lastDocument = null;
   }
 
   void initTimeLine() async {
+    friendList = await getFriendList();
+    print("test: $friendList");
     getMoreTimeLinePosts();
   }
 

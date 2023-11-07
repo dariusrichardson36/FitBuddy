@@ -12,7 +12,6 @@ class UserServiceFirestore {
 
   Future<void> init() async {
     user = await getUserData();
-    print(user.name);
   }
 
   Future<User> getUserData() async {
@@ -82,7 +81,7 @@ class UserServiceFirestore {
         'username': username,
         'displayName': displayName,
         'gender': gender,
-        'friendList': [],
+        'friendList': [uid],
       });
     } catch (e) {
       // todo

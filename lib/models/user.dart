@@ -37,7 +37,7 @@ class User {
       image: map['image_url'],
       gender: map['gender'],
       accountCompletion: map['isAccountComplete'],
-      friendList: map['friendList'] ?? [],
+      friendList: List<String>.from(map["friendList"]),
       //fitness info
       liftingStyle: map['liftingStyle'],
       gymGoals: map['goals'],
