@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:fit_buddy/components/FitBuddyTimeLinePost.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 import 'package:fit_buddy/services/auth.dart';
@@ -6,9 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/firestore/firestore_service.dart';
 
-
 class ProfileFeedView extends StatefulWidget {
-
   const ProfileFeedView({super.key});
 
   @override
@@ -17,7 +16,7 @@ class ProfileFeedView extends StatefulWidget {
 
 class _ProfileFeedState extends State<ProfileFeedView> {
   late Stream<List<Post>> _ProfilePostsStream;
-   final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   final _firestore = FirestoreService.firestoreService();
   String? uid = Auth().currentUser?.uid;
@@ -28,7 +27,8 @@ class _ProfileFeedState extends State<ProfileFeedView> {
     super.initState();
     loadProfileFeed();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         loadMorePosts();
       }
     });
@@ -61,23 +61,27 @@ class _ProfileFeedState extends State<ProfileFeedView> {
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            if (snapshot.connectionState == ConnectionState.waiting) ... {
+            if (snapshot.connectionState == ConnectionState.active) ...{
               const Center(child: CircularProgressIndicator()),
-            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) ... {
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) ...{
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
                   itemCount: snapshot.data!.length + (_isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == snapshot.data!.length && _isLoading) {
-                      return const Padding(padding: EdgeInsets.symmetric(vertical: 20) ,child: Center(child: CircularProgressIndicator())); // Loading indicator at the end
+                      return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator())); // Loading indicator at the end
                     }
                     final posts = snapshot.data!;
                     return FitBuddyTimelinePost(postData: posts[index]);
                   },
                 ),
               ),
-            } else ... {
+            } else ...{
               const Center(child: Text('No posts available.')),
             },
           ],

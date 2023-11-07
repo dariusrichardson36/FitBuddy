@@ -9,7 +9,7 @@ class Post {
   final Timestamp timestamp;
   final String postId;
   final String creatorUid;
-  late User user = User();
+  late User user;
 
   Post({
     required this.workout,
@@ -27,7 +27,7 @@ class Post {
       workout: activitiesList,
       creatorUid: map['creator_uid'],
       description: map['description'] ?? '',
-      timestamp: map['timestamp'],
+      timestamp: map['timestamp'] ?? Timestamp.now(),
       postId: id,
     );
   }

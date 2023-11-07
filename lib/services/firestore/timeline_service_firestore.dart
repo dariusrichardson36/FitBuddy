@@ -8,66 +8,31 @@ import 'firestore_service.dart';
 
 class TimelineServiceFirestore {
   final FirestoreService firestoreService;
-
   DocumentSnapshot? _lastDocument;
-  bool _hasMorePosts = true;
-  bool once = false;
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
-  final List<List<Post>> _allPagedResults = [[]];
+  List<List<Post>> _allPagedResults = [];
 
   TimelineServiceFirestore({required this.firestoreService});
 
-  @override
   onDispose() {
-    postsController.close();
-  }
-
-  Future<DocumentSnapshot<Map<String, dynamic>>> _getFirstPost() {
-    return firestoreService.instance
-        .collection("posts")
-        .orderBy('timestamp', descending: true)
-        .limit(1)
-        .get()
-        .then((querySnapshot) => querySnapshot.docs.first);
+    _allPagedResults = []; // clear list of posts
+    _lastDocument = null;
   }
 
   void initTimeLine() async {
-    var firstPost = await _getFirstPost();
-    _lastDocument = firstPost;
-
-    var query = firestoreService.instance
-        .collection("posts")
-        .orderBy('timestamp', descending: true)
-        .endAt([firstPost['timestamp']]);
-
-    query.snapshots().listen((postSnapshot) async {
-      var posts = postSnapshot.docs
-          .map((snapshot) => Post.fromMap(snapshot.data(), snapshot.id))
-          .toList();
-      _allPagedResults[0] = posts;
-
-      List<Future<void>> fetchUserFutures = posts.map((post) async {
-        var user = await fetchUserData(post.creatorUid);
-        if (user != null) {
-          post.user = user;
-        }
-      }).toList();
-      await Future.wait(fetchUserFutures);
-      // combine multiple lists into one with fold
-      var allPosts =
-          _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
-        return initialValue..addAll(pageItems);
-      });
-
-      postsController.add(allPosts);
-    });
     getMoreTimeLinePosts();
   }
 
-  Future<void> getMoreTimeLinePosts() async {
-    print("getMoreTimeLinePosts");
+  Future<void> refreshTimeline() async {
+    _allPagedResults = [];
+    _lastDocument = null;
+    await getMoreTimeLinePosts();
+    return;
+  }
+
+  Future getMoreTimeLinePosts() async {
     var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
     var query = firestoreService.instance
         .collection("posts")
@@ -76,6 +41,7 @@ class TimelineServiceFirestore {
         .limit(10);
 
     if (_lastDocument != null) {
+      print("LAst document is not null");
       query = query.startAfterDocument(_lastDocument!);
     }
 
@@ -88,7 +54,6 @@ class TimelineServiceFirestore {
     List<Future<void>> fetchUserFutures = posts.map((post) async {
       var user = await fetchUserData(post.creatorUid);
       if (user != null) {
-        print("user != null");
         post.user = user;
       }
     }).toList();
@@ -97,11 +62,16 @@ class TimelineServiceFirestore {
     await Future.wait(fetchUserFutures);
 
     if (posts.isNotEmpty) {
-      print("posts.isNotEmpty");
       _allPagedResults.add(posts);
       _lastDocument = postSnapshot.docs.last;
-      _hasMorePosts = posts.length == 10;
     }
+
+    // combine multiple lists into one with fold
+    var allPosts =
+        _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
+      return initialValue..addAll(pageItems);
+    });
+    postsController.add(allPosts);
   }
 
   Future<User?> fetchUserData(String creatorID) async {

@@ -32,6 +32,14 @@ class _TimeLineViewState extends State<TimeLineView> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    print("dispose");
+    _firestore.timelineService.onDispose();
+    _scrollController.dispose();
+  }
+
   Future<void> loadMorePosts() async {
     if (!_isLoading) {
       setState(() {
@@ -56,7 +64,6 @@ class _TimeLineViewState extends State<TimeLineView> {
     return StreamBuilder<List<Post>>(
       stream: _timelinePostsStream,
       builder: (context, snapshot) {
-        print("snapshot");
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -86,20 +93,23 @@ class _TimeLineViewState extends State<TimeLineView> {
               const Center(child: CircularProgressIndicator()),
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) ...{
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: snapshot.data!.length + (_isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == snapshot.data!.length && _isLoading) {
-                      return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Center(
-                              child:
-                                  CircularProgressIndicator())); // Loading indicator at the end
-                    }
-                    final posts = snapshot.data!;
-                    return FitBuddyTimelinePost(postData: posts[index]);
-                  },
+                child: RefreshIndicator(
+                  onRefresh: _firestore.timelineService.refreshTimeline,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: snapshot.data!.length + (_isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == snapshot.data!.length && _isLoading) {
+                        return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                                child:
+                                    CircularProgressIndicator())); // Loading indicator at the end
+                      }
+                      final posts = snapshot.data!;
+                      return FitBuddyTimelinePost(postData: posts[index]);
+                    },
+                  ),
                 ),
               ),
             } else ...{

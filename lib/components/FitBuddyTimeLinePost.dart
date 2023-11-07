@@ -162,11 +162,10 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
           Container(
             width: 40.0,
             height: 40.0,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: NetworkImage(
-                    'https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'),
+                image: NetworkImage(widget.postData.user.image ?? ""),
                 fit: BoxFit.cover,
               ),
             ),
@@ -177,7 +176,7 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.postData.user.name!,
+              Text(widget.postData.user.name! ?? "",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 18)),
               Text(formatDateForDisplay(widget.postData.timestamp),

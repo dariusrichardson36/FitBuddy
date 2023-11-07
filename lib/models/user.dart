@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class User {
   //Personal Info
-  String? name;
-  String? age;
-  String? username;
+  String name;
+  String age;
+  String username;
   String? email;
   String? gender;
   bool? accountCompletion;
-  String? image;
+  String image;
 
   //Fitness Info
   String? liftingStyle;
@@ -16,16 +14,16 @@ class User {
   String? gymExperience;
 
   User({
-    this.name,
-    this.age,
-    this.gymExperience,
+    required this.name,
+    required this.age,
+    required this.gymExperience,
     this.gender,
     this.gymGoals,
-    this.accountCompletion,
+    required this.accountCompletion,
     this.liftingStyle,
-    this.username,
+    required this.username,
     this.email,
-    this.image,
+    required this.image,
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {
