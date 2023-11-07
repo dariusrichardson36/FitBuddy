@@ -1,21 +1,32 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../models/user.dart';
 import '../auth.dart';
 import 'firestore_service.dart';
 
 class UserServiceFirestore {
   final FirestoreService firestoreService;
+  late User user;
 
   UserServiceFirestore({required this.firestoreService});
 
-  getUserData() async {
-    return await firestoreService.instance.collection('users').doc(Auth().currentUser?.uid).get();
+  Future<void> init() async {
+    user = await getUserData();
+    print(user.name);
+  }
+
+  Future<User> getUserData() async {
+    var data = await firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .get();
+    return User.fromDataSnapshot(data.data()!);
   }
 
   Future<bool> doesUserDocumentExist(String userId) async {
     // Reference to the "users" collection and the specific document
-    DocumentReference userDocRef = firestoreService.instance.collection("users").doc(userId);
+    DocumentReference userDocRef =
+        firestoreService.instance.collection("users").doc(userId);
 
     // Try to retrieve the document snapshot
     DocumentSnapshot docSnapshot = await userDocRef.get();
@@ -34,13 +45,14 @@ class UserServiceFirestore {
           .collection('users')
           .orderBy('username')
           .startAt([lowerCaseName])
-      //.endAt(['$lowerCaseName\uf8ff'])
-      //.where('username', isEqualTo: lowerCaseName)
+          //.endAt(['$lowerCaseName\uf8ff'])
+          //.where('username', isEqualTo: lowerCaseName)
           .get();
 
       // Extracting usernames from the query snapshot
       List<String> usernames = snapshot.docs.map((doc) {
-        return (doc['username'] as String?) ?? ''; // Adjust if the username is nested or has a different field name
+        return (doc['username'] as String?) ??
+            ''; // Adjust if the username is nested or has a different field name
       }).toList();
 
       return usernames;
@@ -50,7 +62,16 @@ class UserServiceFirestore {
     }
   }
 
-  Future createUser(String uid, String? experience, String? goals, String? liftingStyle, String username, String displayName, bool isAccountComplete, DateTime? dob, String? gender) async {
+  Future createUser(
+      String uid,
+      String? experience,
+      String? goals,
+      String? liftingStyle,
+      String username,
+      String displayName,
+      bool isAccountComplete,
+      DateTime? dob,
+      String? gender) async {
     try {
       await firestoreService.instance.collection('users').doc(uid).set({
         'experience': experience,

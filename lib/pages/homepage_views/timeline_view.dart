@@ -35,7 +35,6 @@ class _TimeLineViewState extends State<TimeLineView> {
   @override
   void dispose() {
     super.dispose();
-    print("dispose");
     _firestore.timelineService.onDispose();
     _scrollController.dispose();
   }

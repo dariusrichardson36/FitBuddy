@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/services/auth.dart';
 
 import '../../models/FitBuddyPostModel.dart';
 import '../../models/user.dart';
@@ -8,13 +9,31 @@ import 'firestore_service.dart';
 
 class TimelineServiceFirestore {
   final FirestoreService firestoreService;
+
   DocumentSnapshot? _lastDocument;
   final StreamController<List<Post>> postsController =
       StreamController<List<Post>>.broadcast();
 
   List<List<Post>> _allPagedResults = [];
+  late Query<Map<String, dynamic>> query;
+  late List<String> friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
 
-  TimelineServiceFirestore({required this.firestoreService});
+  TimelineServiceFirestore.publicTimeline({required this.firestoreService}) {
+    query = firestoreService.instance
+        .collection("posts")
+        .where("creator_uid", whereIn: friendList)
+        .where("visibility", isEqualTo: "public")
+        .orderBy('timestamp', descending: true)
+        .limit(10);
+  }
+
+  TimelineServiceFirestore.privateTimeline({required this.firestoreService}) {
+    query = firestoreService.instance
+        .collection("posts")
+        .where("creator_uid", isEqualTo: Auth().currentUser?.uid)
+        .orderBy('timestamp', descending: true)
+        .limit(10);
+  }
 
   onDispose() {
     _allPagedResults = []; // clear list of posts
@@ -33,15 +52,7 @@ class TimelineServiceFirestore {
   }
 
   Future getMoreTimeLinePosts() async {
-    var friendList = ["iRBSpsuph3QO0ZvRrlp5m1jfX9q1"];
-    var query = firestoreService.instance
-        .collection("posts")
-        .where("creator_uid", whereIn: friendList)
-        .orderBy('timestamp', descending: true)
-        .limit(10);
-
     if (_lastDocument != null) {
-      print("LAst document is not null");
       query = query.startAfterDocument(_lastDocument!);
     }
 

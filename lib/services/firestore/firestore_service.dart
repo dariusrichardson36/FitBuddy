@@ -6,7 +6,8 @@ import 'package:fit_buddy/services/firestore/timeline_service_firestore.dart';
 import 'auth_service_firestore.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firebaseFirestoreInstance = FirebaseFirestore.instance;
+  final FirebaseFirestore _firebaseFirestoreInstance =
+      FirebaseFirestore.instance;
 
   FirebaseFirestore get instance => _firebaseFirestoreInstance;
 
@@ -26,7 +27,9 @@ class FirestoreService {
   // 3. Internal named constructor
   FirestoreService._internal() {
     userService = UserServiceFirestore(firestoreService: this);
-    timelineService = TimelineServiceFirestore(firestoreService: this);
+    userService.init();
+    timelineService =
+        TimelineServiceFirestore.publicTimeline(firestoreService: this);
     postService = PostServiceFirestore(firestoreService: this);
     profileService = ProfileServiceFirestore(firestoreService: this);
   }
