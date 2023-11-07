@@ -39,7 +39,7 @@ class _ProfileFeedState extends State<ProfileFeedView> {
       setState(() {
         _isLoading = true;
       });
-      _firestore.profileService.getMoreUserPosts(uid);
+      _firestore.profileTimelineService.getMoreTimeLinePosts();
       setState(() {
         _isLoading = false;
       });
@@ -48,8 +48,9 @@ class _ProfileFeedState extends State<ProfileFeedView> {
 
   void loadProfileFeed() {
     setState(() {
-      _firestore.profileService.initProfile(uid);
-      _ProfilePostsStream = _firestore.profileService.postsController.stream;
+      _firestore.profileTimelineService.initTimeLine();
+      _ProfilePostsStream =
+          _firestore.profileTimelineService.postsController.stream;
     });
   }
 

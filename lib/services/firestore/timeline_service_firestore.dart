@@ -66,8 +66,7 @@ class TimelineServiceFirestore {
           .orderBy('timestamp', descending: true)
           .limit(10);
     }
-    print(query.parameters);
-    print("last document: $_lastDocument");
+
     if (_lastDocument != null) {
       query = query.startAfterDocument(_lastDocument!);
     }
@@ -113,6 +112,19 @@ class TimelineServiceFirestore {
     }
 
     return null;
+  }
+
+  Future<User> getUserData() async {
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .get();
+
+    if (docSnapshot.exists) {
+      return User.fromDataSnapshot(docSnapshot.data()!);
+    } else {
+      throw Exception('User not found');
+    }
   }
 
   Future<Post> getSinglePost(String postId) async {

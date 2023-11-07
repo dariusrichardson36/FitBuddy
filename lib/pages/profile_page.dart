@@ -3,10 +3,8 @@ import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/pages/profile_feed_view.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
-import 'package:fit_buddy/services/firestore/profile_service_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -26,7 +24,8 @@ class ProfilePage extends StatelessWidget {
     if (userData.image != null) {
       image = userData.image;
     } else {
-      image = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
+      image =
+          "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
     }
 
     return SafeArea(
@@ -141,21 +140,19 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
               const Expanded(
-                child: SizedBox(
-                  height: 250,
-                  child: ProfileFeedView()
-                )
-              )
+                  child: SizedBox(height: 250, child: ProfileFeedView()))
             ],
           ),
         ),
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    Future<User> test = FirestoreService.firestoreService().profileService.getUserData();
+    Future<User> test = FirestoreService.firestoreService()
+        .profileTimelineService
+        .getUserData();
 
     return FutureBuilder(
         future: test,

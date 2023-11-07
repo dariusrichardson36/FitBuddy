@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/services/firestore/post_service_firestore.dart';
-import 'package:fit_buddy/services/firestore/profile_service_firestore.dart';
 import 'package:fit_buddy/services/firestore/timeline_service_firestore.dart';
 
 import 'auth_service_firestore.dart';
@@ -14,7 +13,7 @@ class FirestoreService {
   late final UserServiceFirestore userService;
   late final TimelineServiceFirestore timelineService;
   late final PostServiceFirestore postService;
-  late final ProfileServiceFirestore profileService;
+  late final TimelineServiceFirestore profileTimelineService;
 
   // 1. Static instance of the class
   static final FirestoreService _instance = FirestoreService._internal();
@@ -32,6 +31,7 @@ class FirestoreService {
         firestoreService: this, profileTimeline: false);
     //timelineService.getFriendList();
     postService = PostServiceFirestore(firestoreService: this);
-    profileService = ProfileServiceFirestore(firestoreService: this);
+    profileTimelineService =
+        TimelineServiceFirestore(firestoreService: this, profileTimeline: true);
   }
 }
