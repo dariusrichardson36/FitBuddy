@@ -1,169 +1,153 @@
 import 'package:fit_buddy/constants/color_constants.dart';
-import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/pages/profile_feed_view.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfilePage extends StatelessWidget {
+import '../constants/route_constants.dart';
+
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
-  Widget ui(BuildContext context, User userData) {
-    String? name;
-    String? image;
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
 
-    // sets name variable and gives default value if NULL.
-    if (userData.name != null) {
-      name = userData.name;
-    } else {
-      name = "Name Unknown";
-    }
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void dispose() {
+    super.dispose();
+    FirestoreService.firestoreService().profileTimelineService.onDispose();
+  }
 
-    // sets image variable and gives default value if NULL.
-    if (userData.image != null) {
-      image = userData.image;
-    } else {
-      image =
-          "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
-    }
+  @override
+  Widget build(BuildContext context) {
+    User user = FirestoreService.firestoreService().userService.user;
 
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // User profile picture in top left
-                  Container(
-                    width: 75.0,
-                    height: 75.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image:
-                            NetworkImage(image!), // Replace with your image URL
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(height: 10),
-                      // Users display name.
+                      IconButton(
+                        icon:
+                            const Icon(Icons.arrow_back_ios_rounded, size: 30),
+                        onPressed: () {
+                          context.goNamed(FitBuddyRouterConstants.homePage);
+                        },
+                      ),
                       Text(
-                        name,
+                        user.name,
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnPrimary,
                             fontSize: 25,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10),
-                      // Row of badges on display + button to change order.
-                      Row(
-                        children: [
-                          const Icon(Icons.military_tech, color: Colors.amber),
-                          Icon(Icons.military_tech,
-                              color: Colors.blueGrey[100]),
-                          Icon(Icons.military_tech, color: Colors.orange[900]),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.add,
-                                  color: FitBuddyColorConstants.lOnPrimary)),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.restart_alt,
-                                  color: FitBuddyColorConstants.lOnPrimary)),
-                        ],
-                      ),
+                      const SizedBox(width: 30),
                     ],
                   ),
-                  // Button that brings you back to the home page.
-                  Column(
+                  Row(
                     children: [
-                      IconButton(
-                          onPressed: () =>
-                              context.goNamed(FitBuddyRouterConstants.homePage),
-                          icon: Icon(Icons.arrow_forward,
-                              color: FitBuddyColorConstants.lOnPrimary)),
-                      SizedBox(height: 45)
+                      // User profile picture in top left
+                      Container(
+                        width: 75.0,
+                        height: 75.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                user.image), // Replace with your image URL
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Row of badges on display + button to change order.
+                          Row(
+                            children: [
+                              const Icon(Icons.military_tech,
+                                  color: Colors.amber),
+                              Icon(Icons.military_tech,
+                                  color: Colors.blueGrey[100]),
+                              Icon(Icons.military_tech,
+                                  color: Colors.orange[900]),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.add,
+                                      color:
+                                          FitBuddyColorConstants.lOnPrimary)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.restart_alt,
+                                      color:
+                                          FitBuddyColorConstants.lOnPrimary)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      // Button that brings you back to the home page.
                     ],
-                  )
+                  ),
+                  const SizedBox(height: 25),
+                  Row(
+                    children: [
+                      // Button to see all the User's Posts.
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                          ),
+                          child: Text(
+                            'Posts',
+                            style: TextStyle(
+                                color: FitBuddyColorConstants.lOnPrimary,
+                                fontSize: 32),
+                          )),
+                      // Button to only see highlighted posts.
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                          ),
+                          child: Text(
+                            'Highlights',
+                            style: TextStyle(
+                                color: FitBuddyColorConstants.lOnPrimary,
+                                fontSize: 32),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(width: 270),
+                      // Button to search user's posts
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.search,
+                              color: FitBuddyColorConstants.lOnPrimary)),
+                    ],
+                  ),
                 ],
               ),
-              SizedBox(height: 25),
-              Row(
-                children: [
-                  // Button to see all the User's Posts.
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                      ),
-                      child: Text(
-                        'Posts',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 32),
-                      )),
-                  // Button to only see highlighted posts.
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                      ),
-                      child: Text(
-                        'Highlights',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 32),
-                      )),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(width: 270),
-                  // Button to search user's posts
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.search,
-                          color: FitBuddyColorConstants.lOnPrimary)),
-                ],
-              ),
-              const Expanded(
-                  child: SizedBox(height: 250, child: ProfileFeedView()))
-            ],
-          ),
+            ),
+            const Expanded(child: ProfileFeedView())
+          ],
         ),
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Future<User> test = FirestoreService.firestoreService()
-        .profileTimelineService
-        .getUserData();
-
-    return FutureBuilder(
-        future: test,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            User? user = snapshot.data;
-            if (user != null) {
-              return ui(context, user);
-            }
-            return Text('User not Found');
-          } else {
-            return CircularProgressIndicator();
-          }
-        });
   }
 }

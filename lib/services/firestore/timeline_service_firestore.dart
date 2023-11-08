@@ -36,6 +36,7 @@ class TimelineServiceFirestore {
   }
 
   void initTimeLine() async {
+    print("initTimeLine");
     getMoreTimeLinePosts();
   }
 
@@ -96,6 +97,7 @@ class TimelineServiceFirestore {
         _allPagedResults.fold<List<Post>>([], (initialValue, pageItems) {
       return initialValue..addAll(pageItems);
     });
+    print(allPosts.length);
     postsController.add(allPosts);
   }
 

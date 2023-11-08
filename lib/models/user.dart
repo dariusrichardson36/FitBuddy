@@ -34,7 +34,8 @@ class User {
       age: map['dob'],
       username: map['username'],
       email: map['email'],
-      image: map['image_url'],
+      image: map['image_url'] ??
+          "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
       gender: map['gender'],
       accountCompletion: map['isAccountComplete'],
       friendList: List<String>.from(map["friendList"]),

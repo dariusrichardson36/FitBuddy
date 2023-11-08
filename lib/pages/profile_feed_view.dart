@@ -62,24 +62,27 @@ class _ProfileFeedState extends State<ProfileFeedView> {
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            if (snapshot.connectionState == ConnectionState.active) ...{
+            if (snapshot.connectionState == ConnectionState.waiting) ...{
               const Center(child: CircularProgressIndicator()),
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) ...{
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: snapshot.data!.length + (_isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == snapshot.data!.length && _isLoading) {
-                      return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Center(
-                              child:
-                                  CircularProgressIndicator())); // Loading indicator at the end
-                    }
-                    final posts = snapshot.data!;
-                    return FitBuddyTimelinePost(postData: posts[index]);
-                  },
+                child: RefreshIndicator(
+                  onRefresh: _firestore.profileTimelineService.refreshTimeline,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: snapshot.data!.length + (_isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == snapshot.data!.length && _isLoading) {
+                        return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                                child:
+                                    CircularProgressIndicator())); // Loading indicator at the end
+                      }
+                      final posts = snapshot.data!;
+                      return FitBuddyTimelinePost(postData: posts[index]);
+                    },
+                  ),
                 ),
               ),
             } else ...{

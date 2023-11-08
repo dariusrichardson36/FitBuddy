@@ -49,23 +49,19 @@ class FitBuddyRouter {
               return const MaterialPage(child: CompleteAccountInformation());
             }),
         GoRoute(
-          path: '/profile',
-          name: FitBuddyRouterConstants.profilePage,
-          pageBuilder: (context, state) {
-            return MaterialPage(
-                child: ProfilePage()
-            );
-          }
-        ),
+            path: '/profile',
+            name: FitBuddyRouterConstants.profilePage,
+            pageBuilder: (context, state) {
+              return MaterialPage(child: ProfilePage());
+            }),
         GoRoute(
-          path: '/search',
-          name: FitBuddyRouterConstants.searchPage,
-          pageBuilder: (context, state) {
-            return MaterialPage(
-              child: SearchPage(),
-            );
-          }
-        ),
+            path: '/search',
+            name: FitBuddyRouterConstants.searchPage,
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                child: SearchPage(),
+              );
+            }),
         GoRoute(
             path: '/post/:postId',
             name: FitBuddyRouterConstants.singlePostPage,
@@ -83,7 +79,6 @@ class FitBuddyRouter {
               );
             }),
       ],
-
       refreshListenable: GoRouterRefreshStream(Auth().authStateChanges),
       redirect: (context, GoRouterState state) async {
         User? user = Auth().currentUser;
@@ -102,10 +97,12 @@ class FitBuddyRouter {
           }
         }
 
-        if(state.matchedLocation != '/' && state.matchedLocation != '/authentication' && state.matchedLocation != '/completeAccountInfo') {
+        if (state.matchedLocation != '/' &&
+            state.matchedLocation != '/authentication' &&
+            state.matchedLocation != '/completeAccountInfo') {
           return null;
         }
+        //return state.namedLocation(FitBuddyRouterConstants.profilePage);
         return '/';
-      }
-  );
+      });
 }
