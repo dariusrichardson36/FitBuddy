@@ -50,16 +50,14 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  SizedBox(width: 10),
-
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 10),
                       // Users display name.
                       Text(
-                        name!,
+                        name,
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnPrimary,
                             fontSize: 25,
@@ -69,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                       // Row of badges on display + button to change order.
                       Row(
                         children: [
-                          Icon(Icons.military_tech, color: Colors.amber),
+                          const Icon(Icons.military_tech, color: Colors.amber),
                           Icon(Icons.military_tech,
                               color: Colors.blueGrey[100]),
                           Icon(Icons.military_tech, color: Colors.orange[900]),

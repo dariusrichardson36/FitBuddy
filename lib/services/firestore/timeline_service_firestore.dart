@@ -27,7 +27,6 @@ class TimelineServiceFirestore {
         .collection('users')
         .doc(Auth().currentUser?.uid)
         .get();
-    print("friend list:");
     return User.fromDataSnapshot(data.data()!).friendList;
   }
 
@@ -110,7 +109,6 @@ class TimelineServiceFirestore {
       var userData = userDoc.data() as Map<String, dynamic>;
       return User.fromDataSnapshot(userData);
     }
-
     return null;
   }
 
