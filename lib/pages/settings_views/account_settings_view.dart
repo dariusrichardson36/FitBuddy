@@ -61,7 +61,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             children: [
               IconButton(
                   onPressed: () =>
-                      context.goNamed(FitBuddyRouterConstants.homePage),
+                      context.goNamed(FitBuddyRouterConstants.settingsPage),
                   icon: Icon(Icons.arrow_back,
                       color: FitBuddyColorConstants.lOnPrimary)),
             ],
