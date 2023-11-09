@@ -45,4 +45,20 @@ class User {
       gymExperience: map['experience'],
     );
   }
+
+  // toJson() {
+  //   return {
+  //     "displayName": name,
+  //     "dob": age,
+  //     "username": username,
+  //     "email": email,
+  //     "image_url": image,
+  //     "gender": gender,
+  //     "isAccountComplete": accountCompletion,
+  //     "friendList": friendList,
+  //     "liftingStyle": liftingStyle,
+  //     "goals": gymGoals,
+  //     "experience": gymExperience
+  //   };
+  // }
 }

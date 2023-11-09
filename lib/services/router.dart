@@ -4,7 +4,8 @@ import 'package:fit_buddy/pages/auth_page.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/create_workout_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
-import 'package:fit_buddy/pages/settings_page.dart';
+import 'package:fit_buddy/pages/settings_views/account_settings_view.dart';
+import 'package:fit_buddy/pages/settings_views/settings_page.dart';
 import 'package:fit_buddy/pages/profile_page.dart';
 import 'package:fit_buddy/pages/single_post_page.dart';
 import 'package:fit_buddy/services/auth.dart';
@@ -85,6 +86,14 @@ class FitBuddyRouter {
           pageBuilder: (context, state) {
             return const MaterialPage(
               child: SettingsPage(),
+            );
+          }),
+          GoRoute(
+          path: '/accountsettings',
+          name: FitBuddyRouterConstants.accountsettingsPage,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: AccountSettings(),
             );
           }),
       ],

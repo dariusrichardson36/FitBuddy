@@ -127,6 +127,13 @@ class TimelineServiceFirestore {
     }
   }
 
+  // Future<void> updateUserRecord(User user) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(Auth().currentUser?.uid)
+  //       .update(user.toJson());
+  // }
+
   Future<Post> getSinglePost(String postId) async {
     final docSnapshot =
         await FirebaseFirestore.instance.collection('posts').doc(postId).get();
