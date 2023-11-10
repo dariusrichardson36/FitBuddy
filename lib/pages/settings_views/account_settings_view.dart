@@ -33,14 +33,21 @@ class _AccountSettingsState extends State<AccountSettings> {
   Widget build(BuildContext context) {
     User user = FirestoreService.firestoreService().userService.user;
     String? experience;
-    //String? email;
-    //String? gender;
+    String? email;
+    String? gender;
     String? liftingStyle;
     String? goals;
+
     if (user.gymExperience != null) experience = user.gymExperience;
-    //if (user.email != null) email = user.email;
-    //if (user.gender != null) gender = user.gender;
+
+    if (user.email != null) email = user.email;
+    else email = "null";
+
+    if (user.gender != null) gender = user.gender;
+    else gender = "null";
+
     if (user.liftingStyle != null) liftingStyle = user.liftingStyle;
+
     if (user.gymGoals!= null) goals = user.gymGoals;
 
     Future<String?> openDialog() => showDialog<String?>(
@@ -140,50 +147,62 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ))
           ]),
 
-          // Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-          // Row(children: [
-          //   ElevatedButton(
-          //       onPressed: () {},
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Colors.transparent,
-          //         shadowColor: Colors.transparent,
-          //       ),
-          //       child: Row(
-          //         children: [
-          //           Text('Email',
-          //               style: TextStyle(
-          //                   color: FitBuddyColorConstants.lOnPrimary,
-          //                   fontSize: 18)),
-          //           const SizedBox(width: 20),
-          //           Text(email!,
-          //               style: TextStyle(
-          //                   color: FitBuddyColorConstants.lOnSecondary,
-          //                   fontSize: 18)),
-          //         ],
-          //       ))
-          // ]),
-          // Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-          // Row(children: [
-          //   ElevatedButton(
-          //       onPressed: () {},
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Colors.transparent,
-          //         shadowColor: Colors.transparent,
-          //       ),
-          //       child: Row(
-          //         children: [
-          //           Text('Gender',
-          //               style: TextStyle(
-          //                   color: FitBuddyColorConstants.lOnPrimary,
-          //                   fontSize: 18)),
-          //           const SizedBox(width: 20),
-          //           Text(gender!,
-          //               style: TextStyle(
-          //                   color: FitBuddyColorConstants.lOnSecondary,
-          //                   fontSize: 18)),
-          //         ],
-          //       ))
-          // ]),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          Row(children: [
+            ElevatedButton(
+                onPressed: () async {
+                  final email = await openDialog();
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(Auth().currentUser?.uid)
+                      .set({'email': email},SetOptions(merge: true));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
+                child: Row(
+                  children: [
+                    Text('Email',
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnPrimary,
+                            fontSize: 18)),
+                    const SizedBox(width: 20),
+                    Text(email!,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnSecondary,
+                            fontSize: 18)),
+                  ],
+                ))
+          ]),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          Row(children: [
+            ElevatedButton(
+                onPressed: () async {
+                  final gender = await openDialog();
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(Auth().currentUser?.uid)
+                      .set({'gender': gender},SetOptions(merge: true));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(0, 66, 5, 5),
+                  shadowColor: Colors.transparent,
+                ),
+                child: Row(
+                  children: [
+                    Text('Gender',
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnPrimary,
+                            fontSize: 18)),
+                    const SizedBox(width: 20),
+                    Text(gender!,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnSecondary,
+                            fontSize: 18)),
+                  ],
+                ))
+          ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
             ElevatedButton(
