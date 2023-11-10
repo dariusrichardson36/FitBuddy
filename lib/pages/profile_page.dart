@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/pages/profile_feed_view.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../constants/route_constants.dart';
 
@@ -24,6 +28,29 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     User user = FirestoreService.firestoreService().userService.user;
+
+    Future<void> pickImage() async {
+      final picker = ImagePicker();
+      // Pick an image.
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      // Upload to Firebase Storage.
+      if (image != null) {
+        final storageRef = FirebaseStorage.instance.ref();
+        final picRef = storageRef.child("profile_pictures/1");
+
+        try {
+          //Store the file
+          await picRef.putFile(File(image!.path));
+          var imageUrl = await picRef.getDownloadURL();
+          print(imageUrl);
+        } catch (error) {
+          //Some error occurred
+        }
+      } else {
+        // Handle the case where the user didn't pick an image.
+        print('No image selected');
+      }
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -72,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         alignment: Alignment.bottomRight,
                         child: IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () {},
+                          onPressed: pickImage,
                           icon: const Icon(
                             Icons.add_a_photo_rounded,
                           ),
