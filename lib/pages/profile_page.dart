@@ -69,6 +69,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             fit: BoxFit.cover,
                           ),
                         ),
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.add_a_photo_rounded,
+                          ),
+                          constraints: const BoxConstraints(),
+                          color: FitBuddyColorConstants.lOnPrimary,
+                        ),
                       ),
                       const SizedBox(width: 10),
                       Column(
