@@ -32,6 +32,17 @@ class _AccountSettingsState extends State<AccountSettings> {
   @override
   Widget build(BuildContext context) {
     User user = FirestoreService.firestoreService().userService.user;
+    String? experience;
+    //String? email;
+    //String? gender;
+    String? liftingStyle;
+    String? goals;
+    if (user.gymExperience != null) experience = user.gymExperience;
+    //if (user.email != null) email = user.email;
+    //if (user.gender != null) gender = user.gender;
+    if (user.liftingStyle != null) liftingStyle = user.liftingStyle;
+    if (user.gymGoals!= null) goals = user.gymGoals;
+
     Future<String?> openDialog() => showDialog<String?>(
           context: context,
           builder: (context) => AlertDialog(
@@ -91,7 +102,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnPrimary,
                             fontSize: 18)),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(user.name,
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnSecondary,
@@ -100,28 +111,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ))
           ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-          Row(children: [
-            ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Date of Birth',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    SizedBox(width: 20),
-                    Text(user.age,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
-          ]),
-          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          
           Row(children: [
             ElevatedButton(
                 onPressed: () async {
@@ -141,8 +131,141 @@ class _AccountSettingsState extends State<AccountSettings> {
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnPrimary,
                             fontSize: 18)),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(user.username,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnSecondary,
+                            fontSize: 18)),
+                  ],
+                ))
+          ]),
+
+          // Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          // Row(children: [
+          //   ElevatedButton(
+          //       onPressed: () {},
+          //       style: ElevatedButton.styleFrom(
+          //         backgroundColor: Colors.transparent,
+          //         shadowColor: Colors.transparent,
+          //       ),
+          //       child: Row(
+          //         children: [
+          //           Text('Email',
+          //               style: TextStyle(
+          //                   color: FitBuddyColorConstants.lOnPrimary,
+          //                   fontSize: 18)),
+          //           const SizedBox(width: 20),
+          //           Text(email!,
+          //               style: TextStyle(
+          //                   color: FitBuddyColorConstants.lOnSecondary,
+          //                   fontSize: 18)),
+          //         ],
+          //       ))
+          // ]),
+          // Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          // Row(children: [
+          //   ElevatedButton(
+          //       onPressed: () {},
+          //       style: ElevatedButton.styleFrom(
+          //         backgroundColor: Colors.transparent,
+          //         shadowColor: Colors.transparent,
+          //       ),
+          //       child: Row(
+          //         children: [
+          //           Text('Gender',
+          //               style: TextStyle(
+          //                   color: FitBuddyColorConstants.lOnPrimary,
+          //                   fontSize: 18)),
+          //           const SizedBox(width: 20),
+          //           Text(gender!,
+          //               style: TextStyle(
+          //                   color: FitBuddyColorConstants.lOnSecondary,
+          //                   fontSize: 18)),
+          //         ],
+          //       ))
+          // ]),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          Row(children: [
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
+                child: Row(
+                  children: [
+                    Text('Date of Birth',
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnPrimary,
+                            fontSize: 18)),
+                    const SizedBox(width: 20),
+                    Text(user.age,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnSecondary,
+                            fontSize: 18)),
+                  ],
+                ))
+          ]),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          Row(children: [
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
+                child: Row(
+                  children: [
+                    Text('Lifting Style',
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnPrimary,
+                            fontSize: 18)),
+                    const SizedBox(width: 20),
+                    Text(liftingStyle!,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnSecondary,
+                            fontSize: 18)),
+                  ],
+                ))
+          ]),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          Row(children: [
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
+                child: Row(
+                  children: [
+                    Text('Gym Goals',
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnPrimary,
+                            fontSize: 18)),
+                    const SizedBox(width: 20),
+                    Text(goals!,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnSecondary,
+                            fontSize: 18)),
+                  ],
+                ))
+          ]),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
+          Row(children: [
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
+                child: Row(
+                  children: [
+                    Text('Gym Experience',
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lOnPrimary,
+                            fontSize: 18)),
+                    const SizedBox(width: 20),
+                    Text(experience!,
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnSecondary,
                             fontSize: 18)),
