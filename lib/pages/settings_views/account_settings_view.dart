@@ -50,13 +50,13 @@ class _AccountSettingsState extends State<AccountSettings> {
 
     if (user.gymGoals!= null) goals = user.gymGoals;
 
-    Future<String?> openDialog() => showDialog<String?>(
+    Future<String?> openDialog(String title, String hinttext) => showDialog<String?>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Your Input'),
+            title: Text(title),
             content: TextField(
               autofocus: true,
-              decoration: InputDecoration(hintText: 'Enter your input'),
+              decoration: InputDecoration(hintText: hinttext),
               controller: controller,
             ),
             actions: [
@@ -93,7 +93,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           Row(children: [
             ElevatedButton(
                 onPressed: () async {
-                  final name = await openDialog();
+                  final name = await openDialog("Change Display Name", "Enter your new Display Name");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
@@ -122,7 +122,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           Row(children: [
             ElevatedButton(
                 onPressed: () async {
-                  final username = await openDialog();
+                  final username = await openDialog("Change Username", "Enter your new Username");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
@@ -151,7 +151,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           Row(children: [
             ElevatedButton(
                 onPressed: () async {
-                  final email = await openDialog();
+                  final email = await openDialog("Change Email", "Enter your new Email");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
@@ -179,7 +179,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           Row(children: [
             ElevatedButton(
                 onPressed: () async {
-                  final gender = await openDialog();
+                  final gender = await openDialog("Change Gender", "Enter your new Gender");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
