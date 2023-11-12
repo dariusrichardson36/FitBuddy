@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/color_constants.dart';
@@ -22,25 +21,25 @@ class FitBuddyDropdownMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField (
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         labelText: labelText,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         labelStyle: TextStyle(color: FitBuddyColorConstants.lOnSecondary),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
 
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lError),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lError),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: FitBuddyColorConstants.lOnSecondary),
         ),
         //fillColor: FitBuddyColorConstants.lSecondary,
@@ -54,7 +53,7 @@ class FitBuddyDropdownMenu extends StatelessWidget {
       }).toList(),
       value: value.isEmpty ? null : value,
       onChanged: onChange,
-      icon: Icon(Icons.keyboard_arrow_down_rounded),
+      icon: const Icon(Icons.keyboard_arrow_down_rounded),
       iconSize: 50,
     );
   }

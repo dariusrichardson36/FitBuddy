@@ -8,38 +8,105 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../models/user.dart';
 import 'package:intl/intl.dart';
 
+import '../../services/auth.dart';
 
+// Constructs list of user information from user class
 Future<List<User>> getUsersFromFirestore() async {
   final collection = FirebaseFirestore.instance.collection('users');
   final snapshot = await collection.get();
   return snapshot.docs.map((doc) => User.fromDataSnapshot(doc)).toList();
 }
 
+String? getCurrentUserUID() {
+  FirebaseAuth auth = FirebaseAuth.instance;
 
+  User? user = auth.currentUser as User?;
 
-String? currentUserID;
-
-void getCurrentUser() {
-  final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
-    currentUserID = user.uid;
-    print('Current User ID: $currentUserID');
+    String? uid = user?.uid;
+    print('Current User UID: $uid');
   } else {
-    print('User is not logged in.');
+    print('No user is currently signed in.');
   }
 }
+
 
 class MatchmakingView extends StatelessWidget {
 
   const MatchmakingView({Key? key}) : super(key: key);
-  Future<void> likeProfile(String userId) async {
+
+
+  // Here is my like function
+  Future<void> likeProfile(String likerID, String likedID) async {
     try {
-      // Add a like to Firestore
-      final likedUserProfileRef =
-      FirebaseFirestore.instance.collection('users').doc(currentUserID).collection('Likes').doc(userId);
-      print('Liked added to Firestore!');
+      final userRef = FirebaseFirestore.instance.collection('users').doc(likerID);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userSnapshot = await transaction.get(userRef);
+
+        if (userSnapshot.exists) {
+          final userData = userSnapshot.data();
+          final likes = List<String>.from(userData?['likes'] ?? []);
+
+          if (!likes.contains(likedID)) {
+            likes.add(likedID);
+            transaction.update(userRef, {'likes': likes});
+            print('Like added to Firestore!');
+          } else {
+            print('User already liked this profile!');
+          }
+        }
+      });
     } catch (error) {
       print('Error adding like: $error');
+    }
+  }
+
+
+  // Here is my matching function
+  Future<void> likeUser(String likerID, String likedID) async {
+    try {
+      var likerRef = FirebaseFirestore.instance.collection('users').doc(likerID);
+      var likedRef = FirebaseFirestore.instance.collection('users').doc(likedID);
+
+      var likerSnapshot = await likerRef.get();
+      var likedSnapshot = await likedRef.get();
+
+      if (likerSnapshot.exists && likedSnapshot.exists) {
+        var likerData = likerSnapshot.data();
+        var likedData = likedSnapshot.data();
+
+        var likerAlreadyLiked =
+            likerData?['Likes'] != null && likerData?['Likes'].contains(likedID);
+        var likedAlreadyLiked =
+            likedData?['Likes'] != null && likedData?['Likes'].contains(likerID);
+
+        if (likerAlreadyLiked && likedAlreadyLiked) {
+          var likerMatchData = {'userId': likedID};
+          var likedMatchData = {'userId': likerID};
+
+          await FirebaseFirestore.instance.runTransaction((transaction) async {
+            var likerMatchesDoc = await transaction.get(likerRef);
+            var likedMatchesDoc = await transaction.get(likedRef);
+
+            var likerMatchesArray = (likerMatchesDoc.data()?['Matches'] as List<Map<String, dynamic>>?) ?? [];
+            likerMatchesArray.add(likerMatchData);
+            transaction.update(likerRef, {'Matches': likerMatchesArray});
+
+            var likedMatchesArray = (likedMatchesDoc.data()?['Matches'] as List<Map<String, dynamic>>?) ?? [];
+            likedMatchesArray.add(likedMatchData);
+            transaction.update(likedRef, {'Matches': likedMatchesArray});
+
+            print('Match found and updated in Firestore!');
+          });
+        } else {
+          print('No mutual like yet.');
+        }
+      } else {
+        print('One or both users not found.');
+      }
+    } catch (error) {
+      print('Error: $error');
     }
   }
 
@@ -47,6 +114,7 @@ class MatchmakingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder<List<User>>(
       future: getUsersFromFirestore(),
       builder: (context, snapshot) {
@@ -70,11 +138,14 @@ class MatchmakingView extends StatelessWidget {
         final group4Users = users?.where((user) =>
             isUserInGroup(user, 'T', 'Z')).toList();
 
-        int activeCardIndex = 0;
 
+
+        // Here is my swiper
         return AppinioSwiper(
 
           cardsCount: group2Users?.length ?? 0,
+
+          // Tracks direction that the card is swiped in
           onSwiping: (AppinioSwiperDirection direction) {
             if (direction == AppinioSwiperDirection.bottom) {
               print('Liked');
@@ -84,7 +155,8 @@ class MatchmakingView extends StatelessWidget {
             final user = group2Users?[index];
             final imageUrl = user?.image_url ?? placeholderImageUrl;
 
-            final docID = group2Users?[index].uid ?? 'No ID'; // Assuming `userId` is the document ID field
+            // Tracks the current user id being displayed on screen
+            final docID = group2Users?[index].uid ?? 'None'; // Assuming `userId` is the document ID field
             print(docID);
 
             return Container(
@@ -267,23 +339,43 @@ class MatchmakingView extends StatelessWidget {
                   SizedBox(
                       height: 10
                   ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      ' ${user?.uid ??
-                          'No id'}',
-                      style: GoogleFonts.roboto(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
 
+                  // Here is my code for my buttons, and the logic as far as liking and disliking goes
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              String? currentUserID = getCurrentUserUID(); // Fetch the current user ID
+                              String? likedUserID = group2Users?[index].uid; // Get the liked user ID
+
+                              likeProfile(currentUserID!, likedUserID!); // Call your like function
+                            },
+                            child: Icon(
+                              Icons.favorite,
+                              size: 40,
+                              color: Colors.green,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // Perform the dislike action when the 'x' icon is tapped
+                              // You might want to implement functionality for 'x' action
+                            },
+                            child: Icon(
+                              Icons.close,
+                              size: 40,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: 25
-                  ),
-
                 ],
               ),
             );

@@ -25,7 +25,7 @@ class Post {
     return Post(
       workout: activitiesList,
       creatorUserName: map['creator_userName'],
-      description: map['description'],
+      description: map['description'] ?? '',
       creatorUid: map['creator_uid'],
       timestamp: map['timestamp'],
       postId: id,

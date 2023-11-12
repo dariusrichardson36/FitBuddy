@@ -6,6 +6,6 @@ class MessagesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("This is messages"),);
+    return const Center(child: Text("This is messages"),);
   }
 }

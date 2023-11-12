@@ -32,9 +32,6 @@ dependencies:
     sdk: flutter
 
   # Gives date and time formatting
-  intl:
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,7 +48,13 @@ dependencies:
   cloud_firestore: ^4.9.1
   go_router: ^10.2.0
   google_fonts: ^6.1.0
+
   appinio_swiper:
+
+  dropdown_button2: ^2.3.8
+  cool_dropdown: ^2.1.0
+  intl: ^0.18.1
+
 
 dev_dependencies:
   flutter_test:
