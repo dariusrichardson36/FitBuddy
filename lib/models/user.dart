@@ -12,6 +12,12 @@ class User {
   String? liftingStyle;
   String? gymGoals;
   String? gymExperience;
+  String? uid;
+  List<String> images = [
+    "https://firebasestorage.googleapis.com/v0/b/fitbuddy-85955.appspot.com/o/profileImages%2FiRBSpsuph3QO0ZvRrlp5m1jfX9q1%2FIMG_20230712_150044.jpg?alt=media&token=ed2480ea-6b63-4a45-b72e-28a12dc291af",
+    "https://firebasestorage.googleapis.com/v0/b/fitbuddy-85955.appspot.com/o/profileImages%2FiRBSpsuph3QO0ZvRrlp5m1jfX9q1%2FIMG-20230210-WA0004.jpg?alt=media&token=92acc894-a000-4c2a-9a8e-0504975cb761",
+    "https://firebasestorage.googleapis.com/v0/b/fitbuddy-85955.appspot.com/o/profileImages%2FiRBSpsuph3QO0ZvRrlp5m1jfX9q1%2FIMG-20220818-WA0008.jpg?alt=media&token=2205b684-c281-4466-a516-14d965e5ee5d"
+  ];
 
   User({
     required this.name,
@@ -25,6 +31,7 @@ class User {
     this.email,
     required this.image,
     required this.friendList,
+    this.uid,
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {

@@ -25,9 +25,18 @@ class _ProfilePageState extends State<ProfilePage> {
     FirestoreService.firestoreService().profileTimelineService.onDispose();
   }
 
+  late PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(initialPage: 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     User user = FirestoreService.firestoreService().userService.user;
+    int _currentPage = 0;
 
     Future<void> pickImage() async {
       final picker = ImagePicker();
@@ -53,17 +62,76 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
+      body: Column(
+        children: [
+          Stack(children: [
+            SizedBox(
+              height: 350,
+              child: PageView.builder(
+                controller: _controller,
+                onPageChanged: (int index) {
+                  setState(() {
+                    print(index);
+                    _currentPage = index;
+                    print(_currentPage);
+                  });
+                },
+                itemCount: user.images.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTapUp: (TapUpDetails details) {
+                      // Get the width of the widget
+                      var width = MediaQuery.of(context).size.width;
+                      // Check where the user tapped
+                      if (details.globalPosition.dx < width / 2) {
+                        // If the user tapped on the left side, go to the previous image
+                        if (_controller.page != 0) {
+                          _controller.previousPage(
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      } else {
+                        // If the user tapped on the right side, go to the next image
+                        if (_controller.page != user.images.length - 1) {
+                          _controller.nextPage(
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.decelerate,
+                          );
+                        }
+                      }
+                    },
+                    child: Image.network(user.images[index], fit: BoxFit.cover),
+                  );
+                },
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.only(left: 20.0, top: 40, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // This centers the indicators horizontally
+                    children: List.generate(user.images.length, (index) {
+                      return Expanded(
+                        child: Container(
+                          height: 8.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                          decoration: BoxDecoration(
+                            color: _currentPage.round() == index
+                                ? FitBuddyColorConstants
+                                    .lOnPrimary // Active indicator color
+                                : FitBuddyColorConstants
+                                    .lSecondary, // Inactive indicator color
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       IconButton(
                         icon:
@@ -72,118 +140,34 @@ class _ProfilePageState extends State<ProfilePage> {
                           context.goNamed(FitBuddyRouterConstants.homePage);
                         },
                       ),
-                      Text(
-                        user.name,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 30),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      // User profile picture in top left
-                      Container(
-                        width: 75.0,
-                        height: 75.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                user.image), // Replace with your image URL
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        alignment: Alignment.bottomRight,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: pickImage,
-                          icon: const Icon(
-                            Icons.add_a_photo_rounded,
-                          ),
-                          constraints: const BoxConstraints(),
-                          color: FitBuddyColorConstants.lOnPrimary,
+                      //    const SizedBox(width: 30),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          "@${user.username}",
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Row of badges on display + button to change order.
-                          Row(
-                            children: [
-                              const Icon(Icons.military_tech,
-                                  color: Colors.amber),
-                              Icon(Icons.military_tech,
-                                  color: Colors.blueGrey[100]),
-                              Icon(Icons.military_tech,
-                                  color: Colors.orange[900]),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.add,
-                                      color:
-                                          FitBuddyColorConstants.lOnPrimary)),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.restart_alt,
-                                      color:
-                                          FitBuddyColorConstants.lOnPrimary)),
-                            ],
-                          ),
-                        ],
-                      ),
-                      // Button that brings you back to the home page.
                     ],
                   ),
-                  const SizedBox(height: 25),
-                  Row(
-                    children: [
-                      // Button to see all the User's Posts.
-                      ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                          ),
-                          child: Text(
-                            'Posts',
-                            style: TextStyle(
-                                color: FitBuddyColorConstants.lOnPrimary,
-                                fontSize: 32),
-                          )),
-                      // Button to only see highlighted posts.
-                      ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                          ),
-                          child: Text(
-                            'Highlights',
-                            style: TextStyle(
-                                color: FitBuddyColorConstants.lOnPrimary,
-                                fontSize: 32),
-                          )),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(width: 270),
-                      // Button to search user's posts
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.search,
-                              color: FitBuddyColorConstants.lOnPrimary)),
-                    ],
+                  const SizedBox(height: 215),
+                  Text(
+                    user.name,
+                    style: TextStyle(
+                        color: FitBuddyColorConstants.lPrimary,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
-            const Expanded(child: ProfileFeedView())
-          ],
-        ),
+          ]),
+          const SizedBox(height: 20),
+          const Expanded(child: ProfileFeedView())
+        ],
       ),
     );
   }

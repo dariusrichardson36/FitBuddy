@@ -47,7 +47,6 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
       },
       child: Column(
         children: [
-          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -129,7 +128,8 @@ class _FitBuddyTimelinePostState extends State<FitBuddyTimelinePost> {
                 //SizedBox(height: 10),
               ],
             ),
-          )
+          ),
+          Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
         ],
       ),
     );
