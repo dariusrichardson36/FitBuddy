@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Gives date and time formatting
+  intl:
+
 
 
   # The following adds the Cupertino Icons font to your application.
