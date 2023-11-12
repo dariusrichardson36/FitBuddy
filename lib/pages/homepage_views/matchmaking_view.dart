@@ -62,7 +62,6 @@ class MatchmakingView extends StatelessWidget {
     }
   }
 
-
   // Here is my matching function
   Future<void> likeUser(String likerID, String likedID) async {
     try {
@@ -146,18 +145,17 @@ class MatchmakingView extends StatelessWidget {
           cardsCount: group2Users?.length ?? 0,
 
           // Tracks direction that the card is swiped in
-          onSwiping: (AppinioSwiperDirection direction) {
-            if (direction == AppinioSwiperDirection.bottom) {
-              print('Liked');
-            }
+          onSwipe: (int index, AppinioSwiperDirection direction) {
+
+            final docID = group2Users?[index].uid ?? 'None';
+            print("index");
+            print(direction);
+            print(docID);
           },
+
           cardsBuilder: (BuildContext context, int index) {
             final user = group2Users?[index];
             final imageUrl = user?.image_url ?? placeholderImageUrl;
-
-            // Tracks the current user id being displayed on screen
-            final docID = group2Users?[index].uid ?? 'None'; // Assuming `userId` is the document ID field
-            print(docID);
 
             return Container(
               height: MediaQuery
@@ -350,6 +348,17 @@ class MatchmakingView extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              // Perform the dislike action when the 'x' icon is tapped
+                              // You might want to implement functionality for 'x' action
+                            },
+                            child: Icon(
+                              Icons.close,
+                              size: 40,
+                              color: Colors.red,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
                               String? currentUserID = getCurrentUserUID(); // Fetch the current user ID
                               String? likedUserID = group2Users?[index].uid; // Get the liked user ID
 
@@ -359,17 +368,6 @@ class MatchmakingView extends StatelessWidget {
                               Icons.favorite,
                               size: 40,
                               color: Colors.green,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // Perform the dislike action when the 'x' icon is tapped
-                              // You might want to implement functionality for 'x' action
-                            },
-                            child: Icon(
-                              Icons.close,
-                              size: 40,
-                              color: Colors.red,
                             ),
                           ),
                         ],
