@@ -8,6 +8,7 @@ import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../constants/route_constants.dart';
 
@@ -36,7 +37,12 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     User user = FirestoreService.firestoreService().userService.user;
-    int _currentPage = 0;
+
+    final screenWidth = MediaQuery.of(context).size.width - 40;
+    final dotSpacing = 8.0; // The space you want to keep between each dot
+    final totalSpacing =
+        dotSpacing * (user.images.length - 1); // Total spacing between dots
+    final dotWidth = (screenWidth - totalSpacing) / user.images.length;
 
     Future<void> pickImage() async {
       final picker = ImagePicker();
@@ -69,13 +75,6 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 350,
               child: PageView.builder(
                 controller: _controller,
-                onPageChanged: (int index) {
-                  setState(() {
-                    print(index);
-                    _currentPage = index;
-                    print(_currentPage);
-                  });
-                },
                 itemCount: user.images.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -111,25 +110,18 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment
-                        .center, // This centers the indicators horizontally
-                    children: List.generate(user.images.length, (index) {
-                      return Expanded(
-                        child: Container(
-                          height: 8.0,
-                          margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                          decoration: BoxDecoration(
-                            color: _currentPage.round() == index
-                                ? FitBuddyColorConstants
-                                    .lOnPrimary // Active indicator color
-                                : FitBuddyColorConstants
-                                    .lSecondary, // Inactive indicator color
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
+                  SmoothPageIndicator(
+                      controller: _controller, // PageController
+                      count: user.images.length,
+                      effect: WormEffect(
+                          activeDotColor: FitBuddyColorConstants.lAccent,
+                          dotColor: FitBuddyColorConstants.lPrimary,
+                          dotHeight: 5,
+                          dotWidth:
+                              dotWidth, // Width for each dot calculated to fill the screen width
+                          spacing: dotSpacing // Spacing between dots
+                          ), // your preferred effect
+                      onDotClicked: (index) {}),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -153,9 +145,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 215),
+                  const SizedBox(height: 180),
                   Text(
-                    user.name,
+                    "${user.name} \n@${user.username}",
                     style: TextStyle(
                         color: FitBuddyColorConstants.lPrimary,
                         fontSize: 30,
