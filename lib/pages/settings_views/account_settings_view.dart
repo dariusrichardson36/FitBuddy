@@ -72,7 +72,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     return SafeArea(
         child: Scaffold(
             body: Padding(
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
       child: Column(
         children: [
           Row(
@@ -90,206 +90,245 @@ class _AccountSettingsState extends State<AccountSettings> {
                     color: FitBuddyColorConstants.lOnPrimary, fontSize: 25)),
           ),
           const SizedBox(height: 35),
-          Row(children: [
-            ElevatedButton(
-                onPressed: () async {
+          Row(
+            children: [
+            IconButton(
+              onPressed: () async {
                   final name = await openDialog("Change Display Name", "Enter your new Display Name");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
                       .update({'displayName': name});
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Display Name',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(user.name,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
-          ]),
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Display Name',
+                    style: TextStyle(
+                      color: FitBuddyColorConstants.lOnPrimary,
+                      fontSize: 18)),
+                  Text(user.name,
+                    style: TextStyle(
+                      color: FitBuddyColorConstants.lOnSecondary,
+                      fontSize: 14
+                    )
+                  ),
+                ],
+              ),
+            )
+            ]
+          ),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           
           Row(children: [
-            ElevatedButton(
-                onPressed: () async {
+            IconButton(
+              onPressed: () async {
                   final username = await openDialog("Change Username", "Enter your new Username");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
                       .update({'username': username});
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Username',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
+                      style: TextStyle(
+                        color: FitBuddyColorConstants.lOnPrimary,
+                        fontSize: 18
+                      )
+                    ),
+
                     Text(user.username,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
+                      style: TextStyle(
+                        color: FitBuddyColorConstants.lOnSecondary,
+                        fontSize: 14
+                      )
+                    ),
                   ],
-                ))
+              ),
+            )
           ]),
 
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
-            ElevatedButton(
-                onPressed: () async {
+            IconButton(
+              onPressed: () async {
                   final email = await openDialog("Change Email", "Enter your new Email");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
                       .set({'email': email},SetOptions(merge: true));
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Email',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(email!,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Email',
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 18)),
+                      const SizedBox(width: 20),
+                      Text(email!,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14)),
+                    ],
+                  ),
+            )
           ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
-            ElevatedButton(
-                onPressed: () async {
+            IconButton(
+              onPressed: () async {
                   final gender = await openDialog("Change Gender", "Enter your new Gender");
                   FirebaseFirestore.instance
                       .collection('users')
                       .doc(Auth().currentUser?.uid)
                       .set({'gender': gender},SetOptions(merge: true));
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(0, 66, 5, 5),
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Gender',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(gender!,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Gender',
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 18)),
+                      const SizedBox(width: 20),
+                      Text(gender!,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14)),
+                    ],
+                  ),
+            )
           ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
-            ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Date of Birth',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(user.age,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Date of Birth',
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 18)),
+                      const SizedBox(width: 20),
+                      Text(user.age,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14)),
+                    ],
+                  ),
+            )
           ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
-            ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Lifting Style',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(liftingStyle!,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Lifting Style',
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 18)),
+                      const SizedBox(width: 20),
+                      Text(liftingStyle!,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14)),
+                    ],
+                  ),
+            )
           ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
-            ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Gym Goals',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(goals!,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Gym Goals',
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 18)),
+                      const SizedBox(width: 20),
+                      Text(goals!,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14)),
+                    ],
+                  ),
+            )
           ]),
           Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
           Row(children: [
-            ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Text('Gym Experience',
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnPrimary,
-                            fontSize: 18)),
-                    const SizedBox(width: 20),
-                    Text(experience!,
-                        style: TextStyle(
-                            color: FitBuddyColorConstants.lOnSecondary,
-                            fontSize: 18)),
-                  ],
-                ))
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.restart_alt,
+                color: FitBuddyColorConstants.lOnPrimary
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Gym Experience',
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnPrimary,
+                              fontSize: 18)),
+                      const SizedBox(width: 20),
+                      Text(experience!,
+                          style: TextStyle(
+                              color: FitBuddyColorConstants.lOnSecondary,
+                              fontSize: 14)),
+                    ],
+                  ),
+            )
           ]),
         ],
       ),
