@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/pages/profile_feed_view.dart';
+import 'package:fit_buddy/services/auth.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -39,19 +40,21 @@ class _ProfilePageState extends State<ProfilePage> {
     User user = FirestoreService.firestoreService().userService.user;
 
     final screenWidth = MediaQuery.of(context).size.width - 40;
-    final dotSpacing = 8.0; // The space you want to keep between each dot
+    const dotSpacing = 8.0; // The space you want to keep between each dot
     final totalSpacing =
         dotSpacing * (user.images.length - 1); // Total spacing between dots
     final dotWidth = (screenWidth - totalSpacing) / user.images.length;
 
     Future<void> pickImage() async {
+      String _uid = Auth().currentUser!.uid;
       final picker = ImagePicker();
       // Pick an image.
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       // Upload to Firebase Storage.
       if (image != null) {
         final storageRef = FirebaseStorage.instance.ref();
-        final picRef = storageRef.child("profile_pictures/1");
+        final picRef = storageRef.child(
+            "profileImages/$_uid/${DateTime.now().millisecondsSinceEpoch.toString()}.${image.path.split('.').last}");
 
         try {
           //Store the file
@@ -145,13 +148,24 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 180),
-                  Text(
-                    "${user.name} \n@${user.username}",
-                    style: TextStyle(
-                        color: FitBuddyColorConstants.lPrimary,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
+                  const SizedBox(height: 210),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        user.name,
+                        style: TextStyle(
+                            color: FitBuddyColorConstants.lPrimary,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                          onPressed: pickImage,
+                          icon: Icon(
+                            Icons.add_a_photo,
+                            color: FitBuddyColorConstants.lPrimary,
+                          ))
+                    ],
                   ),
                 ],
               ),
