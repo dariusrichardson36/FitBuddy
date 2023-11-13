@@ -5,6 +5,7 @@ import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/pages/profile_feed_view.dart';
 import 'package:fit_buddy/services/auth.dart';
+import 'package:fit_buddy/services/firestore/auth_service_firestore.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +38,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    User user = FirestoreService.firestoreService().userService.user;
+    UserServiceFirestore userService =
+        FirestoreService.firestoreService().userService;
+    User user = userService.user;
 
     final screenWidth = MediaQuery.of(context).size.width - 40;
     const dotSpacing = 8.0; // The space you want to keep between each dot
@@ -61,6 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
           await picRef.putFile(File(image!.path));
           var imageUrl = await picRef.getDownloadURL();
           print(imageUrl);
+          //Update the user's profile imageµ
+          userService.addImage(imageUrl);
+          setState(() {});
         } catch (error) {
           //Some error occurred
         }

@@ -102,7 +102,6 @@ class FitBuddyRouter {
             state.matchedLocation != '/completeAccountInfo') {
           return null;
         }
-        //return state.namedLocation(FitBuddyRouterConstants.profilePage);
         return '/';
       });
 }

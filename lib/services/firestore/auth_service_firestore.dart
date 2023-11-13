@@ -61,6 +61,15 @@ class UserServiceFirestore {
     }
   }
 
+  addImage(String url) {
+    firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .update({
+      'images': FieldValue.arrayUnion([url])
+    });
+  }
+
   Future createUser(
       String uid,
       String? experience,
