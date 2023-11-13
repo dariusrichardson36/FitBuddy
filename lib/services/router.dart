@@ -58,7 +58,7 @@ class FitBuddyRouter {
             path: '/search',
             name: FitBuddyRouterConstants.searchPage,
             pageBuilder: (context, state) {
-              return MaterialPage(
+              return const MaterialPage(
                 child: SearchPage(),
               );
             }),

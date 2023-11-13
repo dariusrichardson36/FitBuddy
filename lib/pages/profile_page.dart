@@ -63,8 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
           //Store the file
           await picRef.putFile(File(image!.path));
           var imageUrl = await picRef.getDownloadURL();
-          print(imageUrl);
-          //Update the user's profile imageµ
+          //Update the user's profile image
           userService.addImage(imageUrl);
           setState(() {});
         } catch (error) {
@@ -72,7 +71,6 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       } else {
         // Handle the case where the user didn't pick an image.
-        print('No image selected');
       }
     }
 

@@ -23,7 +23,6 @@ class _ProfileFeedState extends State<ProfileFeedView> {
 
   @override
   void initState() {
-    print("initState");
     super.initState();
     loadProfileFeed();
     _scrollController.addListener(() {
