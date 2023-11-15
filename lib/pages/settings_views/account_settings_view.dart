@@ -28,21 +28,37 @@ class _AccountSettingsState extends State<AccountSettings> {
     super.dispose();
   }
 
-  void _selDatePicker(String dob) {
+  void _selDatePicker(String dob) async {
     showDatePicker(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(1940),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(Auth().currentUser?.uid)
-          .update({'dob': pickedDate.toString().substring(0, 10)});
-    });
+            lastDate: DateTime.now(),
+            builder: (context, child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: FitBuddyColorConstants.lAccent,
+                    onPrimary: FitBuddyColorConstants.lPrimary,
+                    onSurface: FitBuddyColorConstants.lOnPrimary,
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      primary: FitBuddyColorConstants.lAccent
+                    )
+                  )
+                ),
+                child: child!,
+              );
+            }).then((pickedDate) {
+              if (pickedDate == null) {
+                return;
+              }
+              FirebaseFirestore.instance
+                .collection('users')
+                .doc(Auth().currentUser?.uid)
+                .update({'dob': pickedDate.toString().substring(0, 10)});
+            });
   }
 
   // Dialog popup that alows the user to enter in a text box.
