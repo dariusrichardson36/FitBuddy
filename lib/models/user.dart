@@ -9,9 +9,11 @@ class User {
   String image;
   List<String> friendList = [];
   //Fitness Info
+
   String? liftingStyle;
   String? gymGoals;
   String? gymExperience;
+  //List<String> images;
 
   User({
     required this.name,
@@ -25,6 +27,7 @@ class User {
     this.email,
     required this.image,
     required this.friendList,
+    //required this.images,
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {
@@ -41,24 +44,8 @@ class User {
       friendList: List<String>.from(map["friendList"]),
       //fitness info
       liftingStyle: map['liftingStyle'],
-      gymGoals: map['goals'],
-      gymExperience: map['experience'],
+      gymGoals: map['gymGoals'],
+      gymExperience: map['liftingExperience'],
     );
   }
-
-  // toJson() {
-  //   return {
-  //     "displayName": name,
-  //     "dob": age,
-  //     "username": username,
-  //     "email": email,
-  //     "image_url": image,
-  //     "gender": gender,
-  //     "isAccountComplete": accountCompletion,
-  //     "friendList": friendList,
-  //     "liftingStyle": liftingStyle,
-  //     "goals": gymGoals,
-  //     "experience": gymExperience
-  //   };
-  // }
 }
