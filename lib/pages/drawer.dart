@@ -80,7 +80,7 @@ class DrawerPage extends StatelessWidget {
 
               ElevatedButton(
                   onPressed: () {
-                    context.goNamed(FitBuddyRouterConstants.settingsPage);
+                    context.goNamed(FitBuddyRouterConstants.accountsettingsPage);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,

@@ -44,8 +44,8 @@ class User {
       friendList: List<String>.from(map["friendList"]),
       //fitness info
       liftingStyle: map['liftingStyle'],
-      gymGoals: map['gymGoals'],
-      gymExperience: map['liftingExperience'],
+      gymGoals: map['goals'],
+      gymExperience: map['experience'],
     );
   }
 }
