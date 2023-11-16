@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       IconButton(
                         icon:
-                            const Icon(Icons.arrow_back_ios_rounded, size: 30),
+                            Icon(Icons.arrow_back_ios_rounded, size: 30, color: FitBuddyColorConstants.lPrimary),
                         onPressed: () {
                           context.goNamed(FitBuddyRouterConstants.homePage);
                         },
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Text(
                           "@${user.username}",
                           style: TextStyle(
-                              color: FitBuddyColorConstants.lOnPrimary,
+                              color: FitBuddyColorConstants.lPrimary,
                               fontSize: 25,
                               fontWeight: FontWeight.bold),
                         ),
