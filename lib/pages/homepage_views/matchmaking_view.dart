@@ -122,22 +122,22 @@ class MatchmakingView extends StatelessWidget {
 
         // Here is my swiper
         return AppinioSwiper(
-
-          cardsCount: group2Users?.length ?? 0,
-
+          cardsCount: group3Users?.length ?? 0,
           // Tracks direction that the card is swiped in
           onSwipe: (int index, AppinioSwiperDirection direction) {
 
-            final docID = group2Users?[index].uid ?? 'None';
-            print("index");
-            print(direction);
-            print(docID);
-
-
+            if (direction == AppinioSwiperDirection.right) {
+              // User swiped right, call like and match functions
+              String? likedUserID = group3Users?[index].uid;
+              print(currentUserID);
+              print("liked");
+              likeProfile(currentUserID!, likedUserID!);
+              matchUser(currentUserID!, likedUserID);
+            }
           },
 
           cardsBuilder: (BuildContext context, int index) {
-            final user = group2Users?[index];
+            final user = group3Users?[index];
             final imageUrl = user?.image_url ?? placeholderImageUrl;
 
             return Container(
@@ -166,9 +166,7 @@ class MatchmakingView extends StatelessWidget {
                   ),
 
                   // Text widget with size 24 font aligned to the left
-                  SizedBox(
-                      height: 10
-                  ),
+
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -187,7 +185,7 @@ class MatchmakingView extends StatelessWidget {
                         Text(
                           '20',
                           style: GoogleFonts.roboto(
-                            fontSize: 30,
+                            fontSize: 35,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -239,7 +237,7 @@ class MatchmakingView extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: 20,
+                          fontSize: 21,
                           color: Colors
                               .black, // Set the color for the regular text
                         ),
@@ -259,9 +257,8 @@ class MatchmakingView extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   SizedBox(
-                      height: 10
+                      height: 15
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
@@ -269,7 +266,7 @@ class MatchmakingView extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: 20,
+                          fontSize: 21,
                           color: Colors
                               .black, // Set the color for the regular text
                         ),
@@ -289,7 +286,7 @@ class MatchmakingView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                      height: 10
+                      height: 15
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
@@ -297,7 +294,7 @@ class MatchmakingView extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: 20,
+                          fontSize: 21,
                           color: Colors
                               .black, // Set the color for the regular text
                         ),
@@ -318,7 +315,7 @@ class MatchmakingView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                      height: 10
+                      height: 20
                   ),
 
                   // Here is my code for my buttons, and the logic as far as liking and disliking goes
@@ -327,31 +324,43 @@ class MatchmakingView extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // Perform the dislike action when the 'x' icon is tapped
-                              // You might want to implement functionality for 'x' action
+                              // Perform the action for the first button
                             },
                             child: Icon(
                               Icons.close,
-                              size: 60,
+                              size: 52,
                               color: Colors.red,
                             ),
                           ),
+                          SizedBox(width: 30.0),
                           GestureDetector(
                             onTap: () {
                               String? likedUserID = group2Users?[index].uid; // Get the liked user ID
                               print(currentUserID);
                               print("liked");
-                              likeProfile(currentUserID!, likedUserID!);// Call your like function
+                              likeProfile(currentUserID!, likedUserID!); // Call your like function
                               matchUser(currentUserID!, likedUserID);
                             },
                             child: Icon(
                               Icons.favorite,
-                              size: 60,
+                              size: 65,
                               color: Colors.green,
+                            ),
+                          ),
+                          SizedBox(width: 30.0),
+                          GestureDetector(
+                            onTap: () {
+                              // Perform the action for the third button
+                            },
+                            child: Icon(
+                              Icons.star,
+                              size: 52,
+                              color: Colors.blue,
                             ),
                           ),
                         ],
