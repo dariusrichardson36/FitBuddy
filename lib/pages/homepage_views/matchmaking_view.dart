@@ -1,33 +1,21 @@
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../models/user.dart';
-import 'package:intl/intl.dart';
+import '../../models/Profile.dart';
 
-import '../../services/auth.dart';
+
+User? user = FirebaseAuth.instance.currentUser;
+String? currentUserID = user?.uid;
 
 // Constructs list of user information from user class
-Future<List<User>> getUsersFromFirestore() async {
+Future<List<Profile>> getProfilesFromFirestore(String currentUserID) async {
   final collection = FirebaseFirestore.instance.collection('users');
-  final snapshot = await collection.get();
-  return snapshot.docs.map((doc) => User.fromDataSnapshot(doc)).toList();
-}
-
-String? getCurrentUserUID() {
-  FirebaseAuth auth = FirebaseAuth.instance;
-
-  User? user = auth.currentUser as User?;
-
-  if (user != null) {
-    String? uid = user?.uid;
-    print('Current User UID: $uid');
-  } else {
-    print('No user is currently signed in.');
-  }
+  final snapshot = await collection.where('uid', isNotEqualTo: currentUserID).get();
+  return snapshot.docs.map((doc) => Profile.fromDataSnapshot(doc)).toList();
 }
 
 
@@ -39,18 +27,18 @@ class MatchmakingView extends StatelessWidget {
   // Here is my like function
   Future<void> likeProfile(String likerID, String likedID) async {
     try {
-      final userRef = FirebaseFirestore.instance.collection('users').doc(likerID);
+      final likerRef = FirebaseFirestore.instance.collection('users').doc(likerID);
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final userSnapshot = await transaction.get(userRef);
+        final userSnapshot = await transaction.get(likerRef);
 
         if (userSnapshot.exists) {
           final userData = userSnapshot.data();
-          final likes = List<String>.from(userData?['likes'] ?? []);
+          final likes = List<String>.from(userData?['Likes'] ?? []);
 
           if (!likes.contains(likedID)) {
             likes.add(likedID);
-            transaction.update(userRef, {'likes': likes});
+            transaction.update(likerRef, {'Likes': likes});
             print('Like added to Firestore!');
           } else {
             print('User already liked this profile!');
@@ -62,48 +50,42 @@ class MatchmakingView extends StatelessWidget {
     }
   }
 
-  // Here is my matching function
-  Future<void> likeUser(String likerID, String likedID) async {
+  Future<void> matchUser(String likerID, String likedID) async {
     try {
       var likerRef = FirebaseFirestore.instance.collection('users').doc(likerID);
       var likedRef = FirebaseFirestore.instance.collection('users').doc(likedID);
 
-      var likerSnapshot = await likerRef.get();
-      var likedSnapshot = await likedRef.get();
+      await FirebaseFirestore.instance.runTransaction((Transaction transaction) async {
+        var likerSnapshot = await transaction.get(likerRef);
+        var likedSnapshot = await transaction.get(likedRef);
 
-      if (likerSnapshot.exists && likedSnapshot.exists) {
-        var likerData = likerSnapshot.data();
-        var likedData = likedSnapshot.data();
+        if (likerSnapshot.exists && likedSnapshot.exists) {
+          var likerData = likerSnapshot.data();
+          var likedData = likedSnapshot.data();
 
-        var likerAlreadyLiked =
-            likerData?['Likes'] != null && likerData?['Likes'].contains(likedID);
-        var likedAlreadyLiked =
-            likedData?['Likes'] != null && likedData?['Likes'].contains(likerID);
+          var likerLikes = List<String>.from(likerData?['Likes'] ?? []);
+          var likedLikes = List<String>.from(likedData?['Likes'] ?? []);
 
-        if (likerAlreadyLiked && likedAlreadyLiked) {
-          var likerMatchData = {'userId': likedID};
-          var likedMatchData = {'userId': likerID};
+          var mutualLike = likerLikes.contains(likedID) && likedLikes.contains(likerID);
 
-          await FirebaseFirestore.instance.runTransaction((transaction) async {
-            var likerMatchesDoc = await transaction.get(likerRef);
-            var likedMatchesDoc = await transaction.get(likedRef);
+          if (mutualLike) {
+            var likerMatches = List<String>.from(likerData?['Matches'] ?? []);
+            likerMatches.add(likedID);
 
-            var likerMatchesArray = (likerMatchesDoc.data()?['Matches'] as List<Map<String, dynamic>>?) ?? [];
-            likerMatchesArray.add(likerMatchData);
-            transaction.update(likerRef, {'Matches': likerMatchesArray});
+            var likedMatches = List<String>.from(likedData?['Matches'] ?? []);
+            likedMatches.add(likerID);
 
-            var likedMatchesArray = (likedMatchesDoc.data()?['Matches'] as List<Map<String, dynamic>>?) ?? [];
-            likedMatchesArray.add(likedMatchData);
-            transaction.update(likedRef, {'Matches': likedMatchesArray});
+            transaction.update(likerRef, {'Matches': likerMatches});
+            transaction.update(likedRef, {'Matches': likedMatches});
 
             print('Match found and updated in Firestore!');
-          });
+          } else {
+            print('No mutual like yet.');
+          }
         } else {
-          print('No mutual like yet.');
+          print('One or both users not found.');
         }
-      } else {
-        print('One or both users not found.');
-      }
+      });
     } catch (error) {
       print('Error: $error');
     }
@@ -114,8 +96,8 @@ class MatchmakingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return FutureBuilder<List<User>>(
-      future: getUsersFromFirestore(),
+    return FutureBuilder<List<Profile>>(
+      future: getProfilesFromFirestore(currentUserID!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
@@ -138,7 +120,6 @@ class MatchmakingView extends StatelessWidget {
             isUserInGroup(user, 'T', 'Z')).toList();
 
 
-
         // Here is my swiper
         return AppinioSwiper(
 
@@ -151,6 +132,8 @@ class MatchmakingView extends StatelessWidget {
             print("index");
             print(direction);
             print(docID);
+
+
           },
 
           cardsBuilder: (BuildContext context, int index) {
@@ -353,20 +336,21 @@ class MatchmakingView extends StatelessWidget {
                             },
                             child: Icon(
                               Icons.close,
-                              size: 40,
+                              size: 60,
                               color: Colors.red,
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              String? currentUserID = getCurrentUserUID(); // Fetch the current user ID
                               String? likedUserID = group2Users?[index].uid; // Get the liked user ID
-
-                              likeProfile(currentUserID!, likedUserID!); // Call your like function
+                              print(currentUserID);
+                              print("liked");
+                              likeProfile(currentUserID!, likedUserID!);// Call your like function
+                              matchUser(currentUserID!, likedUserID);
                             },
                             child: Icon(
                               Icons.favorite,
-                              size: 40,
+                              size: 60,
                               color: Colors.green,
                             ),
                           ),
@@ -378,13 +362,12 @@ class MatchmakingView extends StatelessWidget {
               ),
             );
           },
-
         );
       },
     );
   }
 
-  bool isUserInGroup(User? user, String startLetter, String endLetter) {
+  bool isUserInGroup(Profile? user, String startLetter, String endLetter) {
     final displayName = user?.displayName;
     if (displayName != null && displayName.isNotEmpty) {
       final firstLetter = displayName[0].toUpperCase();

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User
+class Profile
 {
   String? uid;
 
@@ -16,7 +16,7 @@ class User
   String? gymGoals;
   String? liftingExperience;
 
-  User({
+  Profile({
     this.uid,
     this.displayName,
     this.username,
@@ -28,10 +28,10 @@ class User
     this.liftingExperience,
 });
 
-  static User fromDataSnapshot(DocumentSnapshot snapshot){
+  static Profile fromDataSnapshot(DocumentSnapshot snapshot){
     var dataSnapshot = snapshot.data() as Map<String, dynamic>;
 
-    return User(
+    return Profile(
 
       uid: dataSnapshot['uid'],
       //personal info
