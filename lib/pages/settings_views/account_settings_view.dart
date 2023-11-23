@@ -68,13 +68,23 @@ class _AccountSettingsState extends State<AccountSettings> {
   // Dialog popup that allows to user to change thier gender.
   void genderSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
+
     showDialog<void>(
       context: context,
+
       builder: (context) => AlertDialog(
         title: Text(message),
         content: DropdownButtonFormField<String>(
             value: currentGender,
             icon: const Icon(Icons.keyboard_arrow_down),
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+            ),
             items: items.map<DropdownMenuItem<String>>((String items) {
               return DropdownMenuItem(value: items, child: Text(items));
             }).toList(),
@@ -95,7 +105,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                     .set({'gender': currentGender}, SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
               },
-              child: const Text('SUBMIT'))
+              child: Text('SUBMIT',
+                  style: TextStyle(color: FitBuddyColorConstants.lAccent)))
         ],
       ),
     );
@@ -104,6 +115,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   // Dialog popup that allows to user to change thier gender.
   void goalsSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
+
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -111,6 +123,14 @@ class _AccountSettingsState extends State<AccountSettings> {
         content: DropdownButtonFormField<String>(
             value: currentGoals,
             icon: const Icon(Icons.keyboard_arrow_down),
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+            ),
             items: items.map<DropdownMenuItem<String>>((String items) {
               return DropdownMenuItem(value: items, child: Text(items));
             }).toList(),
@@ -131,7 +151,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                     .set({'goals': currentGoals}, SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
               },
-              child: const Text('SUBMIT'))
+              child: Text('SUBMIT',
+                  style: TextStyle(color: FitBuddyColorConstants.lAccent)))
         ],
       ),
     );
@@ -140,6 +161,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   // Dialog popup that allows to user to change thier gender.
   void experienceSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
+
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -147,6 +169,14 @@ class _AccountSettingsState extends State<AccountSettings> {
         content: DropdownButtonFormField<String>(
             value: currentExperience,
             icon: const Icon(Icons.keyboard_arrow_down),
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+            ),
             items: items.map<DropdownMenuItem<String>>((String items) {
               return DropdownMenuItem(value: items, child: Text(items));
             }).toList(),
@@ -164,10 +194,12 @@ class _AccountSettingsState extends State<AccountSettings> {
                 FirebaseFirestore.instance
                     .collection('users')
                     .doc(Auth().currentUser?.uid)
-                    .set({'experience': currentExperience}, SetOptions(merge: true));
+                    .set({'experience': currentExperience},
+                        SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
               },
-              child: const Text('SUBMIT'))
+              child: Text('SUBMIT',
+                  style: TextStyle(color: FitBuddyColorConstants.lAccent)))
         ],
       ),
     );
@@ -176,6 +208,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   // Dialog popup that allows to user to change thier gender.
   void styleSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
+
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -183,6 +216,14 @@ class _AccountSettingsState extends State<AccountSettings> {
         content: DropdownButtonFormField<String>(
             value: currentStyle,
             icon: const Icon(Icons.keyboard_arrow_down),
+            decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: FitBuddyColorConstants.lAccent, width: 2)
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: FitBuddyColorConstants.lAccent, width: 2)
+              ),
+            ),
             items: items.map<DropdownMenuItem<String>>((String items) {
               return DropdownMenuItem(value: items, child: Text(items));
             }).toList(),
@@ -200,10 +241,12 @@ class _AccountSettingsState extends State<AccountSettings> {
                 FirebaseFirestore.instance
                     .collection('users')
                     .doc(Auth().currentUser?.uid)
-                    .set({'liftingStyle': currentStyle}, SetOptions(merge: true));
+                    .set({'liftingStyle': currentStyle},
+                        SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
               },
-              child: const Text('SUBMIT'))
+              child: Text('SUBMIT',
+                  style: TextStyle(color: FitBuddyColorConstants.lAccent)))
         ],
       ),
     );
@@ -219,7 +262,12 @@ class _AccountSettingsState extends State<AccountSettings> {
         content: SingleChildScrollView(
           child: TextField(
             autofocus: true,
-            decoration: InputDecoration(hintText: hinttext),
+            decoration: InputDecoration(
+              hintText: hinttext,
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
+            ),
             controller: controller,
           ),
         ),
@@ -228,7 +276,8 @@ class _AccountSettingsState extends State<AccountSettings> {
               onPressed: () {
                 Navigator.of(context).pop(controller.text);
               },
-              child: const Text('SUBMIT'))
+              child: Text('SUBMIT',
+                  style: TextStyle(color: FitBuddyColorConstants.lAccent)))
         ],
       ),
     );
@@ -256,16 +305,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                         color: FitBuddyColorConstants.lOnPrimary)),
               ],
             ),
-      
+
             // Page Title
             Center(
               child: Text('Account Settings',
                   style: TextStyle(
                       color: FitBuddyColorConstants.lOnPrimary, fontSize: 25)),
             ),
-      
+
             const SizedBox(height: 35),
-      
+
             // Displays current Display Name and allows the user to change it.
             Row(children: [
               IconButton(
@@ -297,9 +346,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Username and allows the user to change it.
             Row(children: [
               IconButton(
@@ -331,15 +380,15 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Email and allows the user to change it.
             Row(children: [
               IconButton(
                   onPressed: () async {
-                    final email =
-                        await openDialog("Change Email", "Enter your new Email");
+                    final email = await openDialog(
+                        "Change Email", "Enter your new Email");
                     if (email != null) {
                       FirebaseFirestore.instance
                           .collection('users')
@@ -365,9 +414,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Gender and allows the user to change it.
             Row(children: [
               IconButton(
@@ -392,9 +441,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Date of Birth and allows the user to change it.
             Row(children: [
               IconButton(
@@ -419,14 +468,20 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Lifting Style and allows the user to change it.
             Row(children: [
               IconButton(
                   onPressed: () {
-                    styleSelMenu("Select Your Lifting Style", ["Calisthenics", "Powerlifting", "Bodybuilding", "Crossfit", "General Health"]);
+                    styleSelMenu("Select Your Lifting Style", [
+                      "Calisthenics",
+                      "Powerlifting",
+                      "Bodybuilding",
+                      "Crossfit",
+                      "General Health"
+                    ]);
                   },
                   icon: Icon(Icons.restart_alt,
                       color: FitBuddyColorConstants.lOnPrimary)),
@@ -446,14 +501,15 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Gym Goals and allows the user to change it.
             Row(children: [
               IconButton(
                   onPressed: () {
-                    goalsSelMenu("Select Your Gym Goals", ["Lose Weight", "Build Muscle", "Build Strength"]);
+                    goalsSelMenu("Select Your Gym Goals",
+                        ["Lose Weight", "Build Muscle", "Build Strength"]);
                   },
                   icon: Icon(Icons.restart_alt,
                       color: FitBuddyColorConstants.lOnPrimary)),
@@ -473,14 +529,20 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
               )
             ]),
-      
+
             Divider(thickness: 2, color: FitBuddyColorConstants.lAccent),
-      
+
             // Displays current Gym Experience and allows the user to change it.
             Row(children: [
               IconButton(
                   onPressed: () {
-                    experienceSelMenu("Select Your Gym Experience", ["0-3 Months", "6 Months-1 Year", "1-2 Years", "2-4 Years", "5+ Years"]);
+                    experienceSelMenu("Select Your Gym Experience", [
+                      "0-3 Months",
+                      "6 Months-1 Year",
+                      "1-2 Years",
+                      "2-4 Years",
+                      "5+ Years"
+                    ]);
                   },
                   icon: Icon(Icons.restart_alt,
                       color: FitBuddyColorConstants.lOnPrimary)),
