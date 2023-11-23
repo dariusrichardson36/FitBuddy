@@ -1,19 +1,17 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/models/user.dart';
 import 'package:fit_buddy/services/firestore/auth_service_firestore.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
-import 'package:flutter/cupertino.dart';
-//import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../services/auth.dart';
 
 class AccountSettings extends StatefulWidget {
+  const AccountSettings({super.key});
+
   @override
   _AccountSettingsState createState() => _AccountSettingsState();
 }
@@ -62,6 +60,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           .collection('users')
           .doc(Auth().currentUser?.uid)
           .update({'dob': pickedDate.toString().substring(0, 10)});
+      openAlert();
     });
   }
 
@@ -71,7 +70,6 @@ class _AccountSettingsState extends State<AccountSettings> {
 
     showDialog<void>(
       context: context,
-
       builder: (context) => AlertDialog(
         title: Text(message),
         content: DropdownButtonFormField<String>(
@@ -104,6 +102,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     .doc(Auth().currentUser?.uid)
                     .set({'gender': currentGender}, SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
+                openAlert();
               },
               child: Text('SUBMIT',
                   style: TextStyle(color: FitBuddyColorConstants.lAccent)))
@@ -112,7 +111,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     );
   }
 
-  // Dialog popup that allows to user to change thier gender.
+  // Dialog popup that allows to user to change thier gym goals.
   void goalsSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
 
@@ -150,6 +149,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     .doc(Auth().currentUser?.uid)
                     .set({'goals': currentGoals}, SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
+                openAlert();
               },
               child: Text('SUBMIT',
                   style: TextStyle(color: FitBuddyColorConstants.lAccent)))
@@ -158,7 +158,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     );
   }
 
-  // Dialog popup that allows to user to change thier gender.
+  // Dialog popup that allows to user to change thier gym experinece.
   void experienceSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
 
@@ -197,6 +197,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     .set({'experience': currentExperience},
                         SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
+                openAlert();
               },
               child: Text('SUBMIT',
                   style: TextStyle(color: FitBuddyColorConstants.lAccent)))
@@ -205,7 +206,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     );
   }
 
-  // Dialog popup that allows to user to change thier gender.
+  // Dialog popup that allows to user to change thier lifting style.
   void styleSelMenu(String message, var items) {
     late TextEditingController controller = TextEditingController();
 
@@ -218,11 +219,11 @@ class _AccountSettingsState extends State<AccountSettings> {
             icon: const Icon(Icons.keyboard_arrow_down),
             decoration: InputDecoration(
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: FitBuddyColorConstants.lAccent, width: 2)
-              ),
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: FitBuddyColorConstants.lAccent, width: 2)
-              ),
+                  borderSide: BorderSide(
+                      color: FitBuddyColorConstants.lAccent, width: 2)),
             ),
             items: items.map<DropdownMenuItem<String>>((String items) {
               return DropdownMenuItem(value: items, child: Text(items));
@@ -244,6 +245,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     .set({'liftingStyle': currentStyle},
                         SetOptions(merge: true));
                 Navigator.of(context).pop(controller.text);
+                openAlert();
               },
               child: Text('SUBMIT',
                   style: TextStyle(color: FitBuddyColorConstants.lAccent)))
@@ -252,31 +254,50 @@ class _AccountSettingsState extends State<AccountSettings> {
     );
   }
 
-  // Dialog popup that alows the user to enter in a text box.
+  // Dialog popup that allows the user to enter in a text box.
   Future<String?> openDialog(String title, String hinttext) {
     late TextEditingController controller = TextEditingController();
     return showDialog<String?>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
-        content: SingleChildScrollView(
-          child: TextField(
-            autofocus: true,
-            decoration: InputDecoration(
-              hintText: hinttext,
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: FitBuddyColorConstants.lAccent, width: 2)),
-            ),
-            controller: controller,
+        content: TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: hinttext,
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: FitBuddyColorConstants.lAccent, width: 2)),
           ),
+          controller: controller,
         ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                openAlert();
+                Navigator.of(context).pop(controller.text);
+              },
+              child: Text('SUBMIT',
+                  style: TextStyle(color: FitBuddyColorConstants.lAccent)))
+        ],
+      ),
+    );
+  }
+
+  // Dialog popup that lets the user kn ow their changes wont take place until they reload the app.
+  Future<String?> openAlert() {
+    late TextEditingController controller = TextEditingController();
+    return showDialog<String?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Desclaimer"),
+        content: const Text("Changes won't be seen till the app is reloaded."),
         actions: [
           TextButton(
               onPressed: () {
                 Navigator.of(context).pop(controller.text);
               },
-              child: Text('SUBMIT',
+              child: Text('OK',
                   style: TextStyle(color: FitBuddyColorConstants.lAccent)))
         ],
       ),
