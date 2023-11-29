@@ -9,7 +9,6 @@ class User {
   String image;
   List<String> friendList = [];
   //Fitness Info
-
   String? liftingStyle;
   String? gymGoals;
   String? gymExperience;
