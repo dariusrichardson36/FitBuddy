@@ -274,8 +274,8 @@ class _AccountSettingsState extends State<AccountSettings> {
         actions: [
           TextButton(
               onPressed: () {
-                openAlert();
                 Navigator.of(context).pop(controller.text);
+                openAlert();
               },
               child: Text('SUBMIT',
                   style: TextStyle(color: FitBuddyColorConstants.lAccent)))
