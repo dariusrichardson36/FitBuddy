@@ -60,7 +60,7 @@ class FitBuddyRouter {
             path: '/search',
             name: FitBuddyRouterConstants.searchPage,
             pageBuilder: (context, state) {
-              return MaterialPage(
+              return const MaterialPage(
                 child: SearchPage(),
               );
             }),
@@ -120,7 +120,6 @@ class FitBuddyRouter {
             state.matchedLocation != '/completeAccountInfo') {
           return null;
         }
-        //return state.namedLocation(FitBuddyRouterConstants.profilePage);
         return '/';
       });
 }

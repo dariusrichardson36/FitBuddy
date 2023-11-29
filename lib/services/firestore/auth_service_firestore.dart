@@ -61,6 +61,15 @@ class UserServiceFirestore {
     }
   }
 
+  addImage(String url) {
+    firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .update({
+      'images': FieldValue.arrayUnion([url])
+    });
+  }
+
   Future createUser(
       String uid,
       String? experience,
@@ -82,6 +91,9 @@ class UserServiceFirestore {
         'displayName': displayName,
         'gender': gender,
         'friendList': [uid],
+        'images': [
+          "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+        ],
       });
     } catch (e) {
       // todo

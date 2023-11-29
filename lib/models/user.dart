@@ -13,7 +13,8 @@ class User {
   String? liftingStyle;
   String? gymGoals;
   String? gymExperience;
-  //List<String> images;
+  String? uid;
+  List<String> images;
 
   User({
     required this.name,
@@ -27,7 +28,8 @@ class User {
     this.email,
     required this.image,
     required this.friendList,
-    //required this.images,
+    this.uid,
+    required this.images,
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {
@@ -46,6 +48,10 @@ class User {
       liftingStyle: map['liftingStyle'],
       gymGoals: map['goals'],
       gymExperience: map['experience'],
+      images: List<String>.from(map["images"]) ??
+          [
+            "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+          ],
     );
   }
 }
