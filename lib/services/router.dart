@@ -4,6 +4,7 @@ import 'package:fit_buddy/pages/auth_page.dart';
 import 'package:fit_buddy/pages/complete_account_page.dart';
 import 'package:fit_buddy/pages/create_workout_page.dart';
 import 'package:fit_buddy/pages/home_page.dart';
+import 'package:fit_buddy/pages/profile_page.dart';
 import 'package:fit_buddy/pages/single_post_page.dart';
 import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,12 @@ class FitBuddyRouter {
               return const MaterialPage(child: CompleteAccountInformation());
             }),
         GoRoute(
+            path: '/profile',
+            name: FitBuddyRouterConstants.profilePage,
+            pageBuilder: (context, state) {
+              return MaterialPage(child: ProfilePage());
+            }),
+        GoRoute(
             path: '/search',
             name: FitBuddyRouterConstants.searchPage,
             pageBuilder: (context, state) {
@@ -89,6 +96,12 @@ class FitBuddyRouter {
             return state.namedLocation(FitBuddyRouterConstants.homePage);
           }
         }
-        return null;
+
+        if (state.matchedLocation != '/' &&
+            state.matchedLocation != '/authentication' &&
+            state.matchedLocation != '/completeAccountInfo') {
+          return null;
+        }
+        return '/';
       });
 }

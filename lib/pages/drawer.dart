@@ -1,3 +1,5 @@
+
+import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +34,10 @@ class DrawerPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Zachary@Zac.Graham',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: FitBuddyColorConstants.lOnPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
@@ -43,7 +45,7 @@ class DrawerPage extends StatelessWidget {
                   Text(
                     '215 Friends',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: FitBuddyColorConstants.lOnSecondary,
                       fontSize: 10,
                     ),
                   ),
@@ -54,42 +56,46 @@ class DrawerPage extends StatelessWidget {
           const SizedBox(height: 50),
           Row(
             children: [
-              const Icon(Icons.person, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
+              Icon(Icons.person, color: FitBuddyColorConstants.lOnPrimary, size: 35),
+              SizedBox(width: 15),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.goNamed(FitBuddyRouterConstants.profilePage);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Profile',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
           const SizedBox(height: 15),
           Row(
             children: [
-              const Icon(Icons.settings, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
+              Icon(Icons.settings, color: FitBuddyColorConstants.lOnPrimary, size: 35),
+              SizedBox(width: 15),
+
               ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Settings',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
           const SizedBox(height: 15),
           Row(
             children: [
-              const Icon(Icons.edit, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
+              Icon(Icons.edit, color: FitBuddyColorConstants.lOnPrimary, size: 35),
+              SizedBox(width: 15),
+
               ElevatedButton(
                   onPressed: () {
                     context.goNamed(FitBuddyRouterConstants.createWorkoutPage);
@@ -98,9 +104,9 @@ class DrawerPage extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Log Workout',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
                   )),
             ],
           ),
