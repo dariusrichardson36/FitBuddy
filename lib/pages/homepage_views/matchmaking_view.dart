@@ -159,6 +159,4 @@ class MatchmakingView extends StatelessWidget {
         ],
       );
   }
-
-
 }

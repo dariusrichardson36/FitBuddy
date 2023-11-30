@@ -38,7 +38,7 @@ class Auth {
       return await _firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: pw);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // todo
     }
   }

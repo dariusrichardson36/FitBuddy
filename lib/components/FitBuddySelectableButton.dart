@@ -25,7 +25,7 @@ class _FitBuddySelectableButtonState extends State<FitBuddySelectableButton> {
       child: Container(
         width: double.infinity,
         height: 50,
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
