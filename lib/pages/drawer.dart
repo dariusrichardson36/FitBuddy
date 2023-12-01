@@ -41,7 +41,7 @@ class DrawerPage extends StatelessWidget {
                   FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Text(
-                      user.email ?? "Null",
+                      "${user.name}@${user.username}",
                       style: TextStyle(
                           color: FitBuddyColorConstants.lOnPrimary,
                           fontWeight: FontWeight.bold),

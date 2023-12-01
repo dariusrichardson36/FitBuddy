@@ -60,9 +60,9 @@ class _TimeLineViewState extends State<TimeLineView> {
 
   @override
   Widget build(BuildContext context) {
-    UserServiceFirestore userService =
-        _firestore.userService;
-    User user = userService.user;
+    // UserServiceFirestore userService =
+    //     _firestore.userService;
+    // User user = userService.user;
     return StreamBuilder<List<Post>>(
       stream: _timelinePostsStream,
       builder: (context, snapshot) {
@@ -84,7 +84,7 @@ class _TimeLineViewState extends State<TimeLineView> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage(user.image), // Replace with your image URL
+                          image: NetworkImage("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"), // Replace with your image URL
                           fit: BoxFit.cover,
                         ),
                       ),
