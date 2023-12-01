@@ -11,6 +11,7 @@ import '../../models/Profile.dart';
 User? user = FirebaseAuth.instance.currentUser;
 String? currentUserID = user?.uid;
 
+
 // Constructs list of user information from user class
 Future<List<Profile>> getProfilesFromFirestore(String currentUserID) async {
   final collection = FirebaseFirestore.instance.collection('users');
@@ -111,24 +112,17 @@ class MatchmakingView extends StatelessWidget {
         //final age = dob != null ? calculateAgeFromDOB(dob) : 0;
 
         final group1Users = users?.where((user) =>
-            isUserInGroup(user, 'A', 'F')).toList();
-        final group2Users = users?.where((user) =>
-            isUserInGroup(user, 'G', 'M')).toList();
-        final group3Users = users?.where((user) =>
-            isUserInGroup(user, 'N', 'S')).toList();
-        final group4Users = users?.where((user) =>
-            isUserInGroup(user, 'T', 'Z')).toList();
-
+            isUserInGroup(user, 'A', 'Z')).toList();
 
         // Here is my swiper
         return AppinioSwiper(
-          cardsCount: group3Users?.length ?? 0,
+          cardsCount: group1Users?.length ?? 0,
           // Tracks direction that the card is swiped in
           onSwipe: (int index, AppinioSwiperDirection direction) {
 
             if (direction == AppinioSwiperDirection.right) {
               // User swiped right, call like and match functions
-              String? likedUserID = group3Users?[index].uid;
+              String? likedUserID = group1Users?[index].uid;
               print(currentUserID);
               print("liked");
               likeProfile(currentUserID!, likedUserID!);
@@ -137,7 +131,7 @@ class MatchmakingView extends StatelessWidget {
           },
 
           cardsBuilder: (BuildContext context, int index) {
-            final user = group3Users?[index];
+            final user = group1Users?[index];
             final imageUrl = user?.image_url ?? placeholderImageUrl;
 
             return Container(
@@ -333,14 +327,14 @@ class MatchmakingView extends StatelessWidget {
                             },
                             child: Icon(
                               Icons.close,
-                              size: 52,
+                              size: 48,
                               color: Colors.red,
                             ),
                           ),
                           SizedBox(width: 30.0),
                           GestureDetector(
                             onTap: () {
-                              String? likedUserID = group2Users?[index].uid; // Get the liked user ID
+                              String? likedUserID = group1Users?[index].uid; // Get the liked user ID
                               print(currentUserID);
                               print("liked");
                               likeProfile(currentUserID!, likedUserID!); // Call your like function
@@ -348,7 +342,7 @@ class MatchmakingView extends StatelessWidget {
                             },
                             child: Icon(
                               Icons.favorite,
-                              size: 65,
+                              size: 58,
                               color: Colors.green,
                             ),
                           ),
@@ -359,7 +353,7 @@ class MatchmakingView extends StatelessWidget {
                             },
                             child: Icon(
                               Icons.star,
-                              size: 52,
+                              size: 48,
                               color: Colors.blue,
                             ),
                           ),
