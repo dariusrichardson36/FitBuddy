@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:fit_buddy/components/FitBuddyTimeLinePost.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
+import 'package:fit_buddy/models/user.dart';
+import 'package:fit_buddy/services/firestore/auth_service_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../services/firestore/firestore_service.dart';
+import 'package:fit_buddy/services/firestore/firestore_service.dart';
 
 class TimeLineView extends StatefulWidget {
   const TimeLineView({super.key});
@@ -59,6 +60,9 @@ class _TimeLineViewState extends State<TimeLineView> {
 
   @override
   Widget build(BuildContext context) {
+    UserServiceFirestore userService =
+        _firestore.userService;
+    User user = userService.user;
     return StreamBuilder<List<Post>>(
       stream: _timelinePostsStream,
       builder: (context, snapshot) {
@@ -77,11 +81,10 @@ class _TimeLineViewState extends State<TimeLineView> {
                     child: Container(
                       width: 35.0,
                       height: 35.0,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage(
-                              'https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
+                          image: NetworkImage(user.image), // Replace with your image URL
                           fit: BoxFit.cover,
                         ),
                       ),
