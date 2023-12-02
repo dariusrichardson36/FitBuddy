@@ -1,6 +1,8 @@
-
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
+import 'package:fit_buddy/models/user.dart';
+import 'package:fit_buddy/services/firestore/auth_service_firestore.dart';
+import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +14,9 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserServiceFirestore userService =
+        FirestoreService.firestoreService().userService;
+    User user = userService.user;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, top: 10),
@@ -21,11 +26,10 @@ class DrawerPage extends StatelessWidget {
               Container(
                 width: 75.0,
                 height: 75.0,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: NetworkImage(
-                        'https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
+                    image: NetworkImage(user.image), // Replace with your image URL
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -34,19 +38,23 @@ class DrawerPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Zachary@Zac.Graham',
-                    style: TextStyle(
-                        color: FitBuddyColorConstants.lOnPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      "${user.name}@${user.username}",
+                      style: TextStyle(
+                          color: FitBuddyColorConstants.lOnPrimary,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   const SizedBox(height: 35),
-                  Text(
-                    '215 Friends',
-                    style: TextStyle(
-                      color: FitBuddyColorConstants.lOnSecondary,
-                      fontSize: 10,
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      "${user.friendList.length} Friends",
+                      style: TextStyle(
+                        color: FitBuddyColorConstants.lOnSecondary,
+                      ),
                     ),
                   ),
                 ],
