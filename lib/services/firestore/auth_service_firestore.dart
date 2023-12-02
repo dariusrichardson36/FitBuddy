@@ -37,6 +37,24 @@ class UserServiceFirestore {
     return docSnapshot.exists;
   }
 
+  void addToFriendList(String friendId) {
+    firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .update({
+      'friendList': FieldValue.arrayUnion([friendId])
+    });
+  }
+
+  void removeFromFriendList(String friendId) {
+    firestoreService.instance
+        .collection('users')
+        .doc(Auth().currentUser?.uid)
+        .update({
+      'friendList': FieldValue.arrayRemove([friendId])
+    });
+  }
+
   Future<List<String>> searchUser(String name) async {
     try {
       // Ensuring case-insensitive search by converting input and stored name to lowercase
@@ -97,6 +115,7 @@ class UserServiceFirestore {
         'images': [
           "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
         ],
+        'uid': uid,
       });
     } catch (e) {
       // todo

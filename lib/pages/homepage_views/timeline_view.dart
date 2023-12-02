@@ -4,6 +4,9 @@ import 'package:fit_buddy/components/FitBuddyTimeLinePost.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../constants/route_constants.dart';
 
 class TimeLineView extends StatefulWidget {
   const TimeLineView({super.key});
@@ -92,7 +95,11 @@ class _TimeLineViewState extends State<TimeLineView> {
                     ),
                   ),
                   Image.asset("lib/images/logo.png", width: 35, height: 35),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                  IconButton(
+                      onPressed: () {
+                        context.goNamed(FitBuddyRouterConstants.searchPage);
+                      },
+                      icon: const Icon(Icons.search)),
                 ],
               ),
             ),

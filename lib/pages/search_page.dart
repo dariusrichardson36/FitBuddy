@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
+import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,14 +15,19 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final _firestore = FirestoreService.firestoreService();
   late TextEditingController _controller;
   String searchQuery = '';
   List<String> _searchResults = []; // This list will hold the search results
+  List<String> _friendList = []; // This list will hold the friends list
+  String userID = "";
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _friendList = _firestore.userService.user.friendList;
+    userID = Auth().currentUser!.uid;
   }
 
   @override
@@ -78,8 +84,10 @@ class _SearchPageState extends State<SearchPage> {
                 itemBuilder: (context, index) {
                   var data = snapshots.data!.docs[index].data()
                       as Map<String, dynamic>;
-
                   if (searchQuery.isEmpty) {
+                    return null;
+                  }
+                  if (data['uid'] == userID) {
                     return null;
                   }
                   if (data['username']
@@ -114,10 +122,22 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       trailing: ElevatedButton(
                         onPressed: () {
-                          //Navigator.of(context).pushNamed('/profile');
-                          //context.goNamed(FitBuddyRouterConstants.profilePage);
+                          if (!_friendList.contains(data['uid'])) {
+                            _firestore.userService.addToFriendList(data['uid']);
+                            setState(() {
+                              _friendList.add(data['uid']);
+                            });
+                          } else {
+                            _firestore.userService
+                                .removeFromFriendList(data['uid']);
+                            setState(() {
+                              _friendList.remove(data['uid']);
+                            });
+                          }
                         },
-                        child: const Text('Add'),
+                        child: (!_friendList.contains(data['uid']))
+                            ? const Text('Add')
+                            : const Text('Remove'),
                       ),
                       onTap: () {
                         //Navigator.of(context).pushNamed('/profile');
