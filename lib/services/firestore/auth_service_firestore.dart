@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_buddy/models/contact_model.dart';
 
 import '../../models/user.dart';
 import '../auth.dart';
@@ -53,6 +54,21 @@ class UserServiceFirestore {
         .update({
       'friendList': FieldValue.arrayRemove([friendId])
     });
+  }
+
+  Future<List<Contact>> getContactList() async {
+    List<Contact> contacts = [];
+    for (var friendId in user.friendList) {
+      print(friendId);
+      var friendData = await firestoreService.instance
+          .collection('users')
+          .doc(friendId)
+          .get();
+
+      Contact contact = Contact.fromJson(friendData.data()!);
+      contacts.add(contact);
+    }
+    return contacts;
   }
 
   Future<List<String>> searchUser(String name) async {
@@ -112,6 +128,8 @@ class UserServiceFirestore {
         'displayName': displayName,
         'gender': gender,
         'friendList': [uid],
+        'image_url':
+            'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg',
         'images': [
           "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
         ],

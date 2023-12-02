@@ -52,7 +52,7 @@ class DrawerPage extends StatelessWidget {
                   FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Text(
-                      "${user.friendList.length - 1} Friends",
+                      "${user.friendList.length - 1} friends",
                       style: TextStyle(
                         color: FitBuddyColorConstants.lOnSecondary,
                       ),
