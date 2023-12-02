@@ -19,6 +19,9 @@ class UserServiceFirestore {
         .collection('users')
         .doc(Auth().currentUser?.uid)
         .get();
+    print("Getting user data");
+    print("User data: ${data.data()}");
+    print(Auth().currentUser?.uid);
     return User.fromDataSnapshot(data.data()!);
   }
 

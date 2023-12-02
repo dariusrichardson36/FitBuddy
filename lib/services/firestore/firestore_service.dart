@@ -25,6 +25,7 @@ class FirestoreService {
 
   // 3. Internal named constructor
   FirestoreService._internal() {
+    print("FirestoreService._internal()");
     userService = UserServiceFirestore(firestoreService: this);
     userService.init();
     timelineService = TimelineServiceFirestore(

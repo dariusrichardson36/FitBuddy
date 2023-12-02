@@ -35,7 +35,7 @@ class User {
     return User(
       //personal info
       name: map['displayName'],
-      age: map['dob'],
+      age: map['dob'] ?? "0",
       username: map['username'],
       email: map['email'],
       image: map['image_url'] ??
