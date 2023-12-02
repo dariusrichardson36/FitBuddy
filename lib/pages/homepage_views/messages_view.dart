@@ -1,6 +1,8 @@
 import 'package:fit_buddy/models/contact_model.dart';
+import 'package:fit_buddy/services/firestore/chat_service_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/auth.dart';
 import '../../services/firestore/firestore_service.dart';
 
 class MessagesView extends StatefulWidget {
@@ -11,7 +13,9 @@ class MessagesView extends StatefulWidget {
 }
 
 class _MessagesViewState extends State<MessagesView> {
-  final _firestore = FirestoreService.firestoreService().userService;
+  final _firestore = FirestoreService.firestoreService();
+  String? userUid = Auth().currentUser?.uid;
+  final _messageController = TextEditingController();
   Future<List<Contact>>? contacts;
   String chatroomUid = '';
   String chatroomName = "";
@@ -19,7 +23,11 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   void initState() {
     super.initState();
-    contacts = _firestore.getContactList();
+    contacts = _firestore.userService.getContactList();
+  }
+
+  sendMessage(String message) {
+    _firestore.chatService.sendMessage(chatroomUid, message);
   }
 
   @override
@@ -44,23 +52,47 @@ class _MessagesViewState extends State<MessagesView> {
           ],
         ),
         Expanded(
-          child: ListView(
-            children: [
-              Text(chatroomUid),
-            ],
-          ),
+          child: StreamBuilder<List<Chat>>(
+              stream: _firestore.chatService.getChatStream(chatroomUid),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) {
+                      Chat? chat = snapshot.data?[index];
+                      bool sender = (chat?.senderId == userUid);
+                      return Row(
+                        mainAxisAlignment: (sender)
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: (sender) ? Colors.lightGreen : Colors.blue,
+                            ),
+                            child: Text(snapshot.data?[index].message ?? ''),
+                          )
+                        ],
+                      );
+                    });
+              }),
         ),
         Row(
           children: [
-            const Expanded(
+            Expanded(
               child: TextField(
-                decoration: InputDecoration(
+                controller: _messageController,
+                decoration: const InputDecoration(
                   hintText: 'Type a message',
                 ),
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                sendMessage(_messageController.text);
+              },
               icon: const Icon(Icons.send),
             ),
           ],
