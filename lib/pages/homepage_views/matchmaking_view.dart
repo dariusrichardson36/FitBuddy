@@ -35,10 +35,7 @@ class MatchmakingView extends StatelessWidget {
           if (!likes.contains(likedID)) {
             likes.add(likedID);
             transaction.update(likerRef, {'Likes': likes});
-            print('Like added to Firestore!');
-          } else {
-            print('User already liked this profile!');
-          }
+          } else {}
         }
       });
     } catch (error) {
@@ -124,8 +121,6 @@ class MatchmakingView extends StatelessWidget {
             if (direction == AppinioSwiperDirection.right) {
               // User swiped right, call like and match functions
               String? likedUserID = group1Users?[index].uid;
-              print(currentUserID);
-              print("liked");
               likeProfile(currentUserID!, likedUserID!);
               matchUser(currentUserID!, likedUserID);
             }
@@ -144,7 +139,7 @@ class MatchmakingView extends StatelessWidget {
                   Container(
                     alignment: Alignment.topCenter,
                     height: MediaQuery.of(context).size.height *
-                        0.45, // Set 40% of the screen height
+                        0.40, // Set 40% of the screen height
                     child: Image.network(
                       imageUrl,
                       fit: BoxFit.fitWidth, // Take up 90% of the screen width
@@ -155,7 +150,9 @@ class MatchmakingView extends StatelessWidget {
                   ),
 
                   // Text widget with size 24 font aligned to the left
-
+                  const SizedBox(
+                    height: 5,
+                  ),
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -322,8 +319,6 @@ class MatchmakingView extends StatelessWidget {
                               _controller.swipeRight();
                               String? likedUserID = group1Users?[index]
                                   .uid; // Get the liked user ID
-                              print(currentUserID);
-                              print("liked");
                               likeProfile(currentUserID!,
                                   likedUserID!); // Call your like function
                               matchUser(currentUserID!, likedUserID);

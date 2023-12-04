@@ -34,7 +34,6 @@ class User {
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {
-    print(map);
     return User(
       //personal info
       name: map['displayName'],

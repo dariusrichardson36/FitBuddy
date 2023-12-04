@@ -24,7 +24,6 @@ class FitBuddyRouter {
             name: FitBuddyRouterConstants.homePage,
             path: '/',
             pageBuilder: (context, state) {
-              print("going to home page");
               return const MaterialPage(
                 child: HomePage(),
               );
@@ -49,7 +48,6 @@ class FitBuddyRouter {
             name: FitBuddyRouterConstants.completeAccountPage,
             path: '/completeAccountInfo',
             pageBuilder: (context, state) {
-              print("going to complete account info page");
               return const MaterialPage(child: CompleteAccountInformation());
             }),
         GoRoute(
@@ -103,38 +101,28 @@ class FitBuddyRouter {
       redirect: (context, GoRouterState state) async {
         User? user = Auth().currentUser;
         if (user == null) {
-          print("user is null, going to auth page");
           return state.namedLocation(FitBuddyRouterConstants.authPage);
         }
         if (state.matchedLocation == '/authentication') {
-          print("does user data exist?");
           bool doesUserDataExist = await FirestoreService.firestoreService()
               .userService
               .doesUserDocumentExist(user.uid);
-          print(doesUserDataExist);
           if (!doesUserDataExist) {
-            print("Going to complete account page");
             return state
                 .namedLocation(FitBuddyRouterConstants.completeAccountPage);
           } else {
-            print("Going to home page0");
             FirestoreService.firestoreService().userService.init();
             return state.namedLocation(FitBuddyRouterConstants.homePage);
           }
         }
-        if (state.matchedLocation == '/completeAccountInfo') {
-          print("completed account info, going to home page");
-        }
+        if (state.matchedLocation == '/completeAccountInfo') {}
 
         if (state.matchedLocation != '/' &&
             state.matchedLocation != '/authentication' &&
             state.matchedLocation != '/completeAccountInfo') {
-          print(state.matchedLocation);
           return null;
         } else {
-          print(state.matchedLocation);
           FirestoreService.firestoreService().userService.init();
-          print("Going to  / ");
           return null;
         }
       });

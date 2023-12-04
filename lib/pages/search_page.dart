@@ -87,9 +87,6 @@ class _SearchPageState extends State<SearchPage> {
                   if (searchQuery.isEmpty) {
                     return null;
                   }
-                  if (data['uid'] == userID) {
-                    return null;
-                  }
                   if (data['username']
                       .toString()
                       .toLowerCase()
