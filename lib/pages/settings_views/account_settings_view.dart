@@ -33,7 +33,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   }
 
   // Date Picker Popup
-  void _selDatePicker(String dob) async {
+  void _selDatePicker() async {
     showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -59,7 +59,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       FirebaseFirestore.instance
           .collection('users')
           .doc(Auth().currentUser?.uid)
-          .update({'dob': pickedDate.toString().substring(0, 10)});
+          .update({'dob': pickedDate});
       openAlert();
     });
   }
@@ -469,7 +469,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             Row(children: [
               IconButton(
                   onPressed: () {
-                    _selDatePicker(user.age);
+                    _selDatePicker();
                   },
                   icon: Icon(Icons.restart_alt,
                       color: FitBuddyColorConstants.lOnPrimary)),
@@ -481,7 +481,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnPrimary,
                             fontSize: 18)),
-                    Text(user.age,
+                    Text(user.dob.toDate().toString(),
                         style: TextStyle(
                             color: FitBuddyColorConstants.lOnSecondary,
                             fontSize: 14)),
