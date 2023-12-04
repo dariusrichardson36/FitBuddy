@@ -35,10 +35,7 @@ class MatchmakingView extends StatelessWidget {
           if (!likes.contains(likedID)) {
             likes.add(likedID);
             transaction.update(likerRef, {'Likes': likes});
-            print('Like added to Firestore!');
-          } else {
-            print('User already liked this profile!');
-          }
+          } else {}
         }
       });
     } catch (error) {
@@ -124,8 +121,6 @@ class MatchmakingView extends StatelessWidget {
             if (direction == AppinioSwiperDirection.right) {
               // User swiped right, call like and match functions
               String? likedUserID = group1Users?[index].uid;
-              print(currentUserID);
-              print("liked");
               likeProfile(currentUserID!, likedUserID!);
               matchUser(currentUserID!, likedUserID);
             }
@@ -324,8 +319,6 @@ class MatchmakingView extends StatelessWidget {
                               _controller.swipeRight();
                               String? likedUserID = group1Users?[index]
                                   .uid; // Get the liked user ID
-                              print(currentUserID);
-                              print("liked");
                               likeProfile(currentUserID!,
                                   likedUserID!); // Call your like function
                               matchUser(currentUserID!, likedUserID);

@@ -82,18 +82,15 @@ class _SearchPageState extends State<SearchPage> {
             return ListView.builder(
                 itemCount: snapshots.data!.docs.length,
                 itemBuilder: (context, index) {
-                  print(snapshots.data!.docs.length);
                   var data = snapshots.data!.docs[index].data()
                       as Map<String, dynamic>;
                   if (searchQuery.isEmpty) {
-                    print("searchQuery is empty");
                     return null;
                   }
                   if (data['username']
                       .toString()
                       .toLowerCase()
                       .startsWith(searchQuery.toLowerCase())) {
-                    print(data['username']);
                     return ListTile(
                       title: Text(
                         data['displayName'],

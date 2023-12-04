@@ -20,9 +20,6 @@ class UserServiceFirestore {
         .collection('users')
         .doc(Auth().currentUser?.uid)
         .get();
-    print("Getting user data");
-    print("User data: ${data.data()}");
-    print(Auth().currentUser?.uid);
     return User.fromDataSnapshot(data.data()!);
   }
 
@@ -59,7 +56,6 @@ class UserServiceFirestore {
   Future<List<Contact>> getContactList() async {
     List<Contact> contacts = [];
     for (var friendId in user.friendList) {
-      print(friendId);
       var friendData = await firestoreService.instance
           .collection('users')
           .doc(friendId)

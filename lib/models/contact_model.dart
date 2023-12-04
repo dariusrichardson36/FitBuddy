@@ -17,9 +17,7 @@ class Contact {
     chatUid.add(json['uid']);
     chatUid.add(Auth().currentUser!.uid);
     chatUid.sort();
-    print("fromJSon");
     String joined = chatUid.join("_");
-    print(joined);
     return Contact(
         name: json['displayName'],
         image: json['image_url'],
