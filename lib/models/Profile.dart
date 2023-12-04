@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Profile
-{
+class User {
   String? uid;
 
   //Personal Info
@@ -16,7 +15,7 @@ class Profile
   String? gymGoals;
   String? liftingExperience;
 
-  Profile({
+  User({
     this.uid,
     this.displayName,
     this.username,
@@ -26,13 +25,12 @@ class Profile
     this.liftingStyle,
     this.gymGoals,
     this.liftingExperience,
-});
+  });
 
-  static Profile fromDataSnapshot(DocumentSnapshot snapshot){
+  static User fromDataSnapshot(DocumentSnapshot snapshot) {
     var dataSnapshot = snapshot.data() as Map<String, dynamic>;
 
-    return Profile(
-
+    return User(
       uid: dataSnapshot['uid'],
       //personal info
       displayName: dataSnapshot['displayName'],
@@ -48,19 +46,18 @@ class Profile
     );
   }
 
-  Map<String,dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
+        "uid": uid,
+        //personal info
+        "displayName": displayName,
+        "username": username,
+        "image_url": image_url,
+        //"dob": dob,
+        "email": email,
 
-    "uid": uid,
-    //personal info
-    "displayName": displayName,
-    "username": username,
-    "image_url": image_url,
-    //"dob": dob,
-    "email": email,
-
-    //fitness info
-    "liftingStyle": liftingStyle,
-    "gymGoals": gymGoals,
-    "liftingExperience": liftingExperience,
-  };
+        //fitness info
+        "liftingStyle": liftingStyle,
+        "gymGoals": gymGoals,
+        "liftingExperience": liftingExperience,
+      };
 }

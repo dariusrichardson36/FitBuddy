@@ -1,34 +1,29 @@
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../models/Profile.dart';
 
-
-User? user = FirebaseAuth.instance.currentUser;
-String? currentUserID = user?.uid;
-
+String? currentUserID = Auth().currentUser?.uid;
 
 // Constructs list of user information from user class
-Future<List<Profile>> getProfilesFromFirestore(String currentUserID) async {
+Future<List<User>> getProfilesFromFirestore(String currentUserID) async {
   final collection = FirebaseFirestore.instance.collection('users');
-  final snapshot = await collection.where('uid', isNotEqualTo: currentUserID).get();
-  return snapshot.docs.map((doc) => Profile.fromDataSnapshot(doc)).toList();
+  final snapshot =
+      await collection.where('uid', isNotEqualTo: currentUserID).get();
+  return snapshot.docs.map((doc) => User.fromDataSnapshot(doc)).toList();
 }
 
-
 class MatchmakingView extends StatelessWidget {
-
   const MatchmakingView({Key? key}) : super(key: key);
-
 
   // Here is my like function
   Future<void> likeProfile(String likerID, String likedID) async {
     try {
-      final likerRef = FirebaseFirestore.instance.collection('users').doc(likerID);
+      final likerRef =
+          FirebaseFirestore.instance.collection('users').doc(likerID);
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         final userSnapshot = await transaction.get(likerRef);
@@ -53,10 +48,13 @@ class MatchmakingView extends StatelessWidget {
 
   Future<void> matchUser(String likerID, String likedID) async {
     try {
-      var likerRef = FirebaseFirestore.instance.collection('users').doc(likerID);
-      var likedRef = FirebaseFirestore.instance.collection('users').doc(likedID);
+      var likerRef =
+          FirebaseFirestore.instance.collection('users').doc(likerID);
+      var likedRef =
+          FirebaseFirestore.instance.collection('users').doc(likedID);
 
-      await FirebaseFirestore.instance.runTransaction((Transaction transaction) async {
+      await FirebaseFirestore.instance
+          .runTransaction((Transaction transaction) async {
         var likerSnapshot = await transaction.get(likerRef);
         var likedSnapshot = await transaction.get(likedRef);
 
@@ -67,7 +65,8 @@ class MatchmakingView extends StatelessWidget {
           var likerLikes = List<String>.from(likerData?['Likes'] ?? []);
           var likedLikes = List<String>.from(likedData?['Likes'] ?? []);
 
-          var mutualLike = likerLikes.contains(likedID) && likedLikes.contains(likerID);
+          var mutualLike =
+              likerLikes.contains(likedID) && likedLikes.contains(likerID);
 
           if (mutualLike) {
             var likerMatches = List<String>.from(likerData?['Matches'] ?? []);
@@ -92,34 +91,36 @@ class MatchmakingView extends StatelessWidget {
     }
   }
 
-  static const String placeholderImageUrl = 'https://www.seekpng.com/png/detail/847-8474751_download-empty-profile.png';
+  static const String placeholderImageUrl =
+      'https://www.seekpng.com/png/detail/847-8474751_download-empty-profile.png';
 
   @override
   Widget build(BuildContext context) {
+    AppinioSwiperController _controller = AppinioSwiperController();
 
-    return FutureBuilder<List<Profile>>(
+    return FutureBuilder<List<User>>(
       future: getProfilesFromFirestore(currentUserID!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return Text('No users found.');
+          return const Text('No users found.');
         }
 
         final users = snapshot.data;
         //final age = dob != null ? calculateAgeFromDOB(dob) : 0;
 
-        final group1Users = users?.where((user) =>
-            isUserInGroup(user, 'A', 'Z')).toList();
+        final group1Users =
+            users?.where((user) => isUserInGroup(user, 'A', 'Z')).toList();
 
         // Here is my swiper
         return AppinioSwiper(
+          controller: _controller,
           cardsCount: group1Users?.length ?? 0,
           // Tracks direction that the card is swiped in
           onSwipe: (int index, AppinioSwiperDirection direction) {
-
             if (direction == AppinioSwiperDirection.right) {
               // User swiped right, call like and match functions
               String? likedUserID = group1Users?[index].uid;
@@ -135,25 +136,19 @@ class MatchmakingView extends StatelessWidget {
             final imageUrl = user?.image_url ?? placeholderImageUrl;
 
             return Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
+              height: MediaQuery.of(context).size.height,
               color: Colors.blueGrey[100],
               child: Column(
                 children: [
                   // Profile picture aligned with the top of the card and taking half of the height
                   Container(
                     alignment: Alignment.topCenter,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.45, // Set 40% of the screen height
+                    height: MediaQuery.of(context).size.height *
+                        0.45, // Set 40% of the screen height
                     child: Image.network(
                       imageUrl,
                       fit: BoxFit.fitWidth, // Take up 90% of the screen width
-                      width: MediaQuery
-                          .of(context)
+                      width: MediaQuery.of(context)
                           .size
                           .width, // Set 90% of the screen width
                     ),
@@ -163,7 +158,7 @@ class MatchmakingView extends StatelessWidget {
 
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     // Add padding to both sides of the row
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,7 +181,6 @@ class MatchmakingView extends StatelessWidget {
                       ],
                     ),
                   ),
-
 
                   Row(
                     children: [
@@ -221,9 +215,7 @@ class MatchmakingView extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(
-                      height: 10
-                  ),
+                  SizedBox(height: 10),
                   // Inside cardsBuilder in your AppinioSwiper widget
                   Container(
                     alignment: Alignment.centerLeft,
@@ -244,16 +236,14 @@ class MatchmakingView extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: ' ${user?.liftingExperience ??
-                                'No Experience'}',
+                            text:
+                                ' ${user?.liftingExperience ?? 'No Experience'}',
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: 15
-                  ),
+                  SizedBox(height: 15),
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: 16.0),
@@ -279,9 +269,7 @@ class MatchmakingView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: 15
-                  ),
+                  SizedBox(height: 15),
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: 16.0),
@@ -301,57 +289,59 @@ class MatchmakingView extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: ' ${user?.liftingStyle ??
-                                'No Lifting Style'}',
+                            text:
+                                ' ${user?.liftingStyle ?? 'No Lifting Style'}',
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: 20
-                  ),
-
+                  const Spacer(),
                   // Here is my code for my buttons, and the logic as far as liking and disliking goes
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
                             onTap: () {
+                              _controller.swipeLeft();
                               // Perform the action for the first button
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.close,
                               size: 48,
                               color: Colors.red,
                             ),
                           ),
-                          SizedBox(width: 30.0),
+                          const SizedBox(width: 30.0),
                           GestureDetector(
                             onTap: () {
-                              String? likedUserID = group1Users?[index].uid; // Get the liked user ID
+                              _controller.swipeRight();
+                              String? likedUserID = group1Users?[index]
+                                  .uid; // Get the liked user ID
                               print(currentUserID);
                               print("liked");
-                              likeProfile(currentUserID!, likedUserID!); // Call your like function
+                              likeProfile(currentUserID!,
+                                  likedUserID!); // Call your like function
                               matchUser(currentUserID!, likedUserID);
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.favorite,
                               size: 58,
                               color: Colors.green,
                             ),
                           ),
-                          SizedBox(width: 30.0),
+                          const SizedBox(width: 30.0),
                           GestureDetector(
                             onTap: () {
+                              _controller.swipeUp();
                               // Perform the action for the third button
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.star,
                               size: 48,
                               color: Colors.blue,
@@ -370,7 +360,7 @@ class MatchmakingView extends StatelessWidget {
     );
   }
 
-  bool isUserInGroup(Profile? user, String startLetter, String endLetter) {
+  bool isUserInGroup(User? user, String startLetter, String endLetter) {
     final displayName = user?.displayName;
     if (displayName != null && displayName.isNotEmpty) {
       final firstLetter = displayName[0].toUpperCase();
@@ -380,8 +370,3 @@ class MatchmakingView extends StatelessWidget {
     return false;
   }
 }
-
-
-
-
-
