@@ -1,4 +1,8 @@
+import 'package:fit_buddy/constants/color_constants.dart';
 import 'package:fit_buddy/constants/route_constants.dart';
+import 'package:fit_buddy/models/user.dart';
+import 'package:fit_buddy/services/firestore/auth_service_firestore.dart';
+import 'package:fit_buddy/services/firestore/firestore_service.dart';
 import 'package:fit_buddy/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +14,9 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserServiceFirestore userService =
+        FirestoreService.firestoreService().userService;
+    User user = userService.user;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, top: 10),
@@ -19,11 +26,11 @@ class DrawerPage extends StatelessWidget {
               Container(
                 width: 75.0,
                 height: 75.0,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: NetworkImage(
-                        'https://pbs.twimg.com/profile_images/1650839170653335552/WgtT2-ut_400x400.jpg'), // Replace with your image URL
+                    image:
+                        NetworkImage(user.image), // Replace with your image URL
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -32,19 +39,23 @@ class DrawerPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Zachary@Zac.Graham',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      "${user.name}@${user.username}",
+                      style: TextStyle(
+                          color: FitBuddyColorConstants.lOnPrimary,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   const SizedBox(height: 35),
-                  Text(
-                    '215 Friends',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 10,
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      "${user.friendList.length - 1} friends",
+                      style: TextStyle(
+                        color: FitBuddyColorConstants.lOnSecondary,
+                      ),
                     ),
                   ),
                 ],
@@ -52,76 +63,76 @@ class DrawerPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 50),
-          Row(
-            children: [
-              const Icon(Icons.person, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: const Text(
-                    'Profile',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  )),
-            ],
+          GestureDetector(
+            onTap: () {
+              context.goNamed(FitBuddyRouterConstants.profilePage);
+            },
+            child: Row(
+              children: [
+                Icon(Icons.person,
+                    color: FitBuddyColorConstants.lOnPrimary, size: 35),
+                const SizedBox(width: 30),
+                Text(
+                  'Profile',
+                  style: TextStyle(
+                      color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 15),
-          Row(
-            children: [
-              const Icon(Icons.settings, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: const Text(
-                    'Settings',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  )),
-            ],
+          GestureDetector(
+            onTap: () {
+              context.goNamed(FitBuddyRouterConstants.accountsettingsPage);
+            },
+            child: Row(
+              children: [
+                Icon(Icons.settings,
+                    color: FitBuddyColorConstants.lOnPrimary, size: 35),
+                const SizedBox(width: 30),
+                Text(
+                  'Settings',
+                  style: TextStyle(
+                      color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 15),
-          Row(
-            children: [
-              const Icon(Icons.edit, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                  onPressed: () {
-                    context.goNamed(FitBuddyRouterConstants.createWorkoutPage);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: const Text(
-                    'Log Workout',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  )),
-            ],
+          GestureDetector(
+            onTap: () {
+              context.goNamed(FitBuddyRouterConstants.createWorkoutPage);
+            },
+            child: Row(
+              children: [
+                Icon(Icons.edit,
+                    color: FitBuddyColorConstants.lOnPrimary, size: 35),
+                const SizedBox(width: 30),
+                Text(
+                  'Log Workout',
+                  style: TextStyle(
+                      color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 15),
-          Row(
-            children: [
-              const Icon(Icons.search, color: Colors.black, size: 35),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                  onPressed: () {
-                    context.goNamed(FitBuddyRouterConstants.searchPage);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: const Text(
-                    'Search',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  )),
-            ],
+          GestureDetector(
+            onTap: () {
+              context.goNamed(FitBuddyRouterConstants.searchPage);
+            },
+            child: Row(
+              children: [
+                Icon(Icons.search,
+                    color: FitBuddyColorConstants.lOnPrimary, size: 35),
+                const SizedBox(width: 30),
+                Text(
+                  'Search',
+                  style: TextStyle(
+                      color: FitBuddyColorConstants.lOnPrimary, fontSize: 18),
+                ),
+              ],
+            ),
           ),
           const Spacer(),
           Row(

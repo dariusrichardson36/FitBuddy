@@ -4,7 +4,7 @@ import 'package:fit_buddy/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../models/Profile.dart';
+import '../../models/user.dart';
 
 String? currentUserID = Auth().currentUser?.uid;
 
@@ -13,7 +13,7 @@ Future<List<User>> getProfilesFromFirestore(String currentUserID) async {
   final collection = FirebaseFirestore.instance.collection('users');
   final snapshot =
       await collection.where('uid', isNotEqualTo: currentUserID).get();
-  return snapshot.docs.map((doc) => User.fromDataSnapshot(doc)).toList();
+  return snapshot.docs.map((doc) => User.fromDataSnapshot(doc.data())).toList();
 }
 
 class MatchmakingView extends StatelessWidget {
@@ -132,8 +132,8 @@ class MatchmakingView extends StatelessWidget {
           },
 
           cardsBuilder: (BuildContext context, int index) {
-            final user = group1Users?[index];
-            final imageUrl = user?.image_url ?? placeholderImageUrl;
+            final User? user = group1Users?[index];
+            final imageUrl = user?.image ?? placeholderImageUrl;
 
             return Container(
               height: MediaQuery.of(context).size.height,
@@ -165,14 +165,15 @@ class MatchmakingView extends StatelessWidget {
                       // Distribute children to both ends of the row
                       children: [
                         Text(
-                          user?.displayName ?? 'No Name',
+                          user?.name ?? 'No Name',
                           style: GoogleFonts.roboto(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          '20',
+                          // "user?.dob.toString()" ?? 'No Age',
+                          "20" ?? 'No Age',
                           style: GoogleFonts.roboto(
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
@@ -236,8 +237,7 @@ class MatchmakingView extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text:
-                                ' ${user?.liftingExperience ?? 'No Experience'}',
+                            text: ' ${user?.gymExperience ?? 'No Experience'}',
                           ),
                         ],
                       ),
@@ -361,7 +361,7 @@ class MatchmakingView extends StatelessWidget {
   }
 
   bool isUserInGroup(User? user, String startLetter, String endLetter) {
-    final displayName = user?.displayName;
+    final displayName = user?.name;
     if (displayName != null && displayName.isNotEmpty) {
       final firstLetter = displayName[0].toUpperCase();
       return firstLetter.compareTo(startLetter) >= 0 &&
