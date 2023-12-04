@@ -172,8 +172,7 @@ class MatchmakingView extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          // "user?.dob.toString()" ?? 'No Age',
-                          "20" ?? 'No Age',
+                          dateToAge(user!.dob) ?? 'No Age',
                           style: GoogleFonts.roboto(
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
@@ -358,6 +357,12 @@ class MatchmakingView extends StatelessWidget {
         );
       },
     );
+  }
+
+  String dateToAge(Timestamp time) {
+    final date = time.toDate();
+    final age = DateTime.now().year - date.year;
+    return age.toString();
   }
 
   bool isUserInGroup(User? user, String startLetter, String endLetter) {
