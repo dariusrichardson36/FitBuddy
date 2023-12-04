@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   //Personal Info
   String name;
-  String age;
+  Timestamp dob;
   String username;
   String? email;
   String? gender;
@@ -17,7 +19,7 @@ class User {
 
   User({
     required this.name,
-    required this.age,
+    required this.dob,
     required this.gymExperience,
     this.gender,
     this.gymGoals,
@@ -32,10 +34,11 @@ class User {
   });
 
   static User fromDataSnapshot(Map<String, dynamic> map) {
+    print(map);
     return User(
       //personal info
       name: map['displayName'],
-      age: map['dob'],
+      dob: map['dob'] ?? "0",
       username: map['username'],
       email: map['email'],
       image: map['image_url'] ??

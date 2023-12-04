@@ -40,6 +40,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SafeArea(
         child: PageView(
+            physics: _currentPageIndex == 1
+                ? const NeverScrollableScrollPhysics()
+                : const AlwaysScrollableScrollPhysics(),
           onPageChanged: (index) {
             setState(() {
               _currentPageIndex = index;

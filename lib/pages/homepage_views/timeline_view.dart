@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:fit_buddy/components/FitBuddyTimeLinePost.dart';
 import 'package:fit_buddy/models/FitBuddyPostModel.dart';
-import 'package:fit_buddy/models/user.dart';
-import 'package:fit_buddy/services/firestore/auth_service_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:fit_buddy/services/firestore/firestore_service.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../constants/route_constants.dart';
 
 class TimeLineView extends StatefulWidget {
   const TimeLineView({super.key});
@@ -84,14 +85,21 @@ class _TimeLineViewState extends State<TimeLineView> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"), // Replace with your image URL
+                          //image: NetworkImage("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"), // Replace with your image URL
+                          image: NetworkImage(
+                            _firestore.userService.user.image,
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
                   Image.asset("lib/images/logo.png", width: 35, height: 35),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                  IconButton(
+                      onPressed: () {
+                        context.goNamed(FitBuddyRouterConstants.searchPage);
+                      },
+                      icon: const Icon(Icons.search)),
                 ],
               ),
             ),
